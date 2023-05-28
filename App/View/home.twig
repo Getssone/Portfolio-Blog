@@ -1,0 +1,63 @@
+{% extends './Layout/base.twig' %}
+
+{% block head %}
+	<title>Accueil</title>
+{% endblock %}
+{% block header %}
+	<header class="masthead" style="background-image: url('public/assets/img/home-bg.jpg')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="site-heading">
+						<h1>My Blog</h1>
+						<span class="subheading">A blog to learn FullStack tricks</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{% endblock %}
+{% block content %}
+	<h1>Bienvenu M.
+		{{user.name}}</h1>
+	<h3>Voici la liste des article récement publié</h3>
+	<div class="row mb-2">
+		{% for repa in repas %}
+
+			<div class="card m-2" style="width: 18rem;">
+				<img src="..." class="card-img-top" alt="...">
+				<div class="card-body">
+					<h5 class="card-title">
+						{{"Man must explore, and this is exploration at its greatest"}}
+					</h5>
+					<small class="post-subtitle">
+						{{"Problems look mighty small from 150 miles up"}}
+					</small>
+					<p class="card-text">
+						{{"Some quick example text to build on the card title and make up the bulk of the card's content."}}
+					</p>
+				</a>
+				<p class="post-meta">
+					Posted by
+					<a href="#!">
+						{{user.alias}}
+					</a>
+					on
+					{{"September 24, 2023"}}
+				</p>
+				<a href="?p=post">
+					<button class="btn btn-primary">En savoir plus 😉</button>
+				</a>
+			</div>
+		</div>
+	{% endfor %}
+	<!-- Pager-->
+	<div class="d-flex justify-content-end mb-4">
+		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
+	</div>
+</div>
+{# <p>{{soustraction(1,2)}};</p>
+					<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
+					<pre>
+																		{{dump("##un Filtre## **ajouté** " | textadd)}}
+																		</pre> #}{% endblock %}
