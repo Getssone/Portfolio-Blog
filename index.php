@@ -1,25 +1,22 @@
 <?php
+session_start();
+
 
 // use Twig\TwigFilter;
-use Twig\Environment;
+// use PDO;
 // use Twig\TwigFunction;
+use Twig\TwigFilter;
+use Twig\Environment;
+use Twig\TwigFunction;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extension\DebugExtension;
+use App\Controller\EmailController;
 
 require_once './vendor/autoload.php';
 
-//Routing
-$page = "home";
 
-$segments = explode('/', $_SERVER['REQUEST_URI']);
-var_dump($segments[3]);
-die;
-//Permet de vérifier l'url ex: http://localhost/P5/Code_p5/?p=home
-if (isset($_GET["p"])) {
-    $page = $_GET["p"];
-}
-// var_dump($page);
 // var_dump(basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))); 
+//die;
 
 //Récupère les derniers repas
 function repas()
@@ -52,14 +49,60 @@ $twig->addExtension(new DebugExtension); // permet d'utiliser dump() = var_dump(
 //     return "salut je suis un filtre " . $value1;
 // }, ["is_safe" => ["html"]]));
 
+/** Routing */
+
+//Permet de vérifier l'url ex: http://localhost/P5/Code_p5/?p=home
+if (isset($_GET["page"])) {
+    $page = $_GET["page"];
+} else {
+    $page = 'signIn';
+}
+
+
 /* Ne peut être déplacé si non bug */
 switch ($page) {
+    case 'signIn':
+        // echo $twig->render('sign_In.twig');
+        // break;
+
+        $emailController = new EmailController;
+
+        // Vérifier la méthode HTTP
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Récupérer les données du formulaire
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+            $confirmPassword = $_POST['confirm_password'];
+
+            // Envoyer l'email
+            $emailSent = $emailController->envoieMail($email, $password, $confirmPassword);
+
+            if ($emailSent) {
+                // Email envoyé avec succès
+                $_SESSION['message'] = 'Un mail vous a été envoyé.';
+            } else {
+                // Erreur lors de l'envoi de l'email
+                $_SESSION['message'] = 'Une erreur s\'est produite lors de l\'envoi de l\'email.';
+            }
+
+            // Rediriger vers la même page pour afficher le message
+            header('Location: ' . $_SERVER['REQUEST_URI']);
+            exit();
+        }
+
+        // Afficher la vue
+        echo $twig->render('sign_In.twig');
+        break;
+
+    case 'login':
+        echo $twig->render('login.twig');
+        break;
     case 'contact':
         echo $twig->render('contact.twig');
         break;
 
-    case 'home':
-        echo $twig->render('home.twig', ["user" => ["name" => "Solis", "alias" => "Getssone"], 'repas' => repas()]);
+    case 'articles':
+        echo $twig->render('articles.twig', ["user" => ["name" => "Solis", "alias" => "Getssone"], 'repas' => repas()]);
         break;
     case 'aboutme':
         echo $twig->render('aboutme.twig');

@@ -1,0 +1,42 @@
+{% extends './Layout/base_unlogin.twig' %}
+
+{% block title %}
+	<title>login</title>
+{% endblock %}
+
+{% block styles %}
+	<link href="App/View/css/login.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block header %}
+	<header class="masthead" style="background-image: url('https://static.vecteezy.com/system/resources/previews/001/218/592/large_2x/background-wallpaper-with-polygons-in-gradient-colors-vector.jpg')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="site-heading">
+						<h1>Bienvenu</h1>
+						<span class="subheading">A blog to learn Full-Stack tricks</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{% endblock %}
+{% block content %}
+	<form action="{{ 'articles'}}" method="post">
+		<div class="form-group">
+			<label for="email_Login">Email address</label>
+			<input type="email" class="form-control" id="email_Login" aria-describedby="emailHelp" placeholder="Enter email">
+			<small id="emailHelp" class="form-text text-muted">Nous ne communiquerons jamais votre adresse électronique à qui que ce soit.</small>
+		</div>
+		<div class="form-group">
+			<label for="password_Login">Password</label>
+			<input type="password" class="form-control" id="password_Login" placeholder="Password">
+		</div>
+
+
+		<button type="submit" class="btn btn-primary">Se Conecter</button>
+
+
+	</form>
+{% endblock %}

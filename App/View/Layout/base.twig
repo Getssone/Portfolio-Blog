@@ -1,16 +1,17 @@
 <!doctype html>
 <html lang="fr">
-
-
 	{% include 'Layout/head.twig' %}
-
+	<!-- Titre de l'onglet-->
+	{{ block('title') }}
+	<!-- styles de la page spécifique-->
+	{{ block('styles') }}
 	<body>
+
 		<!-- Navbar du Blog-->
 		{% include 'Layout/nav.twig' %}
 
 		<!-- Titre de la page Blog-->
-		{{ block('header') }}
-
+		{{ block('header')}}
 
 		<!-- Contenu de la page Blog-->
 		<article class="container">
