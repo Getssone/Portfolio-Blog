@@ -1,24 +1,43 @@
 {% extends './Layout/base.twig' %}
 
 {% block title %}
-	Post
+
+	<title>Post</title>
 {% endblock %}
 
-{% block styles %}{% endblock %}
-
+{% block styles %}
+	<link rel="stylesheet" href="App/View/css/css_Post/post.css">
+{% endblock %}
 {% block header %}
+
 	<header class="masthead" style="background-image: url('assets/img/post-bg.jpg')">
 		<div class="container position-relative px-4 px-lg-5">
 			<div class="row gx-4 gx-lg-5 justify-content-center">
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<div class="post-heading">
-						<h1>{{"Title of The Post"}}</h1>
-						<h2 class="subheading">{{'Chapo of the post'}}</h2>
+						{% if user.role is same as 1 %}
+							<form action="/edit_title" method="post" class="edit-form">
+								<input type="text" name="title" value="{{ post.title }}" class="form-control" required>
+								<button type="submit" class="btn btn-primary">Save</button>
+							</form>
+						{% else %}
+							<h1>{{ post.title }}</h1>
+						{% endif %}
 						<span class="meta">
 							Posted by
-							<a href="#!">{{user.alias}}</a>
-							{{"DATE OF PUBLICATION"}}
+							<a href="#!">{{ user.alias }}</a>
+							{{ post.date_of_publication }}
 						</span>
+						<q class="subheading">
+							{% if user.role is same as 1 %}
+								<form action="/edit_summary" method="post" class="edit-form">
+									<textarea name="summary" class="form-control" required>{{ post.summary }}</textarea>
+									<button type="submit" class="btn btn-primary">Save</button>
+								</form>
+							{% else %}
+								{{ post.summary }}
+							{% endif %}
+						</q>
 					</div>
 				</div>
 			</div>
@@ -30,31 +49,100 @@
 		<div class="container px-4 px-lg-5">
 			<div class="row gx-4 gx-lg-5 justify-content-center">
 				<div class="col-md-10 col-lg-8 col-xl-7">
-					{{"The Article"}}
-					<p>Never in all their history have men been able truly to conceive of the world as one: a single sphere, a globe, having the qualities of a globe, a round earth in which all the directions eventually meet, in which there is no center because every point, or none, is center — an equal earth which all men occupy as equals. The airman's earth, if free men make it, will be truly round: a globe in practice, not in theory.</p>
-					<p>Science cuts two ways, of course; its products can be used for both good and evil. But there's no turning back from science. The early warnings about technological dangers also come from science.</p>
-					<p>What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.</p>
-					<p>A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.</p>
-					<p>For those who have seen the Earth from space, and for the hundreds and perhaps thousands more who will, the experience most certainly changes your perspective. The things that we share in our world are far more valuable than those which divide us.</p>
-					<h2 class="section-heading">The Final Frontier</h2>
-					<p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it is a task to occupy the generations. And no matter how much progress one makes, there is always the thrill of just beginning.</p>
-					<p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it is a task to occupy the generations. And no matter how much progress one makes, there is always the thrill of just beginning.</p>
-					<blockquote class="blockquote">The dreams of yesterday are the hopes of today and the reality of tomorrow. Science has not yet mastered prophecy. We predict too much for the next year and yet far too little for the next ten.</blockquote>
-					<p>Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.</p>
-					<h2 class="section-heading">Reaching for the Stars</h2>
-					<p>As we got further and further away, it [the Earth] diminished in size. Finally it shrank to the size of a marble, the most beautiful you can imagine. That beautiful, warm, living object looked so fragile, so delicate, that if you touched it with a finger it would crumble and fall apart. Seeing this has to change a man.</p>
-					<a href="#!"><img class="img-fluid" src="assets/img/post-sample-image.jpg" alt="..."/></a>
-					<span class="caption text-muted">To go places and do things that have never been done before – that’s what living is all about.</span>
-					<p>Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds, to seek out new life and new civilizations, to boldly go where no man has gone before.</p>
-					<p>As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore, and this is exploration at its greatest.</p>
-					<p>
-						Placeholder text by
-						<a href="http://spaceipsum.com/">Space Ipsum</a>
-						&middot; Images by
-						<a href="https://www.flickr.com/photos/nasacommons/">NASA on The Commons</a>
-					</p>
+					{% if user.role is same as 1 %}
+						<form action="/edit_content" method="post" class="edit-form">
+							<textarea name="content" class="form-control" required>{{ post.content }}</textarea>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</form>
+					{% else %}
+						{# <h1>{{ post.content }}</h1> #}
+						<h1>
+							The Article
+						</h1>
+						<p>
+							Never in all their history have men been able truly to conceive of the world as one: a single sphere, a globe, having the qualities of a globe, a round earth in which all the directions eventually meet, in which there is no center because every point, or none, is center — an equal earth which all men occupy as equals. The airman's earth, if free men make it, will be truly round: a globe in practice, not in theory.
+						</p>
+
+						<h2 class='section-heading'>The Final Frontier</h2>
+						<p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it is a task to occupy the generations. And no matter how much progress one makes, there is always the thrill of just beginning.</p>
+						<blockquote class='blockquote'>The dreams of yesterday are the hopes of today and the reality of tomorrow. Science has not yet mastered prophecy. We predict too much for the next year and yet far too little for the next ten.</blockquote>
+						<a href='#!'><img class='img-fluid' src='public\assets\img\post-sample-image.jpg' alt='...'></a>
+						<span class='caption text-muted'>To go places and do things that have never been done before – that’s what living is all about.</span>
+						<p>
+							Placeholder text by
+							<a href='http://spaceipsum.com/'>Space Ipsum</a>
+							· Images by
+							<a href='https://www.flickr.com/photos/nasacommons/'>NASA on The Commons</a>
+						</p>
+					{% endif %}
+
 				</div>
 			</div>
 		</div>
 	</article>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 col-lg-12 col-xl-7">
+				<h2 class="section-heading">Comments</h2>
+				<!-- Zone de commentaires -->
+				<div class="comments">
+					{% if comments is empty %}
+						<p>No comments yet.</p>
+					{% else %}
+						{# {{dump(comments)}} #}
+						{% for comment in comments %}
+							<div class="comment">
+								<img src={{ comment.picture }} alt="picture">
+								<div class="user-name_date">
+									<h5>{{ comment.author }}</h5>
+									<small class="comment-date">{{ comment.date }}</small>
+								</div>
+								<div class="stick"></div>
+								{% if user.role is same as 1 or user.id is same as comment.authorId %}
+									<p>{{ comment.content }}</p>
+									<form action='edit_comment/{{ comment.id }}' method=" post">
+										<input type="hidden" name="edit" value="true">
+										<button type="submit" class="btn btn-sm btn-primary">Modifier</button>
+									</form>
+									<form action="delete_comment/{{ comment.id }}" method="post">
+										<input type="hidden" name="delete" value="true">
+										<button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+									</form>
+								{% endif %}
+							</div>
+						{% else %}
+							<p>{{ comment.content }}</p>
+
+						{% endfor %}
+					{% endif %}
+
+
+					{% if user is defined %}
+						<!-- Formulaire d'ajout de commentaire -->
+						<div class="container_add-comment">
+							<h3>Add a Comment</h3>
+							<form action="#" method="post">
+								<div class="add-comment">
+									<img src={{ user.picture }} alt="picture">
+									<div class="user-name_date">
+										<h5>{{ user.alias }}</h5>
+										<small class="comment-date">{{ "now"|date("d-m-Y") }}</small>
+									</div>
+									<div class="form-group">
+										<label for="message">Commentaire</label>
+										<textarea class="form-control" id="message" name="message" rows="2" required></textarea>
+									</div>
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				{% else %}
+					<p>
+						<a href="login">Inscrivez-vous</a>
+						pour laisser un commentaire.</p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -4,11 +4,11 @@
 	<title>Articles</title>
 {% endblock %}
 
-{% block styles %}{% endblock %}
-
-
+{% block styles %}
+	<link rel="stylesheet" href="App/View/css/css_Articles/articles.css">
+{% endblock %}
 {% block header %}
-	<header class="masthead" style="background-image: url('public/assets/img/home-bg.jpg')">
+	<header class="masthead color-transition" style="background-image: url('public/assets/img/Accueil.jpg')">
 		<div class="container position-relative px-4 px-lg-5">
 			<div class="row gx-4 gx-lg-5 justify-content-center">
 				<div class="col-md-10 col-lg-8 col-xl-7">
@@ -22,13 +22,28 @@
 	</header>
 {% endblock %}
 {% block content %}
-	<h1>Bienvenu M.
-		{{user.name}}</h1>
-	<h3>Voici la liste des article récement publié</h3>
+	<div class="container_bienvenue_button">
+		<div>
+			<h1>Bienvenu M.
+				{{user.name}}</h1>
+			<h3>Voici la liste des article récement publié</h3>
+		</div>
+		{% if user is defined %}
+			{% if user.role is same as 1 %}
+				<a href='new_post' class="button">
+					<div class="button__line"></div>
+					<div class="button__line"></div>
+					<span class="button__text">Ecrire un article</span>
+					<div class="button__drow1"></div>
+					<div class="button__drow2"></div>
+				</a>
+			{% endif %}
+		{% endif %}
+	</div>
 	<div class="row mb-2">
 		{% for repa in repas %}
 			{# {{ dump (repa) }}
-																																										{{ die }} #}
+																																																																																																																																			{{ die }} #}
 
 			<div class="card m-2" style="width: 18rem;">
 				<img src="..." class="card-img-top" alt="...">
@@ -38,7 +53,8 @@
 						{{repa.title}}
 					</h5>
 					<small class="post-subtitle">
-						{{"post-subtitle"}}
+						Dernière Modification
+						{{"September 24, 2023"}}
 					</small>
 					<p class="card-text">
 						{{repa.recipe}}
@@ -49,22 +65,21 @@
 					<a href="#!">
 						{{user.alias}}
 					</a>
-					on
-					{{"September 24, 2023"}}
+
 				</p>
-				<a href="?p=post">
-					<button class="btn btn-primary">En savoir plus 😉</button>
+				{# :id/post #}
+				<a href="post">
+					<button type="button" class="btn btn-primary">En savoir plus 😉</button>
 				</a>
 			</div>
 		</div>
 	{% endfor %}
 	<!-- Pager-->
-	<div class="d-flex justify-content-end mb-4">
+	<div class="d-flex justify-content-end m-4">
 		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
 	</div>
-</div>
-{# <p>{{soustraction(1,2)}};</p>
-					<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
-					<pre>
-																		{{dump("##un Filtre## **ajouté** " | textadd)}}
-																		</pre> #}{% endblock %}
+</div>{# <p>{{soustraction(1,2)}};</p>
+																												<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
+																												<pre>
+																																									{{dump("##un Filtre## **ajouté** " | textadd)}}
+																																									</pre> #}{% endblock %}

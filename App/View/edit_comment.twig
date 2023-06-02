@@ -1,0 +1,57 @@
+{% extends './Layout/base.twig' %}
+
+{% block title %}
+
+	<title>Modification Commentaire</title>
+{% endblock %}
+
+{% block styles %}
+	<link rel="stylesheet" href="App/View/css/css_Post/post.css">
+{% endblock %}
+{% block header %}
+
+	<header class="masthead color-transition" style="background-image: url('public/assets/img/Accueil.jpg')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="site-heading">
+						<h1>Modification du commentaire</h1>
+						<span class="subheading">{{comment.id}}
+							de
+							{{comment.author}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{% endblock %}
+{% block content %}
+	{% if user.role is same as 1 %}
+		<div class="row">
+			<div class="col-md-10 col-lg-12 col-xl-7">
+				<h2 class="section-heading">Comments</h2>
+				<div
+					class="container">
+					<!-- Zone de commentaires -->
+					<div
+						class="comments">
+						{# {{dump(comments)}} #}
+						<div class="comment">
+							<img src={{ comment.picture }} alt="picture">
+							<div class="user-name_date">
+								<h5>{{ comment.author }}</h5>
+								<small class="comment-date">{{ comment.date }}</small>
+							</div>
+							<div class="stick"></div>
+							<form action="/update-comment/{{ comment.id }}" method="post">
+								<textarea class="form-control" name="content" rows="3">{{ comment.content }}</textarea>
+								<button type="submit" class="btn btn-primary">Enregistrer</button>
+								<a href="/cancel-edit/{{ comment.id }}" class="btn btn-secondary">Annuler</a>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

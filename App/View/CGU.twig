@@ -1,0 +1,40 @@
+{% extends './Layout/base.twig' %}
+
+{% block title %}
+	<title>CGU</title>
+{% endblock %}
+
+{% block styles %}<link rel="stylesheet" href="App/View/css/css_CGU/cgu.css">
+{% endblock %}
+
+{% block header %}
+	<header class="masthead" style="background-image: url('public/assets/img/CGU.jpg')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="site-heading">
+						<h1>Conditions Générales d'Utilisation</h1>
+						<span class="subheading">Veuillez lire attentivement les conditions d'utilisation avant d'utiliser le site.</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{% endblock %}
+{% block content %}
+	<h2>Titre de la section 1</h2>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a sapien vitae neque suscipit sagittis. Mauris et urna a massa tristique pellentesque. Sed gravida tellus justo, eu convallis velit volutpat eu. Sed viverra, turpis nec posuere gravida, sapien metus ullamcorper erat, ut posuere nunc ipsum eu lectus.</p>
+
+	<h2>Titre de la section 2</h2>
+	<p>Donec pharetra elementum nunc eu vestibulum. In cursus mi sed est semper pharetra. Mauris non interdum urna, eu condimentum risus. Curabitur eleifend, ex sed varius efficitur, nunc enim tincidunt tellus, non ullamcorper odio metus at enim. Suspendisse feugiat dapibus leo, ut efficitur lacus tempus vitae. Ut nec volutpat orci, ut aliquet justo.</p>
+
+	<h2>Titre de la section 3</h2>
+	<p>Pellentesque venenatis convallis arcu, nec pellentesque tortor sagittis in. Suspendisse a purus ac ligula tempor cursus. Sed et luctus mi. Duis mattis risus non ullamcorper convallis. Integer a sem ut sem varius fermentum. Suspendisse id varius diam. Mauris at tristique mi, nec luctus neque. Etiam gravida placerat nibh, ac lacinia dolor tincidunt eget.</p>
+
+	<h2>Image de droit</h2>
+	<p>Photo de
+		<a href="https://unsplash.com/@lekoarts?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">LekoArts</a>
+		sur
+		<a href="https://unsplash.com/fr/photos/CCzQjvRWn_Q?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+		.</p>
+{% endblock %}

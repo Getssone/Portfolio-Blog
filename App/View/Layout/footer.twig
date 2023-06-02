@@ -1,5 +1,5 @@
 {% block styles %}
-	<link href="App/View/css2/footer.css" rel="stylesheet"/>
+	<link href="App/View/css/css_Footer/footer.css" rel="stylesheet"/>
 {% endblock %}
 <!-- Footer -->
 <footer class="border-top">
@@ -24,18 +24,34 @@
 							</span>
 						</a>
 					</li>
-					<li class="list-inline-item">
-						<a href="http://localhost/P5/Code_p5/login">
-							<span class="fa-stack fa-lg center">
-								<i class="fas fa-circle fa-stack-2x"></i>
-								<i class="fa-solid fa-gear fa-stack-1x fa-inverse"></i>
-								{# style=" font-size: 3rem; " #}
-							</span>
-						</a>
-					</li>
-				</ul>
-				<div class="small text-center text-muted fst-italic">Copyright &copy; Getssone Website 2023</div>
+
+					{% if user is defined %}
+						{% if user.role is same as 1 %}
+							<!-- Formulaire d'ajout de commentaire -->
+							<div class="add-comment">
+								<li class="list-inline-item">
+									<a href="http://localhost/P5/Code_p5/login">
+										<span class="fa-stack fa-lg center">
+											<i class="fas fa-circle fa-stack-2x"></i>
+											<i class="fa-solid fa-gear fa-stack-1x fa-inverse"></i>
+											{# style=" font-size: 3rem; " #}
+										</span>
+									</a>
+								</li>
+							{% endif %}
+						{% endif %}
+						<li class="list-inline-item">
+							<a href="CGU">
+								<span class="fa-stack fa-lg center">
+									<i class="fas fa-circle fa-stack-2x"></i>
+									<i class="fa-solid fa-circle-info fa-stack-1x fa-inverse"></i>
+								</span>
+							</a>
+						</li>
+
+					</ul>
+					<div class="small text-center text-muted fst-italic">Copyright &copy; Getssone Website 2023</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</footer>
+	</footer>

@@ -1,0 +1,44 @@
+.form-group {
+  margin: 1rem;
+}
+
+.container_Info_Auteur {
+  display: flex;
+  justify-content: space-between;
+  height: 6rem;
+}
+.container_Info_Auteur p {
+  margin-top: 0.2rem;
+}
+
+.container_CardImage {
+  display: flex;
+  width: inherit;
+  margin: 1rem;
+  flex-direction: row;
+  overflow: hidden;
+}
+.container_CardImage .CardImage {
+  display: flex;
+  gap: 14rem;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 2rem;
+  background: rgba(215, 215, 215, 0.3411764706);
+  height: 10rem;
+  width: 14rem;
+}
+.container_CardImage .CardImage .form-group {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.container_CardImage .CardImage input {
+  width: 11.1rem;
+}
+.container_CardImage .CardImage img {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}/*# sourceMappingURL=new_post.css.map */
