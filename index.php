@@ -1,8 +1,9 @@
 <?php
 require_once './vendor/autoload.php';
+require_once 'App/DB/database.php'; // Remplacez "chemin/vers/database.php" par le chemin réel vers le fichier database.php
+
 
 session_start();
-
 
 // use Twig\TwigFilter;
 // use PDO;
@@ -13,6 +14,7 @@ use Twig\TwigFunction;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extension\DebugExtension;
 use App\Controller\EmailController;
+use App\DB\database\DatabaseConnection;
 
 
 
@@ -20,15 +22,17 @@ use App\Controller\EmailController;
 //die;
 
 //Récupère les derniers repas
-function repas()
-{
-    $pdo = new PDO('mysql:dbname=test_exo_partage_de_recette;host=localhost', 'root', 'root');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-    $repas = $pdo->query(" SELECT * FROM recipes ");
-    return $repas;
-}
+// function repas()
+// {
+//     $pdo = new PDO('mysql:dbname=test_exo_partage_de_recette;host=localhost', 'root', 'root');
+//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+//     $repas = $pdo->query(" SELECT * FROM recipes ");
+//     return $repas;
+// }
 
+$databaseConnection = new DatabaseConnection();
+$articles = $databaseConnection->articles();
 
 //rendu template
 
@@ -108,7 +112,7 @@ switch ($page) {
         break;
 
     case 'articles':
-        echo $twig->render('articles.twig', ["user" => ["name" => "Solis", "alias" => "Getssone", "role" => 0,], 'repas' => repas()]);
+        echo $twig->render('articles.twig', ["user" => ["name" => "Solis", "alias" => "Getssone", "role" => 1,], 'articles' => $articles]);
         break;
     case 'aboutme':
         echo $twig->render('aboutme.twig');

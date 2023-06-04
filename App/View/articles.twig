@@ -6,6 +6,7 @@
 
 {% block styles %}
 	<link rel="stylesheet" href="App/View/css/css_Articles/articles.css">
+	<link rel="stylesheet" href="App/View/css/css_Header/header.css">
 {% endblock %}
 {% block header %}
 	<header class="masthead color-transition" style="background-image: url('public/assets/img/Accueil.jpg')">
@@ -22,7 +23,7 @@
 	</header>
 {% endblock %}
 {% block content %}
-	<div class="container_bienvenue_button">
+	<div class="container_Ecrire_Article">
 		<div>
 			<h1>Bienvenu M.
 				{{user.name}}</h1>
@@ -41,23 +42,22 @@
 		{% endif %}
 	</div>
 	<div class="row mb-2">
-		{% for repa in repas %}
-			{# {{ dump (repa) }}
-																																																																																																																																			{{ die }} #}
+		{% for article in articles %}
+			{# {{ dump (article) }}{{ die }} #}
 
 			<div class="card m-2" style="width: 18rem;">
-				<img src="..." class="card-img-top" alt="...">
+				<img src={{article.picture}} class="card-img-top" alt="...">
 				<div class="card-body">
 					<h5 class="card-title">
-						#{{repa.recipe_id}}
-						{{repa.title}}
+						{{article.recipe_id}}
+						{{article.title}}
 					</h5>
 					<small class="post-subtitle">
 						Dernière Modification
 						{{"September 24, 2023"}}
 					</small>
 					<p class="card-text">
-						{{repa.recipe}}
+						{{article.recipe}}
 					</p>
 				</a>
 				<p class="post-meta">
@@ -79,7 +79,7 @@
 		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
 	</div>
 </div>{# <p>{{soustraction(1,2)}};</p>
-																												<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
-																												<pre>
-																																									{{dump("##un Filtre## **ajouté** " | textadd)}}
-																																									</pre> #}{% endblock %}
+																																						<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
+																																						<pre>
+																																																			{{dump("##un Filtre## **ajouté** " | textadd)}}
+																																																			</pre> #}{% endblock %}

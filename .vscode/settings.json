@@ -5,8 +5,12 @@
     "DBHOST",
     "DBPASSWD",
     "DBUSER",
+    "drow",
+    "Ecrire",
     "Methode",
     "Propriete",
+    "reponse",
+    "requete",
     "textadd"
   ],
   "workbench.colorCustomizations": {
