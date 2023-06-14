@@ -1,13 +1,13 @@
 <?php
 
-namespace App\DB\database;
+namespace App\DB\Database;
 
 use PDO;
 use PDOException;
 
 class DatabaseConnection
 {
-    private ?PDO $database = null; //déclare une propriété $database de type variable peut contenir soit une instance de la classe PDO, soit la valeur null.
+    protected ?PDO $database = null; //déclare une propriété $database de type variable peut contenir soit une instance de la classe PDO, soit la valeur null.
 
     public function __construct()
     {
@@ -22,6 +22,10 @@ class DatabaseConnection
 
         try {
             $this->database = new PDO($dsn, $username, $password);
+            // $this->database = new PDO(
+            //     'mysql:host=' . __DBHOST . ';dbname=' . __DBNAME . ';charset=utf8',
+            //     __DBUSER,
+            //     __DBPASSWD,
             $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //pratique recommandée pour le traitement des erreurs de base de données, car cela facilite le débogage et la gestion des erreurs de manière plus précise.
 
 

@@ -1,6 +1,8 @@
 <?php
 require_once './vendor/autoload.php';
-require_once 'App/DB/database.php'; // Remplacez "chemin/vers/database.php" par le chemin réel vers le fichier database.php
+require_once 'App/DB/database.php';
+require_once 'App/Model/twigRenderer.php';
+
 
 
 session_start();
@@ -9,40 +11,32 @@ session_start();
 // use PDO;
 // use Twig\TwigFunction;
 use Twig\TwigFilter;
-use Twig\Environment;
 use Twig\TwigFunction;
-use Twig\Loader\FilesystemLoader;
-use Twig\Extension\DebugExtension;
 use App\Controller\EmailController;
-use App\DB\database\DatabaseConnection;
+use App\DB\Database\DatabaseConnection;
+use App\Model\TwigRenderer;
 
 
 
 // var_dump(basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))); 
 //die;
 
-//Récupère les derniers repas
-// function repas()
-// {
-//     $pdo = new PDO('mysql:dbname=test_exo_partage_de_recette;host=localhost', 'root', 'root');
-//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-//     $repas = $pdo->query(" SELECT * FROM recipes ");
-//     return $repas;
-// }
-
 $databaseConnection = new DatabaseConnection();
 $articles = $databaseConnection->articles();
 
-//rendu template
+/** //rendu template */
+// $loader = new FilesystemLoader(__DIR__ . "/App/View");
+// $twig = new Environment($loader, [
+//     'cache' => false, //__DIR__ .'./Tmp',
+//     'debug' => true,
+// ]);
 
-$loader = new FilesystemLoader(__DIR__ . "/App/View");
-$twig = new Environment($loader, [
-    'cache' => false, //__DIR__ .'./Tmp',
-    'debug' => true,
-]);
+// $twig->addExtension(new DebugExtension()); // permet d'utiliser dump() = var_dump() qui lui n'est pas accessible dans twig
 
-$twig->addExtension(new DebugExtension); // permet d'utiliser dump() = var_dump() qui lui n'est pas accessible dans twig
+$twigRenderer = new TwigRenderer();
+$twig = $twigRenderer->getTwig();
+
+
 
 
 /** Extension de TWIG via une function */
@@ -55,6 +49,8 @@ $twig->addExtension(new DebugExtension); // permet d'utiliser dump() = var_dump(
 // $twig->addFilter(new TwigFilter('textadd', function ($value1) {
 //     return "salut je suis un filtre " . $value1;
 // }, ["is_safe" => ["html"]]));
+
+
 
 /** Routing */
 
@@ -110,6 +106,15 @@ switch ($page) {
     case 'CGU':
         echo $twig->render('CGU.twig');
         break;
+    case 'admin':
+        echo $twig->render('admin.twig', ["user" => ["name" => "Solis", "alias" => "Getssone", "role" => 1,]]);
+        break;
+    case 'admin-show-posts':
+        echo $twig->render('admin-posts.twig', [
+            "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
+            'articles' => $articles
+        ]);
+        break;
 
     case 'articles':
         echo $twig->render('articles.twig', ["user" => ["name" => "Solis", "alias" => "Getssone", "role" => 1,], 'articles' => $articles]);
@@ -119,7 +124,7 @@ switch ($page) {
         break;
     case 'post':
         echo $twig->render('post.twig', [
-            "user" => ["name" => "Solis", "alias" => "Getssone", "picture" => "public\assets\img\Accueil.jpg", "role" => 1,], "post" => ["title" => "Welcome in my World", "date_of_publication" => "06-05-1994", "picture" => "public\assets\img\post-bg.jpg", "summary" => "I was born in a small village in France called Boulieu.
+            "user" => ["name" => "Solis", "alias" => "Getssone", "picture" => "public\assets\img\Accueil.jpg", "role" => 0,], "post" => ["title" => "Welcome in my World", "date_of_publication" => "06-05-1994", "picture" => "public\assets\img\post-bg.jpg", "summary" => "I was born in a small village in France called Boulieu.
 
         It's a very pleasant village, but also full of history, as it's a fortified town. 
         
@@ -137,7 +142,7 @@ switch ($page) {
 						<a href='https://www.flickr.com/photos/nasacommons/'>NASA on The Commons</a>
 					</p>
         ",],
-            "comments" => [["id" => 1, "author" => "Toto", "content" => "Very interesting", "date" => "24-05-2023", "picture" => "public\assets\img\CGU.jpg",], ["id" => 2, "author" => "Titi", "content" => "Thank you for every thing", "date" => "24-05-2023", "picture" => "public\assets\img\Accueil.jpg",]]
+            "comments" => [["id" => 0, "author" => "Toto", "content" => "Very interesting", "date" => "24-05-2023", "picture" => "public\assets\img\CGU.jpg",], ["id" => 2, "author" => "Titi", "content" => "Thank you for every thing", "date" => "24-05-2023", "picture" => "public\assets\img\Accueil.jpg",]]
         ]);
         break;
     case ':id/post':

@@ -1,0 +1,102 @@
+{% extends './Layout/base.twig' %}
+
+{% block title %}
+	<title>Interface administrateur</title>
+{% endblock %}
+
+{% block styles %}
+	<link href="App/View/css/css_Admin/admin.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block header %}
+	<header class="masthead" style="background-image: url('https://image.lexica.art/full_jpg/0d39f52c-4076-45a4-a292-ec5b5c916be4')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="page-heading">
+						<h1>Tableau de Bord</h1>
+						<span class="subheading">Celui qui révèle les secrets cachés
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+{% endblock %}
+{% block content %}
+	<div class="content-dashboardd-flex justify-content-between">
+		{% block admin_nav %}
+			<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
+				<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+					<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+						<img src="https://via.placeholder.com/150" alt="" width="32" height="32" class="rounded-circle me-2">
+						<span class="fs-4">
+							{% for user in users %}
+								{% if user.role == 1 %}
+									{{user.username}}
+								{% endif %}
+							{% endfor %}
+						</span>
+					</a>
+					<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+						<li>
+							<a class="dropdown-item" href="#">Paramètres</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="profile">Profil</a>
+						</li>
+						<li><hr class="dropdown-divider"></li>
+						<li>
+							<form
+								action="logout-user" method="post">
+								{# {{ form_token("/logout-user")}} #}
+								<button class="dropdown-item" type="submit">Déconnexion</button>
+							</form>
+						</li>
+					</ul>
+				</div>
+				<hr>
+				<ul class="nav nav-pills flex-column mb-auto">
+					<li class="nav-item">
+						<a href="admin" class="nav-link  active" aria-current="page">
+							Tableau de bord
+						</a>
+					</li>
+					<li>
+						<a href="admin-show-posts" class="nav-link text-white">
+							Articles
+						</a>
+					</li>
+					<li>
+						<a href="/admin/create-post" class="nav-link text-white">
+							Ajouter un article
+						</a>
+					</li>
+
+					<li>
+						<a href="/admin/show-comments" class="nav-link text-white">
+							Commentaires
+						</a>
+					</li>
+					<li>
+						<a href="/admin/show-users" class="nav-link text-white">
+							Utilisateurs
+						</a>
+					</li>
+				</ul>
+
+
+			</div>
+		{% endblock %}
+		<div class="container d-flex flex-column justify-content-center align-items-center " style="overflow-x: hidden;">
+			{% block admin_title %}
+				<h2 class="display-6">Interface administrateur</h2>
+			{% endblock %}
+			{% block admin_content %}
+
+				Bienvenu à Bord de votre Tableau de Bord 🚢
+			{% endblock %}
+		</div>
+	</div>
+{% endblock %}

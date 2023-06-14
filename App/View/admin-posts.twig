@@ -1,0 +1,213 @@
+{# {% extends 'admin.twig' %}
+
+{% block title %}Nouvel article
+{% endblock %}
+{% block styles %}{% endblock %}
+
+{% block head %}
+	{{ parent() }}
+{% endblock %}
+
+
+{% block content %}
+
+{% block admin_content %}
+	<div class="mb-5 pb-5">
+		<h2 class="text-secondary">Articles les plus rècents
+		</h2>
+		<div class="d-flex justify-content-end">
+			<a href="admin/create-post" class="btn btn-link">Ajouter +</a>
+		</div>
+		<table class="table table-hover mb-5">
+			<caption>Liste des articles</caption>
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Titre</th>
+					<th scope="col">Chapô</th>
+					<th scope="col">Slug</th>
+					<th scope="col">Date de création</th>
+					<th scope="col">Date de modification</th>
+					<th scope="col">Auteur</th>
+					<th scope="col" colspan="5">Edition</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for post in  posts %}
+					<tr>
+						<th scope="row">{{ post.id }}</th>
+						<td>{{ post.title }}</td>
+						<td>{{ post.lead_sentence }}</td>
+						<td>{{ post.slug }}</td>
+						<td>{{ post.created_at|date("d/m/Y à H:i:s") }}</td>
+						<td>{{ post.updated_at|date("d/m/Y à H:i:s") }}</td>
+						<td>
+							{% for author in authors %}
+								{% if post.created_by == author.id %}
+									{{author.username}}
+								{% endif %}
+							{% endfor %}
+						</td>
+						<td>
+							<a href="/post/{{post.id}}" class="btn btn-primary" role="button">Voir</a>
+						</td>
+						<td>
+							<a href="/admin/edit-post/{{post.id}}" class="btn btn-secondary" role="button">Editer</a>
+						</td>
+						<td>
+							<a href="/admin/delete-post/{{post.id}}" class="btn btn-danger" role="button">Supprimer</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+{% endblock %} #}
+{% extends 'admin.twig' %}
+{% block header %}
+
+	<header class="masthead" style="background-image: url('https://image.lexica.art/full_jpg/0d39f52c-4076-45a4-a292-ec5b5c916be4')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 justify-content-center">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="page-heading">
+						<h1>Articles</h1>
+						<span class="subheading">Gérer les écrits légendaires du blog
+						</span>
+					</div>
+					<div class="d-flex justify-content-end">
+						<a href="/admin/create-post" class="btn btn-link">Ajouter +</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+{% endblock %}
+{% block title %}
+	<title>
+		Nouvel article
+	</title>
+{% endblock %}
+{% block admin_nav %}
+	<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
+		<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+				<img src="https://via.placeholder.com/150" alt="" width="32" height="32" class="rounded-circle me-2">
+				<span class="fs-4">
+					{% for user in users %}
+						{% if user.role == 1 %}
+							{{user.username}}
+						{% endif %}
+					{% endfor %}
+				</span>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+				<li>
+					<a class="dropdown-item" href="#">Paramètres</a>
+				</li>
+				<li>
+					<a class="dropdown-item" href="profile">Profil</a>
+				</li>
+				<li><hr class="dropdown-divider"></li>
+				<li>
+					<form
+						action="logout-user" method="post">
+						{# {{ form_token("/logout-user")}} #}
+						<button class="dropdown-item" type="submit">Déconnexion</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+		<hr>
+		<ul class="nav nav-pills flex-column mb-auto">
+			<li class="nav-item">
+				<a href="admin" class="nav-link text-white">
+					Tableau de bord
+				</a>
+			</li>
+			<li>
+				<a href="admin-show-posts" class="nav-link  active" aria-current="page>
+												Articles
+											</a>
+										</li>
+										<li>
+											<a href=" /admin/create-post" class=" nav-link text-white">
+					Ajouter un article
+				</a>
+			</li>
+
+			<li>
+				<a href="/admin/show-comments" class="nav-link text-white">
+					Commentaires
+				</a>
+			</li>
+			<li>
+				<a href="/admin/show-users" class="nav-link text-white">
+					Utilisateurs
+				</a>
+			</li>
+		</ul>
+
+
+	</div>
+{% endblock %}
+{% block admin_content %}
+	{% block admin_title %}{% endblock %}
+	<div class="mb-5 pb-5" style="width: inherit">
+		<h2 class="text-secondary">Articles</h2>
+		<div class="flex-wrap">
+			<button type="button" class="btn btn-outline-info border-5 rounded ">
+				<a href="/admin-create-post">
+					Ajouter +
+				</a>
+			</button>
+		</div>
+		<div class="table-responsive">
+			<table class="table ">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Titre</th>
+						<th scope="col">Chapô</th>
+						<th scope="col">Slug</th>
+						<th scope="col">Date de création</th>
+						<th scope="col">Date de modification</th>
+						<th scope="col">Auteur</th>
+						<th scope="col" colspan="5">Edition</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for article in  articles %}
+						<tr>
+							<th scope="row">{{ article.id }}</th>
+							<td>{{ article.title }}</td>
+							<td>{{ article.lead_sentence }}</td>
+							<td>{{ article.slug }}</td>
+							<td>{{ article.created_at|date("d/m/Y à H:i:s") }}</td>
+							<td>{{ article.updated_at|date("d/m/Y à H:i:s") }}</td>
+							<td>
+								{% for user in users %}
+									{% if article.created_by == user.id %}
+										{{user.username}}
+									{% endif %}
+								{% endfor %}
+							</td>
+							<td>
+								<a href="/post/{{post.id}}" class="btn btn-primary border-5 rounded" role="button">Voir</a>
+							</td>
+							<td>
+								<a href="/admin-edit-post/{{post.id}}" class="btn btn-secondary border-5 rounded" role="button">Editer</a>
+							</td>
+							<td>
+								<a href="/admin-delete-post/{{post.id}}" class="btn btn-danger border-5 rounded" role="button">Supprimer</a>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+				<caption>Liste des articles</caption>
+			</table>
+		</div>
+	</div>
+{% endblock %}

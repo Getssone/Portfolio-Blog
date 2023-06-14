@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Class;
 
 use DateTime;
 
@@ -57,7 +57,8 @@ class Comment
 
     public function setContent($content)
     {
-        $this->content = strip_tags($content, ['p', 'a', 'i']);
+        $allowedTags = ['p', 'a', 'i', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+        $this->content = strip_tags($content, '<' . implode('><', $allowedTags) . '>');
     }
 
     public function getCreatedAt()

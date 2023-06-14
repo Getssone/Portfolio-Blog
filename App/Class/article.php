@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace App\Class;
 
 use DateTime;
+use ErrorException;
 
-class Post
+class Article
 {
     /**
      * @var int
@@ -27,22 +28,14 @@ class Post
     {
         if (property_exists($this, $property)) {
             return $this->$property;
+        } else {
+            throw new ErrorException('Undefined property.');
         }
     }
 
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setId($id)
-    {
-        if (is_string($id) && intval($id) > 0) {
-            $this->id = intval($id);
-        }
-        if (is_int($id) && $id > 0) {
-            $this->id = $id;
-        }
     }
 
     public function getTitle()
@@ -67,7 +60,8 @@ class Post
 
     public function setContent($content)
     {
-        $this->content = strip_tags($content, ['p', 'a', 'i']);
+        $allowedTags = ['p', 'a', 'i', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+        $this->content = strip_tags($content, '<' . implode('><', $allowedTags) . '>');
     }
 
     public function getLead_Sentence()
@@ -77,7 +71,8 @@ class Post
 
     public function setLead_Sentence($leadSentence)
     {
-        $this->leadSentence = strip_tags($leadSentence, ['p', 'a', 'i']);
+        $allowedTags = ['p', 'a', 'i', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+        $this->leadSentence = strip_tags($leadSentence, '<' . implode('><', $allowedTags) . '>');
     }
 
     public function getCreated_At()
