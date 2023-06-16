@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block styles %}
-	<link href="App/View/css/css_Login/login.css" rel="stylesheet"/>
+	<link href="public\css\login/login.css" rel="stylesheet"/>
 {% endblock %}
 
 {% block header %}
@@ -23,7 +23,7 @@
 	</header>
 {% endblock %}
 {% block content %}
-	<form action="{{ 'articles'}}" method="post">
+	<form action="{{ 'posts'}}" method="post">
 		<div class="form-group">
 			<label for="email_Login">Email address</label>
 			<input type="email" class="form-control" id="email_Login" aria-describedby="emailHelp" placeholder="Enter email">

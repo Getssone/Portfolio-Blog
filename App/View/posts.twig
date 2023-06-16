@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block styles %}
-	<link rel="stylesheet" href="App/View/css/css_Articles/articles.css">
-	<link rel="stylesheet" href="App/View/css/css_Header/header.css">
+	<link rel="stylesheet" href="public\css\posts\posts.css">
+	<link rel="stylesheet" href="public\css\header\header.css">
 {% endblock %}
 {% block header %}
 	<header class="masthead color-transition" style="background-image: url('public/assets/img/Accueil.jpg')">
@@ -42,22 +42,22 @@
 		{% endif %}
 	</div>
 	<div class="row mb-2">
-		{% for article in articles %}
-			{# {{ dump (article) }}{{ die }} #}
+		{% for post in posts %}
+			{# {{ dump (posts) }}{{ die }} #}
 
 			<div class="card m-2" style="width: 18rem;">
-				<img src={{article.picture}} class="card-img-top" alt="...">
+				<img src={{post.picture}} class="card-img-top" alt="...">
 				<div class="card-body">
 					<h5 class="card-title">
-						{{article.recipe_id}}
-						{{article.title}}
+						{{post.recipe_id}}
+						{{post.title}}
 					</h5>
 					<small class="post-subtitle">
 						Dernière Modification
 						{{"September 24, 2023"}}
 					</small>
 					<p class="card-text">
-						{{article.recipe}}
+						{{post.recipe}}
 					</p>
 				</a>
 				<p class="post-meta">
@@ -79,7 +79,7 @@
 		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
 	</div>
 </div>{# <p>{{soustraction(1,2)}};</p>
-																																						<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
-																																						<pre>
-																																																			{{dump("##un Filtre## **ajouté** " | textadd)}}
-																																																			</pre> #}{% endblock %}
+																																									<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
+																																									<pre>
+																																																						{{dump("##un Filtre## **ajouté** " | textadd)}}
+																																																						</pre> #}{% endblock %}

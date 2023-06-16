@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block styles %}
-	<link rel="stylesheet" href="App/View/css/css_New_Post/new_post.css">
+	<link rel="stylesheet" href="public\css\newPost/new_post.css">
 {% endblock %}
 
 {% block header %}
@@ -37,7 +37,7 @@ imgElement.src = reader.result;
 reader.readAsDataURL(input.files[0]);
 }
 	</script>
-	<form action="add_article" method="post">
+	<form action="add_posts" method="post">
 		<div class="form-group">
 			<label for="title">Titre de l'article</label>
 			<input type="text" class="form-control" id="title" name="title" required>

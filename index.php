@@ -1,7 +1,7 @@
 <?php
 require_once './vendor/autoload.php';
-require_once 'App/DB/database.php';
-require_once 'App/Model/twigRenderer.php';
+require_once 'App/Service/DatabaseConnection.php';
+require_once 'App/Service/TwigRenderer.php';
 
 
 
@@ -13,7 +13,7 @@ session_start();
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use App\Controller\EmailController;
-use App\DB\Database\DatabaseConnection;
+use App\Service\DatabaseConnection\DatabaseConnection;
 use App\Model\TwigRenderer;
 
 
@@ -22,7 +22,7 @@ use App\Model\TwigRenderer;
 //die;
 
 $databaseConnection = new DatabaseConnection();
-$articles = $databaseConnection->articles();
+$posts = $databaseConnection->getAllPosts();
 
 /** //rendu template */
 // $loader = new FilesystemLoader(__DIR__ . "/App/View");
@@ -107,17 +107,17 @@ switch ($page) {
         echo $twig->render('CGU.twig');
         break;
     case 'admin':
-        echo $twig->render('admin.twig', ["user" => ["name" => "Solis", "alias" => "Getssone", "role" => 1,]]);
+        echo $twig->render('admin.twig', ["users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]]]);
         break;
     case 'admin-show-posts':
         echo $twig->render('admin-posts.twig', [
             "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
-            'articles' => $articles
+            'posts' => $posts
         ]);
         break;
 
-    case 'articles':
-        echo $twig->render('articles.twig', ["user" => ["name" => "Solis", "alias" => "Getssone", "role" => 1,], 'articles' => $articles]);
+    case 'posts':
+        echo $twig->render('posts.twig', ["user" => ["name" => "Solis", "alias" => "Getssone", "role" => 1,], 'posts' => $posts]);
         break;
     case 'aboutme':
         echo $twig->render('aboutme.twig');

@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block styles %}
-	<link href="App/View/css/css_Admin/admin.css" rel="stylesheet"/>
+	<link href="public\css\admin\admin.css" rel="stylesheet"/>
 {% endblock %}
 
 {% block header %}
 	<header class="masthead" style="background-image: url('https://image.lexica.art/full_jpg/0d39f52c-4076-45a4-a292-ec5b5c916be4')">
 		<div class="container position-relative px-4 px-lg-5">
-			<div class="row gx-4 gx-lg-5 justify-content-center">
+			<div class="row gx-4 gx-lg-5 align-content-center justify-content-center pt-5">
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<div class="page-heading">
 						<h1>Tableau de Bord</h1>
@@ -25,14 +25,14 @@
 
 {% endblock %}
 {% block content %}
-	<div class="content-dashboardd-flex justify-content-between">
+	<div class="content-dashboard d-flex justify-content-between">
 		{% block admin_nav %}
 			<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
 				<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 					<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
 						<img src="https://via.placeholder.com/150" alt="" width="32" height="32" class="rounded-circle me-2">
-						<span class="fs-4">
-							{% for user in users %}
+						{% for user in users %}
+							<span class="fs-4">
 								{% if user.role == 1 %}
 									{{user.username}}
 								{% endif %}

@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\Model\Email;
+use App\Model\EmailModel;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\Extension\DebugExtension;
-
-session_start();
 
 class EmailController
 {
@@ -37,7 +35,7 @@ class EmailController
             }
 
             // Instancier la classe Email
-            $emailForUser = new Email();
+            $emailForUser = new EmailModel();
 
             // Envoyer l'email
             $emailSent = $emailForUser->sendEmail($email, $password, 'John Doe'); // Remplacez 'John Doe' par le nom approprié

@@ -6,37 +6,24 @@
 {% endblock %}
 
 {% block styles %}
-	<link rel="stylesheet" href="App/View/css/css_Post/post.css">
+	<link rel="stylesheet" href="public\css\post/post.css">
 {% endblock %}
 {% block header %}
-
-	<header class="masthead" style="background-image: url('assets/img/post-bg.jpg')">
+	<header class="masthead" style="background-image: url('https://img.freepik.com/photos-gratuite/rue-medievale_1182-805.jpg?w=1380&t=st=1686927519~exp=1686928119~hmac=4856197d4726582142f399f0c97c3b84e851e61801d9672e45d7e3b11e13aaef')">
 		<div class="container position-relative px-4 px-lg-5">
-			<div class="row gx-4 gx-lg-5 justify-content-center">
+			<div class="row gx-4 gx-lg-5 align-content-center justify-content-center pt-5">
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<div class="post-heading">
-						{% if user.role is same as 1 %}
-							<form action="/edit_title" method="post" class="edit-form">
-								<input type="text" name="title" value="{{ post.title }}" class="form-control" required>
-								<button type="submit" class="btn btn-primary">Save</button>
-							</form>
-						{% else %}
-							<h1>{{ post.title }}</h1>
-						{% endif %}
+						<h1>{{ post.title }}</h1>
 						<span class="meta">
 							Posted by
 							<a href="#!">{{ user.alias }}</a>
 							{{ post.date_of_publication }}
 						</span>
 						<q class="subheading">
-							{% if user.role is same as 1 %}
-								<form action="/edit_summary" method="post" class="edit-form">
-									<textarea name="summary" class="form-control" required>{{ post.summary }}</textarea>
-									<button type="submit" class="btn btn-primary">Save</button>
-								</form>
-							{% else %}
-								{{ post.summary }}
-							{% endif %}
+
+							{{ post.summary }}
+
 						</q>
 					</div>
 				</div>
@@ -44,105 +31,26 @@
 		</div>
 	</header>
 {% endblock %}
+
 {% block content %}
-	<article class="mb-4">
-		<div class="container px-4 px-lg-5">
-			<div class="row gx-4 gx-lg-5 justify-content-center">
-				<div class="col-md-10 col-lg-8 col-xl-7">
-					{% if user.role is same as 1 %}
-						<form action="/edit_content" method="post" class="edit-form">
-							<textarea name="content" class="form-control" required>{{ post.content }}</textarea>
-							<button type="submit" class="btn btn-primary">Save</button>
-						</form>
-					{% else %}
-						{# <h1>{{ post.content }}</h1> #}
-						<h1>
-							The Article
-						</h1>
-						<p>
-							Never in all their history have men been able truly to conceive of the world as one: a single sphere, a globe, having the qualities of a globe, a round earth in which all the directions eventually meet, in which there is no center because every point, or none, is center — an equal earth which all men occupy as equals. The airman's earth, if free men make it, will be truly round: a globe in practice, not in theory.
-						</p>
-
-						<h2 class='section-heading'>The Final Frontier</h2>
-						<p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it is a task to occupy the generations. And no matter how much progress one makes, there is always the thrill of just beginning.</p>
-						<blockquote class='blockquote'>The dreams of yesterday are the hopes of today and the reality of tomorrow. Science has not yet mastered prophecy. We predict too much for the next year and yet far too little for the next ten.</blockquote>
-						<a href='#!'><img class='img-fluid' src='public\assets\img\post-sample-image.jpg' alt='...'></a>
-						<span class='caption text-muted'>To go places and do things that have never been done before – that’s what living is all about.</span>
-						<p>
-							Placeholder text by
-							<a href='http://spaceipsum.com/'>Space Ipsum</a>
-							· Images by
-							<a href='https://www.flickr.com/photos/nasacommons/'>NASA on The Commons</a>
-						</p>
-					{% endif %}
-
+	<div id="content" class="container mb-5">
+		<main class="pb-5">
+			<article class="my-5 text-center">
+				<h1 class="display-2">{{ post.title }}</h1>
+				<p class="text-muted">Publié le
+					{{ post.created_at|date("d/m/Y à H:i:s") }}
+					- auteur :
+					{{author.username}}</p>
+				<img class="card-img-top mb-5" src="https://picsum.photos/900/400">
+				<p class="badge rounded-pill bg-secondary">{{ post.slug }}</p>
+				<div class="fw-bold display-6 mb-4">
+					{{ post.lead_sentence }}
 				</div>
-			</div>
-		</div>
-	</article>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-10 col-lg-12 col-xl-7">
-				<h2 class="section-heading">Comments</h2>
-				<!-- Zone de commentaires -->
-				<div class="comments">
-					{% if comments is empty %}
-						<p>No comments yet.</p>
-					{% else %}
-						{# {{dump(comments)}} #}
-						{% for comment in comments %}
-							<div class="comment">
-								<img src={{ comment.picture }} alt="picture">
-								<div class="user-name_date">
-									<h5>{{ comment.author }}</h5>
-									<small class="comment-date">{{ comment.date }}</small>
-								</div>
-								<div class="stick"></div>
-								{% if user.role is same as 1 or user.id is same as comment.authorId %}
-									<p>{{ comment.content }}</p>
-									<form action='edit_comment/{{ comment.id }}' method=" post">
-										<input type="hidden" name="edit" value="true">
-										<button type="submit" class="btn btn-sm btn-primary">Modifier</button>
-									</form>
-									<form action="delete_comment/{{ comment.id }}" method="post">
-										<input type="hidden" name="delete" value="true">
-										<button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-									</form>
-								{% endif %}
-							</div>
-						{% else %}
-							<p>{{ comment.content }}</p>
-
-						{% endfor %}
-					{% endif %}
-
-
-					{% if user is defined %}
-						<!-- Formulaire d'ajout de commentaire -->
-						<div class="container_add-comment">
-							<h3>Add a Comment</h3>
-							<form action="#" method="post">
-								<div class="add-comment">
-									<img src={{ user.picture }} alt="picture">
-									<div class="user-name_date">
-										<h5>{{ user.alias }}</h5>
-										<small class="comment-date">{{ "now"|date("d-m-Y") }}</small>
-									</div>
-									<div class="form-group">
-										<label for="message">Commentaire</label>
-										<textarea class="form-control" id="message" name="message" rows="2" required></textarea>
-									</div>
-									<button type="submit" class="btn btn-primary">Submit</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				{% else %}
-					<p>
-						<a href="login">Inscrivez-vous</a>
-						pour laisser un commentaire.</p>
-				{% endif %}
-			</div>
-		</div>
+				<div class="">
+					{{ post.content }}
+				</div>
+			</article>
+			{{ include('comments.twig') }}
+		</main>
 	</div>
 {% endblock %}

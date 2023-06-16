@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DB\Database;
+namespace App\Service\DatabaseConnection;
 
 use PDO;
 use PDOException;
@@ -39,11 +39,11 @@ class DatabaseConnection
         }
     }
 
-    public function articles()
+    public function getAllPosts()
     {
         $requeteSQL = "SELECT * FROM articles";
         $reponse = $this->database->query($requeteSQL);
-        $articles = $reponse->fetchAll();
-        return $articles;
+        $posts = $reponse->fetchAll();
+        return $posts;
     }
 }

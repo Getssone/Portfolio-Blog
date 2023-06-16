@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Repository;
+namespace App\Model;
 
 use PDO;
 use Exception;
 use App\Class\User;
-use App\DB\Database\DatabaseConnection;
+use App\Service\DatabaseConnection\DatabaseConnection;
 
-class UserManager extends DatabaseConnection
+class UserModel extends DatabaseConnection
 {
 
     public function read(int $id)

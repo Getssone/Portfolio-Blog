@@ -19,7 +19,7 @@ require 'vendor/autoload.php';
 
 // Logique d'envoi de l'email
 
-class Email
+class EmailModel
 {
     private $mail;
     protected $emailSent = false; // Par défaut, on suppose que l'email n'a pas été envoyé
@@ -57,7 +57,7 @@ class Email
             $this->mail->addAddress($user_Mail, 'email du bénéficiaire');
             $this->mail->Subject = 'Plus qu’un Blog.
             Une véritable boite à Outils . ';
-            $this->mail->Body = "Voici pourquoi $user_Name, j'ai le plaisir de te donner l’accès au site via ce liens : http://localhost/P5/Code_p5/articles 
+            $this->mail->Body = "Voici pourquoi $user_Name, j'ai le plaisir de te donner l’accès au site via ce liens : http://localhost/P5/Code_p5/posts 
             
             Penser à garder vos ID et mot de passe : 
             id: $user_Mail
@@ -71,7 +71,7 @@ class Email
             $this->mail->isHTML(true);                                  //Set email format to HTML
             $this->mail->Subject = '<h1>Plus qu’un Blog.
             Une véritable boite à Outils .</h1>';
-            $this->mail->Body    = "<p> Voici pourquoi $user_Name, j'ai le plaisir de te donner l’accès au site via ce liens :<p> <a href= http://localhost/P5/Code_p5/articles > Ta boite à Outils 😉</a>
+            $this->mail->Body    = "<p> Voici pourquoi $user_Name, j'ai le plaisir de te donner l’accès au site via ce liens :<p> <a href= http://localhost/P5/Code_p5/posts > Ta boite à Outils 😉</a>
             <pre>
             Penser à garder vos ID et mot de passe : 
             id: $user_Mail

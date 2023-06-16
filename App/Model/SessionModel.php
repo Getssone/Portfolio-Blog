@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-class Session
+class SessionModel
 {
 
     public function __construct()

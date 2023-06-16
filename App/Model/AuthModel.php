@@ -3,9 +3,9 @@
 namespace App\Model;
 
 use App\Class\User;
-use App\Repository\UserManager;
+use App\Model\UserModel;
 
-class Auth
+class AuthModel
 {
     /**
      * User manager : requete PDO connection to Users stored in the database
@@ -24,8 +24,8 @@ class Auth
 
     public function __construct()
     {
-        $this->session = new Session();
-        $this->userManager = new UserManager();
+        $this->session = new SessionModel();
+        $this->userManager = new UserModel();
     }
 
     /**

@@ -69,15 +69,12 @@
 
 	<header class="masthead" style="background-image: url('https://image.lexica.art/full_jpg/0d39f52c-4076-45a4-a292-ec5b5c916be4')">
 		<div class="container position-relative px-4 px-lg-5">
-			<div class="row gx-4 gx-lg-5 justify-content-center">
+			<div class="row gx-4 gx-lg-5 align-content-center justify-content-center pt-5">
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<div class="page-heading">
 						<h1>Articles</h1>
 						<span class="subheading">Gérer les écrits légendaires du blog
 						</span>
-					</div>
-					<div class="d-flex justify-content-end">
-						<a href="/admin/create-post" class="btn btn-link">Ajouter +</a>
 					</div>
 				</div>
 			</div>
@@ -129,11 +126,11 @@
 			</li>
 			<li>
 				<a href="admin-show-posts" class="nav-link  active" aria-current="page>
-												Articles
-											</a>
-										</li>
-										<li>
-											<a href=" /admin/create-post" class=" nav-link text-white">
+																																										Articles
+																																									</a>
+																																								</li>
+																																								<li>
+																																									<a href=" /admin/create-post" class=" nav-link text-white">
 					Ajouter un article
 				</a>
 			</li>
@@ -179,17 +176,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for article in  articles %}
+					{% for post in  posts %}
 						<tr>
-							<th scope="row">{{ article.id }}</th>
-							<td>{{ article.title }}</td>
-							<td>{{ article.lead_sentence }}</td>
-							<td>{{ article.slug }}</td>
-							<td>{{ article.created_at|date("d/m/Y à H:i:s") }}</td>
-							<td>{{ article.updated_at|date("d/m/Y à H:i:s") }}</td>
+							<th scope="row">{{ post.id }}</th>
+							<td>{{ post.title }}</td>
+							<td>{{ post.lead_sentence }}</td>
+							<td>{{ post.slug }}</td>
+							<td>{{ post.created_at|date("d/m/Y à H:i:s") }}</td>
+							<td>{{ post.updated_at|date("d/m/Y à H:i:s") }}</td>
 							<td>
 								{% for user in users %}
-									{% if article.created_by == user.id %}
+									{% if post.created_by == user.id %}
 										{{user.username}}
 									{% endif %}
 								{% endfor %}

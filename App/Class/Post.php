@@ -5,7 +5,7 @@ namespace App\Class;
 use DateTime;
 use ErrorException;
 
-class Article
+class Post
 {
     /**
      * @var int
