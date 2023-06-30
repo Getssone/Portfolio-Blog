@@ -1,0 +1,158 @@
+{% extends "admin.twig" %}
+
+{% block title %}
+	<title>Ajouter un article</title>
+{% endblock %}
+{% block styles %}
+	<link href="public\css\admin\admin.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="public\css\adminCreatePost/admin_create_post.css">
+{% endblock %}
+{% block header %}
+	<header class="masthead" style="background-image: url('public/assets/img/home-bg.jpg')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 align-content-center justify-content-center pt-5">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="page-heading">
+						<h1>Création de l'article</h1>
+						<span>
+							le Début du Commencement
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{% endblock %}
+{% block admin_nav %}
+	<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
+		<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+				<img src="https://via.placeholder.com/150" alt="" width="32" height="32" class="rounded-circle me-2">
+				<span class="fs-4">
+					{% for user in users %}
+						{% if user.role == 1 %}
+							{{user.username}}
+						{% endif %}
+					{% endfor %}
+				</span>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+				<li>
+					<a class="dropdown-item" href="#">Paramètres</a>
+				</li>
+				<li>
+					<a class="dropdown-item" href="profile">Profil</a>
+				</li>
+				<li><hr class="dropdown-divider"></li>
+				<li>
+					<form
+						action="logout-user" method="post">
+						{# {{ form_token("/logout-user")}} #}
+						<button class="dropdown-item" type="submit">Déconnexion</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+		<hr>
+		<ul class="nav nav-pills flex-column mb-auto">
+			<li class="nav-item">
+				<a href="admin" class="nav-link text-white">
+					Tableau de bord
+				</a>
+			</li>
+			<li>
+				<a href="admin_show_posts" class="nav-link text-white" aria-current="page">
+					Articles
+				</a>
+			</li>
+			<li>
+				<a href="admin_create_post" class=" nav-link active">
+					Ajouter un article
+				</a>
+			</li>
+
+			<li>
+				<a href="admin_pending_comments" class="nav-link   text-white">
+					Commentaires
+				</a>
+			</li>
+			<li>
+				<a href="admin_show_users" class="nav-link text-white">
+					Utilisateurs
+				</a>
+			</li>
+		</ul>
+
+
+	</div>
+{% endblock %}
+{% block admin_content %}
+	<script>
+		function previewImage(event) {
+let input = event.target;
+let reader = new FileReader();
+
+reader.onload = function () {
+let imgElement = document.getElementById('image-preview');
+imgElement.src = reader.result;
+// Ajoutez la condition ici pour afficher l'image si la source est valide
+if (input.files.length === 0) {
+imgElement.style.display = 'none';
+} else {
+imgElement.style.display = 'block';
+}
+};
+
+reader.readAsDataURL(input.files[0]);
+}
+	</script>
+
+	{% block admin_title %}{% endblock %}
+	<main class="mb-5 pb-5">
+		<div class="mb-5">
+			<h2 class="text-secondary">Ajouter un article</h2>
+			<p>Laissez-vous emporter par la magie des mots et créez votre propre chef-d'œuvre de l'écriture.</p>
+			<div class="container">
+				<div class="row">
+					<div class="col-10 card bg-light mt-5">
+						<form
+							action="admin_add_post" method="post" class="card-body">
+							{# {{ form_token("admin_add_post") }} #}
+							<div class="form-group">
+								<div class="col mt-4">
+									<label for="title">Titre</label>
+									<input type="text" class="form-control mt-2" placeholder="Titre de l'article" name="title">
+								</div>
+								<div class="container_CardImage">
+									<div class="CardImage">
+										<div class="form-group">
+											<label for="image">Image</label>
+											<input type="file" class="form-control-file" id="image" name="image" onchange="previewImage(event)">
+										</div>
+									</div>
+									<div>
+										<img id="image-preview" src="#" alt="L'image de votre article" style="display: none;">
+									</div>
+								</div>
+								<div class="col mt-4">
+									<label for="leadSentence">Châpo</label>
+									<input type="text" class="form-control mt-2" placeholder="Châpo de l'article" name="leadSentence">
+								</div>
+								{# <div class="col mt-4">
+																																																																																																																																																																																																																																																																																																																																																										<label for="title">Slug</label>
+																																																																																																																																																																																																																																																																																																																																																										<input type="text" class="form-control mt-2" placeholder="Slug de l'article" name="slug">
+																																																																																																																																																																																																																																																																																																																																																									</div> #}
+							</div>
+							<div class="form-group">
+								<label for="content" class="form-label mt-4">Contenu</label>
+								<textarea class="form-control" id="content" rows="8" name="content"></textarea>
+							</div>
+							<button type="submit" class="btn btn-success mt-4">Publier</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+{% endblock %}

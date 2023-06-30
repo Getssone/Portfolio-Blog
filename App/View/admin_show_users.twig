@@ -1,0 +1,174 @@
+{% extends "admin.twig" %}
+
+{% block title %}
+	<title>
+		Utilisateurs
+	</title>
+{% endblock %}
+{% block styles %}<link href="public\css\admin\admin.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block header %}
+	<header class="masthead" style="background-image: url('https://cdn.pixabay.com/photo/2017/11/12/22/50/exhibition-2944064_1280.jpg')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 align-content-center justify-content-center pt-5">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="page-heading">
+						<h1>Tableau de Bord</h1>
+						<span class="subheading">Rencontrez les protagonistes enchantés
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+{% endblock %}
+
+{% block admin_nav %}
+	<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
+		<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+				<img src="https://via.placeholder.com/150" alt="" width="32" height="32" class="rounded-circle me-2">
+				<span class="fs-4">
+					{% for user in users %}
+						{% if user.role == 1 %}
+							{{user.username}}
+						{% endif %}
+					{% endfor %}
+				</span>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+				<li>
+					<a class="dropdown-item" href="#">Paramètres</a>
+				</li>
+				<li>
+					<a class="dropdown-item" href="profile">Profil</a>
+				</li>
+				<li><hr class="dropdown-divider"></li>
+				<li>
+					<form
+						action="logout-user" method="post">
+						{# {{ form_token("/logout-user")}} #}
+						<button class="dropdown-item" type="submit">Déconnexion</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+		<hr>
+		<ul class="nav nav-pills flex-column mb-auto">
+			<li class="nav-item">
+				<a href="admin" class="nav-link text-white">
+					Tableau de bord
+				</a>
+			</li>
+			<li>
+				<a href="admin_show_posts" class="nav-link text-white" aria-current="page">
+					Articles
+				</a>
+			</li>
+			<li>
+				<a href="admin_create_post" class=" nav-link text-white">
+					Ajouter un article
+				</a>
+			</li>
+
+			<li>
+				<a href="admin_pending_comments" class="nav-link text-white">
+					Commentaires
+				</a>
+			</li>
+			<li>
+				<a href="admin_show_users" class="nav-link active">
+					Utilisateurs
+				</a>
+			</li>
+		</ul>
+
+
+	</div>
+{% endblock %}
+{% block admin_content %}
+	{% block admin_title %}{% endblock %}
+	<main class="mb-5 pb-5">
+		<h2 class="text-secondary">Liste des utilisateurs</h2>
+		<p class="lead">Gérez ici les utilisateurs et définissez leurs rôles.</p>
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<caption>Liste des utilisateurs actifs</caption>
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Pseudo</th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Email</th>
+						<th scope="col">Rôle</th>
+						<th scope="col" colspan="5">Edition</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for user in  users %}
+						{% if user.deleted == 0 %}
+							<tr>
+								<th scope="row">{{ user.id }}</th>
+								<td>{{ user.username }}</td>
+								<td>{{ user.first_name }}</td>
+								<td>{{ user.last_name }}</td>
+								<td>{{ user.email }}</td>
+								<td>
+									{% if user.role == 0 %}
+										Utilisateur
+									{% else %}
+										Administrateur
+									{% endif %}
+								</td>
+								<td>
+									<a href="/admin/user/{{user.id}}" class="btn btn-warning" role="button">Editer</a>
+								</td>
+								<td>
+									<a href="/admin/delete-user/{{user.id}}" class="btn btn-danger" role="button">Désactiver</a>
+								</td>
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-hover my-5 py-5">
+				<caption>Liste des utilisateurs désactivés</caption>
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Pseudo</th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Email</th>
+						<th scope="col">Rôle</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for user in  users %}
+						{% if user.deleted == 1 %}
+							<tr>
+								<th scope="row">{{ user.id }}</th>
+								<td>{{ user.username }}</td>
+								<td>{{ user.first_name }}</td>
+								<td>{{ user.last_name }}</td>
+								<td>{{ user.email }}</td>
+								<td>
+									{% if user.role == 0 %}
+										Utilisateur
+									{% else %}
+										Administrateur
+									{% endif %}
+								</td>
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</main>
+{% endblock %}

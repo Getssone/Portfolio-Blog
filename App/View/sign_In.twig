@@ -23,38 +23,43 @@
 	</header>
 {% endblock %}
 {% block content %}
-	<form action="{{ '#Controller'}}" method="post">
+
+	{% if message is defined and message is not empty %}
+		<p class="text-light bg-danger d-flex justify-content-center py-3">{{ message }}</p>
+	{% endif %}
+
+	<form action="signInAction" method="post">
 		<div class="form-group">
 			<label for="username_Login">Alias
 			</label>
-			<input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Entrer votre alias" required>
-			<small id="usernameHelp" class="form-text text-muted">Il serira uniquement pour vous dire "Bonjour" lors de votre connexion.</small>
+			<input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Getssone" name="username" required>
+			<small id="usernameHelp" class="form-text text-muted">Il servira uniquement pour vous dire "Bonjour" lors de votre connexion.</small>
 		</div>
 		<div class="form-group">
 			<label for="email_Login">Email</label>
-			<input type="email" class="form-control" id="email_Login" aria-describedby="emailHelp" placeholder="Entrer votre email" required>
+			<input type="email" class="form-control" id="email_Login" aria-describedby="emailHelp" placeholder="nom@exemple.com" name="email" required>
 			<small id="emailHelp" class="form-text text-muted">Nous ne communiquerons jamais votre adresse électronique à qui que ce soit.</small>
 		</div>
 		<div class="form-group">
 			<label for="first_name">Prénom
 			</label>
-			<input type="text" class="form-control" id="first_name" aria-describedby="first_nameHelp" placeholder="Entrer votre Prénom" required>
-			<small id="first_nameHelp" class="form-text text-muted">Il serira uniquement pour votre profil et en cas de perte de vos identifiant et mot de passe.</small>
+			<input type="text" class="form-control" id="first_name" aria-describedby="first_nameHelp" placeholder="Gaetan" name="first_name" required>
+			<small id="first_nameHelp" class="form-text text-muted">Il servira uniquement pour votre profil et en cas de perte de vos identifiant et mot de passe.</small>
 		</div>
 		<div class="form-group">
 			<label for="last_name">Nom
 			</label>
-			<input type="text" class="form-control" id="last_name" aria-describedby="last_nameHelp" placeholder="Entrer votre Nom" required>
-			<small id="last_nameHelp" class="form-text text-muted">Il serira uniquement pour votre profil et en cas de perte de vos identifiant et mot de passe.</small>
+			<input type="text" class="form-control" id="last_name" aria-describedby="last_nameHelp" placeholder="Solis" name="last_name" required>
+			<small id="last_nameHelp" class="form-text text-muted">Il servira uniquement pour votre profil et en cas de perte de vos identifiant et mot de passe.</small>
 		</div>
 		<div class="form-group">
 			<label for="password_Login">Mot de passe</label>
-			<input type="password" class="form-control" id="password_Login" placeholder="Mot de passe" required>
+			<input type="password" class="form-control" id="password_Login" placeholder="MonMotDePasseIncroyable" name="password" required>
 		</div>
 		<div class="form-group">
 			<label for="check_Password_Login">Confirmez le mot de passe
 			</label>
-			<input type="password" class="form-control" id="check_Password_Login" placeholder="Mot de passe à confirmer" required>
+			<input type="password" class="form-control" id="check_Password_Login" placeholder="MonMotDePasseIncroyable" name="password_Confirmed" required>
 		</div>
 		<div class="form-check">
 			<input type="checkbox" class="form-check-input" id="check_CGU" required>
@@ -69,15 +74,15 @@
 			</form>
 
 
-			<!-- Afficher le message si un mail a été envoyé -->
-			{% if app.request.method == 'POST' %}
-				{% if app.session.get('message') is defined %}
-					<p>{{ app.session.get('message') }}</p>
-					{% set _ = app.session.remove('message') %}
-					{% set emailSent = true %}
-				{% else %}
-					{% set emailSent = false %}
-					<p>Mail ou mot de passe non valide</p>
-				{% endif %}
-			{% endif %}
+			{# <!-- Afficher le message si un mail a été envoyé -->
+																																																															{% if app.request.method == 'POST' %}
+																																																																{% if app.session.get('message') is defined %}
+																																																																	<p>{{ app.session.get('message') }}</p>
+																																																																	{% set _ = app.session.remove('message') %}
+																																																																	{% set emailSent = true %}
+																																																																{% else %}
+																																																																	{% set emailSent = false %}
+																																																																	<p>Mail ou mot de passe non valide</p>
+																																																																{% endif %}
+																																																															{% endif %} #}
 		{% endblock %}

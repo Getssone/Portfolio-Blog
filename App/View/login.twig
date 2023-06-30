@@ -23,6 +23,11 @@
 	</header>
 {% endblock %}
 {% block content %}
+
+	{% if message is defined %}
+		<p>{{ message }}</p>
+	{% endif %}
+
 	<form action="{{ 'posts'}}" method="post">
 		<div class="form-group">
 			<label for="email_Login">Email address</label>

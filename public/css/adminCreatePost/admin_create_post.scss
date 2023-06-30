@@ -15,11 +15,11 @@
   width: inherit;
   margin: 1rem;
   flex-direction: row;
-  overflow: hidden;
+  flex-wrap: wrap;
+  justify-content: space-around;
 
   .CardImage {
     display: flex;
-    gap: 14rem;
     flex-direction: row;
     align-items: center;
     border-radius: 2rem;
@@ -36,9 +36,10 @@
     input {
       width: 11.1rem;
     }
-    img {
-      width: 100%;
-      object-fit: cover;
-    }
+  }
+  img {
+    border-radius: 2rem;
+    height: 10rem;
+    object-fit: cover;
   }
 }

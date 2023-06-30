@@ -26,7 +26,8 @@ class TwigRenderer
     {
         //* rendu template */
 
-        $this->loader = new FilesystemLoader("App/View"); // identique au code ci dessous
+        $this->loader = new FilesystemLoader("App/View"); // identique au code ci dessous, il spécifiez le répertoire contenant les templates
+
 
         // $this->loader = new FilesystemLoader(dirname(__DIR__) . "/View");// identique au code ci dessus
 

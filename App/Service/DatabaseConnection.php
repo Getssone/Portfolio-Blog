@@ -7,7 +7,8 @@ use PDOException;
 
 class DatabaseConnection
 {
-    protected ?PDO $database = null; //déclare une propriété $database de type variable peut contenir soit une instance de la classe PDO, soit la valeur null.
+    protected ?PDO $database = null; //déclare une propriété $database de type variable peut contenir soit une instance de la classe PDO, soit la valeur null. 
+    //Elle est accessible par les enfants
 
     public function __construct()
     {
@@ -34,16 +35,16 @@ class DatabaseConnection
             // Gérer l'erreur de connexion à la base de données
             echo 'Erreur de connexion à la base de données : ' . $e->getMessage();
             exit();
-            // exit( $e);
-            // exit( $e->getMessage());
+            // exit( $e); //fonctionne
+            // exit( $e->getMessage());//fonctionne
         }
     }
 
     public function getAllPosts()
     {
-        $requeteSQL = "SELECT * FROM articles";
-        $reponse = $this->database->query($requeteSQL);
-        $posts = $reponse->fetchAll();
+        $requeteSQL = "SELECT * FROM posts";
+        $reponse = $this->database->query($requeteSQL); //query() est une fonction de l'object PDO et return un object PDOStatement
+        $posts = $reponse->fetchAll(); //fetchAll() est une fonction de l'object PDOStatement
         return $posts;
     }
 }

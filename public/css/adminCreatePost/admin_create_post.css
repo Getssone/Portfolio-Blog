@@ -16,11 +16,11 @@
   width: inherit;
   margin: 1rem;
   flex-direction: row;
-  overflow: hidden;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 .container_CardImage .CardImage {
   display: flex;
-  gap: 14rem;
   flex-direction: row;
   align-items: center;
   border-radius: 2rem;
@@ -37,8 +37,9 @@
 .container_CardImage .CardImage input {
   width: 11.1rem;
 }
-.container_CardImage .CardImage img {
-  width: 100%;
+.container_CardImage img {
+  border-radius: 2rem;
+  height: 10rem;
   -o-object-fit: cover;
      object-fit: cover;
-}/*# sourceMappingURL=new_post.css.map */
+}/*# sourceMappingURL=admin_create_post.css.map */

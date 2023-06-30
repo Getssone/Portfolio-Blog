@@ -4,7 +4,7 @@ header.masthead {
   padding-top: 14rem;
   background: no-repeat center center;
   background-color: #6c757d;
-  background-position-y: -50rem;
+  background-size: cover;
 }
 
 #admin-nav {
@@ -16,7 +16,8 @@ header.masthead {
     width: 100%;
   }
   .content-dashboard {
-    margin: 1rem;
+    display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
   }
 }/*# sourceMappingURL=admin.css.map */

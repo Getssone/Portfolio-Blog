@@ -27,11 +27,17 @@
 		<div>
 			<h1>Bienvenu M.
 				{{user.name}}</h1>
+			<blockquote>Bienvenue dans le royaume du
+				<stong>
+					<code>code</code>
+				</stong>
+				la où les fonction prenne vie et les idées se transforment en réalité.</blockquote>
+
 			<h3>Voici la liste des article récement publié</h3>
 		</div>
 		{% if user is defined %}
 			{% if user.role is same as 1 %}
-				<a href='new_post' class="button">
+				<a href="admin_create_post" class="button">
 					<div class="button__line"></div>
 					<div class="button__line"></div>
 					<span class="button__text">Ecrire un article</span>
@@ -79,7 +85,7 @@
 		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
 	</div>
 </div>{# <p>{{soustraction(1,2)}};</p>
-																																									<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
-																																									<pre>
-																																																						{{dump("##un Filtre## **ajouté** " | textadd)}}
-																																																						</pre> #}{% endblock %}
+																																														<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
+																																														<pre>
+																																																											{{dump("##un Filtre## **ajouté** " | textadd)}}
+																																																											</pre> #}{% endblock %}

@@ -12,10 +12,11 @@ session_start();
 // use Twig\TwigFunction;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use App\Controller\EmailController;
-use App\Service\DatabaseConnection\DatabaseConnection;
+use App\Model\SessionModel;
 use App\Model\TwigRenderer;
-
+use App\Controller\EmailController;
+use App\Controller\SignInController;
+use App\Service\DatabaseConnection\DatabaseConnection;
 
 
 // var_dump(basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))); 
@@ -25,13 +26,6 @@ $databaseConnection = new DatabaseConnection();
 $posts = $databaseConnection->getAllPosts();
 
 /** //rendu template */
-// $loader = new FilesystemLoader(__DIR__ . "/App/View");
-// $twig = new Environment($loader, [
-//     'cache' => false, //__DIR__ .'./Tmp',
-//     'debug' => true,
-// ]);
-
-// $twig->addExtension(new DebugExtension()); // permet d'utiliser dump() = var_dump() qui lui n'est pas accessible dans twig
 
 $twigRenderer = new TwigRenderer();
 $twig = $twigRenderer->getTwig();
@@ -54,6 +48,10 @@ $twig = $twigRenderer->getTwig();
 
 /** Routing */
 
+$sessionModel = new SessionModel();
+$message = $sessionModel->get('message');
+$sessionModel->deleteKey('message');
+
 //Permet de vérifier l'url ex: http://localhost/P5/Code_p5/?p=home
 if (isset($_GET["page"])) {
     $page = $_GET["page"];
@@ -65,7 +63,15 @@ if (isset($_GET["page"])) {
 /* Ne peut être déplacé si non bug */
 switch ($page) {
     case 'signIn':
-        echo $twig->render('sign_In.twig');
+        echo $twig->render('sign_In.twig', ['message' => $message]);
+        break;
+
+    case 'signInAction':
+        // var_dump($_POST);
+        // die;
+        $signInController = new SignInController($sessionModel);
+        $signInController->signIn();
+        // echo $twig->render('login.twig', ['message' => $message]);
         break;
 
         // $emailController = new EmailController;
@@ -93,12 +99,8 @@ switch ($page) {
         //     exit();
         // }
 
-        // Afficher la vue
-        echo $twig->render('sign_In.twig');
-        break;
-
     case 'login':
-        echo $twig->render('login.twig');
+        echo $twig->render('login.twig', ['message' => $message]);
         break;
     case 'contact':
         echo $twig->render('contact.twig');
@@ -106,11 +108,33 @@ switch ($page) {
     case 'CGU':
         echo $twig->render('CGU.twig');
         break;
+    case 'profile':
+        echo $twig->render('profile.twig', ["user" => ["name" => "Solis", "username" => "Getssone", "picture" => "public\assets\img\Accueil.jpg", "role" => 0,]]);
+        break;
+
     case 'admin':
         echo $twig->render('admin.twig', ["users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]]]);
         break;
-    case 'admin-show-posts':
-        echo $twig->render('admin-posts.twig', [
+    case 'admin_show_posts':
+        echo $twig->render('admin_show_posts.twig', [
+            "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
+            'posts' => $posts
+        ]);
+        break;
+    case 'admin_create_post':
+        echo $twig->render('admin_create_post.twig', [
+            "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
+            'posts' => $posts
+        ]);
+        break;
+    case 'admin_pending_comments':
+        echo $twig->render('admin_pending_comments.twig', [
+            "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
+            'posts' => $posts
+        ]);
+        break;
+    case 'admin_show_users':
+        echo $twig->render('admin_show_users.twig', [
             "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
             'posts' => $posts
         ]);
@@ -124,15 +148,15 @@ switch ($page) {
         break;
     case 'post':
         echo $twig->render('post.twig', [
-            "user" => ["name" => "Solis", "alias" => "Getssone", "picture" => "public\assets\img\Accueil.jpg", "role" => 0,], "post" => ["title" => "Welcome in my World", "date_of_publication" => "06-05-1994", "picture" => "public\assets\img\post-bg.jpg", "summary" => "I was born in a small village in France called Boulieu.
+            "author" => ["name" => "Solis", "username" => "Getssone", "picture" => "public\assets\img\Accueil.jpg", "role" => 0,], "post" => ["title" => "Welcome in my World", "date_of_publication" => "06-05-1994", "picture" => "public\assets\img\post-bg.jpg", "summary" => "I was born in a small village in France called Boulieu.
 
         It's a very pleasant village, but also full of history, as it's a fortified town. 
         
         I spent my childhood in this village where ...", "content" => "The Article
-        Never in all their history have men been able truly to conceive of the world as one: a single sphere, a globe, having the qualities of a globe, a round earth in which all the directions eventually meet, in which there is no center because every point, or none, is center — an equal earth which all men occupy as equals. The airman's earth, if free men make it, will be truly round: a globe in practice, not in theory.
+        Never in all their history have men been able truly to conceive of the world as one.
         <h2 class='section-heading'>The Final Frontier</h2>
-        <p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it is a task to occupy the generations. And no matter how much progress one makes, there is always the thrill of just beginning.</p>
-        <blockquote class='blockquote'>The dreams of yesterday are the hopes of today and the reality of tomorrow. Science has not yet mastered prophecy. We predict too much for the next year and yet far too little for the next ten.</blockquote>
+        <p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it is a task to occupy the generations...</p>
+        <blockquote class='blockquote'>The dreams of yesterday are the hopes of today and the reality of tomorrow.</blockquote>
         <a href='#!'><img class='img-fluid' src='public\assets\img\post-sample-image.jpg' alt='...'></a>
         <span class='caption text-muted'>To go places and do things that have never been done before – that’s what living is all about.</span>
         <p>
@@ -146,21 +170,14 @@ switch ($page) {
         ]);
         break;
     case ':id/post':
-        echo $twig->render('new_post.twig', ["user" => ["name" => "Solis", "alias" => "Getssone"]]);
+        echo $twig->render('post.twig', ["user" => ["name" => "Solis", "alias" => "Getssone"]]);
         break;
-    case 'new_post':
-        echo $twig->render('new_post.twig', ["user" => ["name" => "Solis", "alias" => "Getssone"]]);
-        break;
-        // case 'edit_comment':
-        //     echo $twig->render('edit_comment.twig', [
-        //         "user" => ["name" => "Solis", "alias" => "Getssone", "picture" => "public\assets\img\Accueil.jpg", "role" => 1,], "comments" => [["id" => 1, "author" => "Toto", "content" => "Very interesting", "date" => "24-05-2023", "picture" => "public\assets\img\CGU.jpg",], ["id" => 2, "author" => "Titi", "content" => "Thank you for every thing", "date" => "24-05-2023", "picture" => "public\assets\img\Accueil.jpg",]]
-        //     ]);
-    case 'edit_comment/':
+    case 'admin_edit_comment':
         if (isset($_GET['commentId'])) {
             var_dump($PHP_SELF . "?" . $_SERVER['QUERY_STRING']);
             die;
             $commentId = $_GET['commentId'];
-            echo $twig->render('edit_comment.twig', [
+            echo $twig->render('admin_edit_comment.twig', [
                 "user" => ["name" => "Solis", "alias" => "Getssone", "picture" => "public\assets\img\Accueil.jpg", "role" => 1,], "comments" => [["id" => $commentId, "author" => "Toto", "content" => "Very interesting", "date" => "24-05-2023", "picture" => "public\assets\img\CGU.jpg",], ["id" => $commentId, "author" => "Titi", "content" => "Thank you for every thing", "date" => "24-05-2023", "picture" => "public\assets\img\Accueil.jpg",]]
             ]);
             header('Location: /post');

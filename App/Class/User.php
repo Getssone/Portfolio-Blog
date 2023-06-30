@@ -129,6 +129,7 @@ class User
     {
         return $this->picture = $picture;
     }
+
     private function hydrate($data)
     {
         // Boucle sur tous les champs et valeurs
