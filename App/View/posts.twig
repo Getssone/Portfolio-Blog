@@ -26,7 +26,10 @@
 	<div class="container_Ecrire_Article">
 		<div>
 			<h1>Bienvenu M.
-				{{user.name}}</h1>
+				{{user.username}}</h1>
+			{# <pre>
+								{{ dump(user) }}
+							</pre> #}
 			<blockquote>Bienvenue dans le royaume du
 				<stong>
 					<code>code</code>
@@ -85,7 +88,7 @@
 		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
 	</div>
 </div>{# <p>{{soustraction(1,2)}};</p>
-																																														<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
-																																														<pre>
-																																																											{{dump("##un Filtre## **ajouté** " | textadd)}}
-																																																											</pre> #}{% endblock %}
+																																																			<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
+																																																			<pre>
+																																																																{{dump("##un Filtre## **ajouté** " | textadd)}}
+																																																																</pre> #}{% endblock %}

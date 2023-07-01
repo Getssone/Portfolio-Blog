@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Exception;
-use App\Class\User;
 use App\Model\UserModel;
 use App\Model\SessionModel;
 
@@ -22,12 +21,12 @@ class SignInController
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Récupérer les données du formulaire
-                $userName = $_POST['username'];
-                $email = $_POST['email'];
-                $firstName = $_POST['first_name'];
-                $lastName = $_POST['last_name'];
-                $password = $_POST['password'];
-                $passwordConfirmed = $_POST['password_Confirmed'];
+                $userName = ucfirst(strtolower(htmlspecialchars($_POST['username'])));
+                $email = strtolower(htmlspecialchars($_POST['email']));
+                $firstName = ucfirst(strtolower(htmlspecialchars($_POST['first_name'])));
+                $lastName = ucfirst(strtolower(htmlspecialchars($_POST['last_name'])));
+                $password = htmlspecialchars($_POST['password']);
+                $passwordConfirmed = htmlspecialchars($_POST['password_Confirmed']);
 
                 // Effectuer les vérifications de sécurité ici
                 if ($password === $passwordConfirmed) {
@@ -51,7 +50,6 @@ class SignInController
             // Redirection vers la page de connexion
             header('Location: signIn');
             exit;
-            // Redirection vers la page de connexion
         }
     }
 
@@ -66,6 +64,6 @@ class SignInController
         // echo "Merci pour votre enregistrement ! Votre compte a bien été créé au nom de : " . $username . ".";
 
         // Afficher un message de remerciement avec le nom d'utilisateur récupéré
-        $_SESSION['message'] = "Merci pour votre enregistrement ! Votre compte a bien été créé au nom de : '. $username . ' ";
+        $this->sessionModel->set('message', "Merci pour votre enregistrement ! Votre compte a bien été créé au nom de : $username ");
     }
 }

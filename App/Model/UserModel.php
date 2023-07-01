@@ -12,8 +12,8 @@ class UserModel extends DatabaseConnection
     public function readAll()
     {
         $usersArray = [];
-        $requeteSQL = "SELECT * FROM users";
-        $reponse = $this->database->query($requeteSQL);
+        $querySQL = "SELECT * FROM users";
+        $reponse = $this->database->query($querySQL);
         while ($user = $reponse->fetch()) {
             $usersArray[] = new User($user);
         }
@@ -21,19 +21,21 @@ class UserModel extends DatabaseConnection
     }
     public function read(int $id)
     {
-        $requeteSQL = ("SELECT * FROM user WHERE id = :id ");
-        $reponse = $this->database->prepare($requeteSQL);
+        $querySQL = ("SELECT * FROM users WHERE id = :id ");
+        $reponse = $this->database->prepare($querySQL);
         $reponse->bindValue(":id", $id, PDO::PARAM_INT);
         $reponse->execute();
-        $result = $reponse->fetch();
+        $result = $reponse->fetch(PDO::FETCH_ASSOC);
 
         return new User($result);
     }
 
     public function findByEmail(string $email)
     {
-        $requeteSQL = ("SELECT * FROM users WHERE email = :email");
-        $reponse = $this->database->prepare($requeteSQL);
+        // var_dump($email);
+        // die;
+        $querySQL = ("SELECT * FROM users WHERE email = :email");
+        $reponse = $this->database->prepare($querySQL);
         $reponse->bindValue(":email", $email, PDO::PARAM_STR);
         $reponse->execute();
         $result = $reponse->fetch();
@@ -46,8 +48,8 @@ class UserModel extends DatabaseConnection
     }
     public function findByUsername(string $username)
     {
-        $requeteSQL = "SELECT * FROM users WHERE username = :username";
-        $reponse = $this->database->prepare($requeteSQL);
+        $querySQL = "SELECT * FROM users WHERE username = :username";
+        $reponse = $this->database->prepare($querySQL);
         $reponse->bindValue(1, $username, PDO::PARAM_STR);
         $reponse->execute();
         $result = $reponse->fetch();
@@ -56,6 +58,7 @@ class UserModel extends DatabaseConnection
         }
         return new User($result);
     }
+
     public function create(string $username, string $email, string $first_name, string $last_name, string $password, $role)
     {
 
@@ -73,7 +76,7 @@ class UserModel extends DatabaseConnection
                 ':email' => $email,
                 ':first_name' => $first_name,
                 ':last_name' => $last_name,
-                ':password' => md5($password),
+                ':password' => password_hash($password, PASSWORD_BCRYPT),
                 ':role' => $role
             )
         );
@@ -85,8 +88,12 @@ class UserModel extends DatabaseConnection
     {
         $querySQL = "SELECT username FROM users WHERE id = :userId";
         $reponse = $this->database->prepare($querySQL);
-        $reponse->execute(array(':userId' => $userId));
-        $user = $reponse->fetch(PDO::FETCH_ASSOC);
+        $reponse->bindValue(":userId", $userId, PDO::PARAM_INT);
+        $reponse->execute();
+        // $reponse = $this->database->prepare($querySQL);
+        // $reponse->execute(array(':userId' => $userId));
+
+        $user = $reponse->fetch(PDO::FETCH_ASSOC); //les résultats seront sous forme de tableau associatif
 
         return $user['username'];
     }
