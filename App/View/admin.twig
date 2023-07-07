@@ -30,14 +30,14 @@
 			<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
 				<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 					<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-						<img src="https://via.placeholder.com/150" alt="" width="32" height="32" class="rounded-circle me-2">
-						{% for user in users %}
-							<span class="fs-4">
-								{% if user.role == 1 %}
+						{% if user is defined %}
+							{% if user.role is same as 1 %}
+								<span class="fs-4">
+									<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
 									{{user.username}}
-								{% endif %}
-							{% endfor %}
-						</span>
+								</span>
+							{% endif %}
+						{% endif %}
 					</a>
 					<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
 						<li>
@@ -90,13 +90,18 @@
 			</div>
 		{% endblock %}
 		<div class="container d-flex flex-column justify-content-center  " style="overflow-x: hidden;">
+
 			{% block admin_title %}
-				<h2 class="display-6">Interface administrateur</h2>
+				<h2 class="display-6 d-flex justify-content-center py-3">Interface administrateur</h2>
 			{% endblock %}
 			{% block admin_content %}
-
-				Bienvenu à Bord de votre Tableau de Bord 🚢
+				<p class="d-flex justify-content-center py-3">
+					Bienvenu à Bord de votre Tableau de Bord 🚢
+				</p>
 			{% endblock %}
+			{% if message is defined and message is not empty %}
+				<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

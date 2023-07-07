@@ -8,7 +8,14 @@
 	<body>
 
 		<!-- Navbar du Blog-->
-		{% include 'Layout/nav.twig' %}
+		<!-- Navbar du Blog-->
+			{% if user.id is defined %}
+			{% include 'Layout/nav.twig' %}
+
+		{% else %}
+			{% include 'Layout/unlogin_nav.twig' %}
+		{% 
+		endif %}
 
 		<!-- Titre de la page Blog-->
 		{{ block('header')}}

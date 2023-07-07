@@ -10,6 +10,8 @@ session_start();
 // use Twig\TwigFilter;
 // use PDO;
 // use Twig\TwigFunction;
+
+use App\Controller\PostController;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use App\Model\SessionModel;
@@ -24,7 +26,7 @@ use App\Service\DatabaseConnection\DatabaseConnection;
 //die;
 
 $databaseConnection = new DatabaseConnection();
-$posts = $databaseConnection->getAllPosts();
+// $posts = $databaseConnection->getAllPosts();
 
 /** //rendu template */
 
@@ -58,7 +60,7 @@ $sessionModel->deleteKey('message');
 if (isset($_GET["page"])) {
     $page = $_GET["page"];
 } else {
-    $page = 'signIn';
+    $page = 'postsAccess';
 }
 
 
@@ -78,15 +80,24 @@ switch ($page) {
         break;
 
     case 'logInAction':
-        // var_dump($_POST);
-        // die;
         $userController = new UserController($sessionModel);
         $userController->connect($_POST['email'], $_POST['password']);
         break;
 
+    case 'logOut':
+        $userController = new UserController($sessionModel);
+        $userController->logoutUser();
+        echo $twig->render('login.twig');
+        break;
+
+    case 'postsAccess':
+        $postController = new PostController($sessionModel);
+        $postController->seeAllPosts();
+
 
     case 'posts':
         $user = $sessionModel->get('user');
+        $posts = $sessionModel->get('posts');
         echo $twig->render('posts.twig', ["user" => $user, 'posts' => $posts]);
         break;
 
@@ -107,15 +118,26 @@ switch ($page) {
         echo $twig->render('profile.twig', ["user" => $user,]);
         break;
 
-    case 'logOut':
-        $userController = new UserController($sessionModel);
-        $userController->logoutUser();
-        echo $twig->render('login.twig');
+    case 'admin_create_post_Action':
+        $postController = new PostController($sessionModel);
+        $postController->createPost();
         break;
 
-        // case 'admin':
-        //     echo $twig->render('admin.twig', ["users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]]]);
-        //     break;
+    case 'admin_create_post':
+        $user = $sessionModel->get('user');
+        echo $twig->render('admin_create_post.twig', ["user" => $user, 'message' => $message]);
+        break;
+
+    case 'admin_add_post_Action':
+        $postController = new PostController($sessionModel);
+        $postController->addPost();
+        break;
+    case 'admin':
+        $user = $sessionModel->get('user');
+        // var_dump($user);
+        // die;
+        echo $twig->render('admin.twig', ["user" => $user, 'message' => $message]);
+        break;
 
         // case 'admin_show_posts':
         //     echo $twig->render('admin_show_posts.twig', [
@@ -124,12 +146,7 @@ switch ($page) {
         //     ]);
         //     break;
 
-        // case 'admin_create_post':
-        //     echo $twig->render('admin_create_post.twig', [
-        //         "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
-        //         'posts' => $posts
-        //     ]);
-        //     break;
+
 
         // case 'admin_pending_comments':
         //     echo $twig->render('admin_pending_comments.twig', [

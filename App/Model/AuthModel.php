@@ -10,9 +10,9 @@ class AuthModel
     /**
      * User manager : requete PDO connection to Users stored in the database
      *
-     * @var UserManager
+     * @var userModel
      */
-    private $userManager;
+    private $userModel;
 
     /**
      * User session
@@ -25,7 +25,7 @@ class AuthModel
     public function __construct()
     {
         $this->session = new SessionModel();
-        $this->userManager = new UserModel();
+        $this->userModel = new UserModel();
     }
 
     /**
@@ -47,9 +47,16 @@ class AuthModel
      *
      * @return User
      */
-    public function getCurrentUser(): User
+    public function getCurrentUser(): ?User
     {
-        $user = $this->userManager->read($this->session->get('userID'));
+        $userId = $this->session->get('userID');
+
+        if ($userId === null) {
+            return null;
+        }
+
+        $user = $this->userModel->read($userId);
+
         return $user;
     }
 
@@ -65,7 +72,7 @@ class AuthModel
          * First retrieve user from session
          */
         if ($this->isLoggedIn()) {
-            $user = $this->userManager->read($this->session->get('userID'));
+            $user = $this->userModel->read($this->session->get('userID'));
             $role = $user->getRole();
             if ($role === false || $role === 0 || $role === '0') {
                 return false;

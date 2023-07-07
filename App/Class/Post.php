@@ -12,6 +12,7 @@ class Post
      */
     private $id;
     private $title;
+    private $image;
     private $content;
     private $createdAt;
     private $updatedAt;
@@ -38,6 +39,11 @@ class Post
         return $this->id;
     }
 
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
     public function getTitle()
     {
         return $this->title;
@@ -51,6 +57,17 @@ class Post
         } else {
             $this->title = substr($title, 0, 255);
         }
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+
+    public function setImage($image)
+    {
+        $this->image = $image;
     }
 
     public function getContent()

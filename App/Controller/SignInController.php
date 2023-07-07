@@ -60,8 +60,6 @@ class SignInController
         $userId = $userModel->create($username, $email, $first_name, $last_name, $password, 0);
         $username = $userModel->getUsernameById($userId);
 
-        // Afficher un message de remerciement avec le nom d'utilisateur récupéré
-        // echo "Merci pour votre enregistrement ! Votre compte a bien été créé au nom de : " . $username . ".";
 
         // Afficher un message de remerciement avec le nom d'utilisateur récupéré
         $this->sessionModel->set('message', "Merci pour votre enregistrement ! Votre compte a bien été créé au nom de : $username ");

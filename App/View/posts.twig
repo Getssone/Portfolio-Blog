@@ -25,29 +25,28 @@
 {% block content %}
 	<div class="container_Ecrire_Article">
 		<div>
-			<h1>Bienvenu M.
-				{{user.username}}</h1>
-			{# <pre>
-								{{ dump(user) }}
-							</pre> #}
-			<blockquote>Bienvenue dans le royaume du
-				<stong>
-					<code>code</code>
-				</stong>
-				la où les fonction prenne vie et les idées se transforment en réalité.</blockquote>
-
-			<h3>Voici la liste des article récement publié</h3>
-		</div>
-		{% if user is defined %}
-			{% if user.role is same as 1 %}
-				<a href="admin_create_post" class="button">
-					<div class="button__line"></div>
-					<div class="button__line"></div>
-					<span class="button__text">Ecrire un article</span>
-					<div class="button__drow1"></div>
-					<div class="button__drow2"></div>
-				</a>
+			{% if user.id is defined %}
+				<h1>Bienvenue M.
+					{{ user.username }}</h1>
+			{% else %}
+				<h1>Bonjour Etranger</h1>
 			{% endif %}
+			<blockquote>Bienvenue dans le royaume du
+				<strong>
+					<code>code</code>
+				</strong>, là où les fonctions prennent vie et les idées se transforment en réalité.</blockquote>
+
+			<h3>Voici, la liste des savoir émanant des plumes érudites :
+			</h3>
+		</div>
+		{% if user.role is same as 1 %}
+			<form action="admin_create_post_Action" method="get" class="button">
+				<div class="button__line"></div>
+				<div class="button__line"></div>
+				<button type="submit" class="button__text border-0 bg-transparent">Écrire un article</button>
+				<div class="button__drow1"></div>
+				<div class="button__drow2"></div>
+			</form>
 		{% endif %}
 	</div>
 	<div class="row mb-2">
@@ -55,24 +54,35 @@
 			{# {{ dump (posts) }}{{ die }} #}
 
 			<div class="card m-2" style="width: 18rem;">
-				<img src={{post.picture}} class="card-img-top" alt="...">
+				<img src="{{post.image}}" class="card-img-top" alt="...">
 				<div class="card-body">
 					<h5 class="card-title">
-						{{post.recipe_id}}
+						<div class="container">
+							<div class="row justify-content-center">
+								<div class="col-md-4 m-3">
+									<div class="rounded-circle  d-flex align-items-center justify-content-center bg-primary text-center" style="width: 40px; height: 40px; line-height: 30px;">
+										<span class="rounded-circle text-center" style="color:white">
+											{{post.id}}
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						{{post.title}}
 					</h5>
 					<small class="post-subtitle">
 						Dernière Modification
-						{{"September 24, 2023"}}
+						{{ post.created_at|date("d/m/Y")}}
 					</small>
 					<p class="card-text">
-						{{post.recipe}}
+						{{post.lead_sentence}}
 					</p>
 				</a>
 				<p class="post-meta">
 					Posted by
 					<a href="#!">
-						{{user.alias}}
+						{{post.created_by}}
 					</a>
 
 				</p>
@@ -82,13 +92,11 @@
 				</a>
 			</div>
 		</div>
-	{% endfor %}
-	<!-- Pager-->
-	<div class="d-flex justify-content-end m-4">
+	{% endfor %}<!-- Pager--><div class="d-flex justify-content-end m-4">
 		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
 	</div>
 </div>{# <p>{{soustraction(1,2)}};</p>
-																																																			<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
-																																																			<pre>
-																																																																{{dump("##un Filtre## **ajouté** " | textadd)}}
-																																																																</pre> #}{% endblock %}
+																																																																																																									<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
+																																																																																																									<pre>
+																																																																																																																						{{dump("##un Filtre## **ajouté** " | textadd)}}
+																																																																																																																						</pre> #}{% endblock %}

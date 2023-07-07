@@ -7,7 +7,13 @@
 	<body>
 
 		<!-- Navbar du Blog-->
-		{% include 'Layout/unlogin_nav.twig' %}
+		{% if user.id is defined %}
+			{% include 'Layout/nav.twig' %}
+
+		{% else %}
+			{% include 'Layout/unlogin_nav.twig' %}
+		{% 
+		endif %}
 
 		<!-- Titre de la page Blog-->
 		{{ block('header')}}
@@ -31,4 +37,4 @@
 
 	<!-- Core theme JS-->
 	<script src="public/js/scripts.js"></script>
-</html>
+</html></body></html>

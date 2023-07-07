@@ -19,6 +19,7 @@ class UserModel extends DatabaseConnection
         }
         return $usersArray;
     }
+
     public function read(int $id)
     {
         $querySQL = ("SELECT * FROM users WHERE id = :id ");
@@ -27,6 +28,10 @@ class UserModel extends DatabaseConnection
         $reponse->execute();
         $result = $reponse->fetch(PDO::FETCH_ASSOC);
 
+        if (!$result) {
+            return null; // Aucun utilisateur trouvé, retourne null
+        }
+        var_dump($result);
         return new User($result);
     }
 

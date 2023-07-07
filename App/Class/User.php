@@ -38,7 +38,7 @@ class User
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId(int $id)
     {
         if (is_string($id) && intval($id) > 0) {
             $this->id = intval($id);

@@ -39,12 +39,4 @@ class DatabaseConnection
             // exit( $e->getMessage());//fonctionne
         }
     }
-
-    public function getAllPosts()
-    {
-        $requeteSQL = "SELECT * FROM posts";
-        $reponse = $this->database->query($requeteSQL); //query() est une fonction de l'object PDO et return un object PDOStatement
-        $posts = $reponse->fetchAll(); //fetchAll() est une fonction de l'object PDOStatement
-        return $posts;
-    }
 }

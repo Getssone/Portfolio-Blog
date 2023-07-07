@@ -43,7 +43,7 @@ class UserController
                 // die;
                 $this->sessionModel->set('user', $userCurrent);
                 // Authentification réussie
-                header('Location: posts');
+                header('Location: postsAccess');
             } else {
                 $this->sessionModel->set('message', "Authentification échouée");
                 // Authentification échouée

@@ -27,14 +27,14 @@
 	<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
 		<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-				<img src="https://via.placeholder.com/150" alt="" width="32" height="32" class="rounded-circle me-2">
-				<span class="fs-4">
-					{% for user in users %}
-						{% if user.role == 1 %}
+				{% if user is defined %}
+					{% if user.role is same as 1 %}
+						<span class="fs-4">
+							<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
 							{{user.username}}
-						{% endif %}
-					{% endfor %}
-				</span>
+						</span>
+					{% endif %}
+				{% endif %}
 			</a>
 			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
 				<li>
@@ -110,13 +110,16 @@ reader.readAsDataURL(input.files[0]);
 	{% block admin_title %}{% endblock %}
 	<main class="mb-5 pb-5">
 		<div class="mb-5">
+			{% if message is defined and message is not empty %}
+				<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
+			{% endif %}
 			<h2 class="text-secondary">Ajouter un article</h2>
 			<p>Laissez-vous emporter par la magie des mots et créez votre propre chef-d'œuvre de l'écriture.</p>
 			<div class="container">
-				<div class="row">
+				<div class="row d-flex justify-content-center py-3">
 					<div class="col-10 card bg-light mt-5">
 						<form
-							action="admin_add_post" method="post" class="card-body">
+							action="admin_add_post_Action" method="post" enctype="multipart/form-data" class="card-body">
 							{# {{ form_token("admin_add_post") }} #}
 							<div class="form-group">
 								<div class="col mt-4">
@@ -138,10 +141,6 @@ reader.readAsDataURL(input.files[0]);
 									<label for="leadSentence">Châpo</label>
 									<input type="text" class="form-control mt-2" placeholder="Châpo de l'article" name="leadSentence">
 								</div>
-								{# <div class="col mt-4">
-																																																																																																																																																																																																																																																																																																																																																										<label for="title">Slug</label>
-																																																																																																																																																																																																																																																																																																																																																										<input type="text" class="form-control mt-2" placeholder="Slug de l'article" name="slug">
-																																																																																																																																																																																																																																																																																																																																																									</div> #}
 							</div>
 							<div class="form-group">
 								<label for="content" class="form-label mt-4">Contenu</label>

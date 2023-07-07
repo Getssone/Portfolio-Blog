@@ -24,14 +24,14 @@
 	<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
 		<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-				<img src="https://via.placeholder.com/150" alt="" width="32" height="32" class="rounded-circle me-2">
-				<span class="fs-4">
-					{% for user in users %}
-						{% if user.role == 1 %}
+				{% if user is defined %}
+					{% if user.role is same as 1 %}
+						<span class="fs-4">
+							<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
 							{{user.username}}
-						{% endif %}
-					{% endfor %}
-				</span>
+						</span>
+					{% endif %}
+				{% endif %}
 			</a>
 			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
 				<li>
@@ -107,48 +107,48 @@
 				</thead>
 				<tbody>
 					{# 
-																																																																															{% if comments|filter(comment => comment.status == constant('App\\Class\\Comment::PENDING')) %}
-																																																																																{% for comment in comments|filter(comment => comment.status == constant('App\\Class\\Comment::PENDING')) %}
-																																																																																	<tr>
-																																																																																		<th scope="row">{{ comment.id }}</th>
-																																																																																		<td>{{ comment.title }}</td>
-																																																																																		<td>{{ comment.content }}</td>
-																																																																																		<td>{{ comment.created_at|date("d/m/Y H:i:s") }}</td>
-																																																																																		<td>{{ comment.username }}</td>
-																																																																																		<td>
-																																																																																			<a href="/post/{{ comment.post_id }}">{{ comment.post_title }}</a>
-																																																																																		</td>
-																																																																																		<td>
-																																																																																			{% for status in  statuses %}
-																																																																																				{% for name,label in  status %}
-																																																																																					{% if comment.status == name %}
-																																																																																						{{  label  }}
-																																																																																					{% endif %}
-																																																																																				{% endfor %}
-																																																																																			{% endfor %}
-																																																																																		</td>
-																																																																																		<td>
-																																																																																			<form
-																																																																																				action="admin_approve_comment/{{comment.id}}" method="post">
-																																																																																				{{ form_token("/admin/approve-comment/#{comment.id}") }}
-																																																																																				<button class="btn btn-success" type="submit">Valider</button>
-																																																																																			</form>
-																																																																																		</td>
-																																																																																		<td>
-																																																																																			<form
-																																																																																				action="admin_reject_comment/{{comment.id}}" method="post">
-																																																																																				{{ form_token("/admin/reject-comment/#{comment.id}") }} 
-																																																																																				<button class="btn btn-danger" type="submit">Rejeter</button>
-																																																																																			</form>
-																																																																																		</td>
-																																																																																	</tr>
-																																																																																{% endfor %}
-																																																																															{% else %}
-																																																																																<tr>
-																																																																																	<td colspan="8">Aucun commentaire en attente.</td>
-																																																																																</tr>
-																																																																															{% endif %}
-																																																																											                #}
+																																																																																				{% if comments|filter(comment => comment.status == constant('App\\Class\\Comment::PENDING')) %}
+																																																																																					{% for comment in comments|filter(comment => comment.status == constant('App\\Class\\Comment::PENDING')) %}
+																																																																																						<tr>
+																																																																																							<th scope="row">{{ comment.id }}</th>
+																																																																																							<td>{{ comment.title }}</td>
+																																																																																							<td>{{ comment.content }}</td>
+																																																																																							<td>{{ comment.created_at|date("d/m/Y H:i:s") }}</td>
+																																																																																							<td>{{ comment.username }}</td>
+																																																																																							<td>
+																																																																																								<a href="/post/{{ comment.post_id }}">{{ comment.post_title }}</a>
+																																																																																							</td>
+																																																																																							<td>
+																																																																																								{% for status in  statuses %}
+																																																																																									{% for name,label in  status %}
+																																																																																										{% if comment.status == name %}
+																																																																																											{{  label  }}
+																																																																																										{% endif %}
+																																																																																									{% endfor %}
+																																																																																								{% endfor %}
+																																																																																							</td>
+																																																																																							<td>
+																																																																																								<form
+																																																																																									action="admin_approve_comment/{{comment.id}}" method="post">
+																																																																																									{{ form_token("/admin/approve-comment/#{comment.id}") }}
+																																																																																									<button class="btn btn-success" type="submit">Valider</button>
+																																																																																								</form>
+																																																																																							</td>
+																																																																																							<td>
+																																																																																								<form
+																																																																																									action="admin_reject_comment/{{comment.id}}" method="post">
+																																																																																									{{ form_token("/admin/reject-comment/#{comment.id}") }} 
+																																																																																									<button class="btn btn-danger" type="submit">Rejeter</button>
+																																																																																								</form>
+																																																																																							</td>
+																																																																																						</tr>
+																																																																																					{% endfor %}
+																																																																																				{% else %}
+																																																																																					<tr>
+																																																																																						<td colspan="8">Aucun commentaire en attente.</td>
+																																																																																					</tr>
+																																																																																				{% endif %}
+																																																																																                #}
 				</tbody>
 			</table>
 		</div>
@@ -168,33 +168,33 @@
 				</thead>
 				<tbody>
 					{#             
-																																																																											{% if comments|filter(comment => comment.status == constant('App\\Class\\Comment::REJECTED')) %}
-																																																																												{% for comment in comments|filter(comment => comment.status == constant('App\\Class\\Comment::REJECTED')) %}
-																																																																													<tr>
-																																																																														<th scope="row">{{ comment.id }}</th>
-																																																																														<td>{{ comment.title }}</td>
-																																																																														<td>{{ comment.content }}</td>
-																																																																														<td>{{ comment.created_at|date("d/m/Y H:i:s") }}</td>
-																																																																														<td>{{ comment.username }}</td>
-																																																																														<td>
-																																																																															<a href="/post/{{ comment.post_id }}">{{ comment.post_title }}</a>
-																																																																														</td>
-																																																																														<td class="text-danger fw-bold">
-																																																																															{% for status in  statuses %}
-																																																																																{% for name,label in  status %}
-																																																																																	{% if comment.status == name %}
-																																																																																		{{  label  }}
-																																																																																	{% endif %}
-																																																																																{% endfor %}
-																																																																															{% endfor %}
-																																																																														</td>
-																																																																													</tr>
-																																																																												{% endfor %}
-																																																																											{% else %}
-																																																																												<tr>
-																																																																													<td colspan="7">Aucun commentaire rejeté.</td>
-																																																																												</tr>
-																																																																											{% endif %} #}
+																																																																																{% if comments|filter(comment => comment.status == constant('App\\Class\\Comment::REJECTED')) %}
+																																																																																	{% for comment in comments|filter(comment => comment.status == constant('App\\Class\\Comment::REJECTED')) %}
+																																																																																		<tr>
+																																																																																			<th scope="row">{{ comment.id }}</th>
+																																																																																			<td>{{ comment.title }}</td>
+																																																																																			<td>{{ comment.content }}</td>
+																																																																																			<td>{{ comment.created_at|date("d/m/Y H:i:s") }}</td>
+																																																																																			<td>{{ comment.username }}</td>
+																																																																																			<td>
+																																																																																				<a href="/post/{{ comment.post_id }}">{{ comment.post_title }}</a>
+																																																																																			</td>
+																																																																																			<td class="text-danger fw-bold">
+																																																																																				{% for status in  statuses %}
+																																																																																					{% for name,label in  status %}
+																																																																																						{% if comment.status == name %}
+																																																																																							{{  label  }}
+																																																																																						{% endif %}
+																																																																																					{% endfor %}
+																																																																																				{% endfor %}
+																																																																																			</td>
+																																																																																		</tr>
+																																																																																	{% endfor %}
+																																																																																{% else %}
+																																																																																	<tr>
+																																																																																		<td colspan="7">Aucun commentaire rejeté.</td>
+																																																																																	</tr>
+																																																																																{% endif %} #}
 				</tbody>
 			</table>
 		</div>
@@ -214,32 +214,32 @@
 				</thead>
 				<tbody>
 					{# {% if comments|filter(comment => comment.status == constant('App\\Class\\Comment::APPROVED')) %}
-																																																																								{% for comment in comments|filter(comment => comment.status == constant('App\\Class\\Comment::APPROVED')) %}
-																																																																									<tr>
-																																																																										<th scope="row">{{ comment.id }}</th>
-																																																																										<td>{{ comment.title }}</td>
-																																																																										<td>{{ comment.content }}</td>
-																																																																										<td>{{ comment.created_at|date("d/m/Y H:i:s") }}</td>
-																																																																										<td>{{ comment.username }}</td>
-																																																																										<td>
-																																																																											<a href="post/{{ comment.post_id }}">{{ comment.post_title }}</a>
-																																																																										</td>
-																																																																										<td class="text-success fw-bold">
-																																																																											{% for status in  statuses %}
-																																																																												{% for name,label in  status %}
-																																																																													{% if comment.status == name %}
-																																																																														{{  label  }}
-																																																																													{% endif %}
-																																																																												{% endfor %}
-																																																																											{% endfor %}
-																																																																										</td>
-																																																																									</tr>
-																																																																								{% endfor %}
-																																																																							{% else %}
-																																																																								<tr>
-																																																																									<td colspan="7">Aucun commentaire publié.</td>
-																																																																								</tr>
-																																																																							{% endif %} #}
+																																																																													{% for comment in comments|filter(comment => comment.status == constant('App\\Class\\Comment::APPROVED')) %}
+																																																																														<tr>
+																																																																															<th scope="row">{{ comment.id }}</th>
+																																																																															<td>{{ comment.title }}</td>
+																																																																															<td>{{ comment.content }}</td>
+																																																																															<td>{{ comment.created_at|date("d/m/Y H:i:s") }}</td>
+																																																																															<td>{{ comment.username }}</td>
+																																																																															<td>
+																																																																																<a href="post/{{ comment.post_id }}">{{ comment.post_title }}</a>
+																																																																															</td>
+																																																																															<td class="text-success fw-bold">
+																																																																																{% for status in  statuses %}
+																																																																																	{% for name,label in  status %}
+																																																																																		{% if comment.status == name %}
+																																																																																			{{  label  }}
+																																																																																		{% endif %}
+																																																																																	{% endfor %}
+																																																																																{% endfor %}
+																																																																															</td>
+																																																																														</tr>
+																																																																													{% endfor %}
+																																																																												{% else %}
+																																																																													<tr>
+																																																																														<td colspan="7">Aucun commentaire publié.</td>
+																																																																													</tr>
+																																																																												{% endif %} #}
 				</tbody>
 			</table>
 		</div>
