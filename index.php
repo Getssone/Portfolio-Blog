@@ -101,6 +101,26 @@ switch ($page) {
         echo $twig->render('posts.twig', ["user" => $user, 'posts' => $posts]);
         break;
 
+    case 'postAccess':
+        $postController = new PostController($sessionModel);
+        $postController->seePostID($_GET['id']);
+        break;
+
+    case 'post':
+
+        $user = $sessionModel->get('user');
+        $post = $sessionModel->get('post');
+        // var_dump($user);
+        // var_dump($post);
+        // die;
+        echo $twig->render('post.twig', [
+            'user' => $user,
+            'message' => $message,
+            "author" => [], "post" => $post,
+            "comments" => []
+        ]);
+        break;
+
     case 'aboutme':
         echo $twig->render('aboutme.twig');
         break;
@@ -163,33 +183,7 @@ switch ($page) {
         //     break;
 
 
-        // case 'post':
-        //     echo $twig->render('post.twig', [
-        //         "author" => ["name" => "Solis", "username" => "Getssone", "picture" => "public\assets\img\Accueil.jpg", "role" => 0,], "post" => ["title" => "Welcome in my World", "date_of_publication" => "06-05-1994", "picture" => "public\assets\img\post-bg.jpg", "summary" => "I was born in a small village in France called Boulieu.
 
-        //     It's a very pleasant village, but also full of history, as it's a fortified town. 
-
-        //     I spent my childhood in this village where ...", "content" => "The Article
-        //     Never in all their history have men been able truly to conceive of the world as one.
-        //     <h2 class='section-heading'>The Final Frontier</h2>
-        //     <p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it is a task to occupy the generations...</p>
-        //     <blockquote class='blockquote'>The dreams of yesterday are the hopes of today and the reality of tomorrow.</blockquote>
-        //     <a href='#!'><img class='img-fluid' src='public\assets\img\post-sample-image.jpg' alt='...'></a>
-        //     <span class='caption text-muted'>To go places and do things that have never been done before – that’s what living is all about.</span>
-        //     <p>
-        // 					Placeholder text by
-        // 					<a href='http://spaceipsum.com/'>Space Ipsum</a>
-        // 					· Images by
-        // 					<a href='https://www.flickr.com/photos/nasacommons/'>NASA on The Commons</a>
-        // 				</p>
-        //     ",],
-        //         "comments" => [["id" => 0, "author" => "Toto", "content" => "Very interesting", "date" => "24-05-2023", "picture" => "public\assets\img\CGU.jpg",], ["id" => 2, "author" => "Titi", "content" => "Thank you for every thing", "date" => "24-05-2023", "picture" => "public\assets\img\Accueil.jpg",]]
-        //     ]);
-        //     break;
-
-        // case ':id/post':
-        //     echo $twig->render('post.twig', ["user" => ["name" => "Solis", "alias" => "Getssone"]]);
-        //     break;
 
         // case 'admin_edit_comment':
         //     if (isset($_GET['commentId'])) {

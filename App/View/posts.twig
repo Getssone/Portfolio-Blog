@@ -51,10 +51,8 @@
 	</div>
 	<div class="row mb-2">
 		{% for post in posts %}
-			{# {{ dump (posts) }}{{ die }} #}
-
 			<div class="card m-2" style="width: 18rem;">
-				<img src="{{post.image}}" class="card-img-top" alt="...">
+				<img src="{{post.image}}" class="card-img-top" alt="image de l'article">
 				<div class="card-body">
 					<h5 class="card-title">
 						<div class="container">
@@ -86,17 +84,15 @@
 					</a>
 
 				</p>
-				{# :id/post #}
-				<a href="post">
-					<button type="button" class="btn btn-primary">En savoir plus 😉</button>
-				</a>
+				<a href="postAccess?id={{ post.id }}" class="btn btn-primary">En savoir plus 😉</a>
+
 			</div>
 		</div>
 	{% endfor %}<!-- Pager--><div class="d-flex justify-content-end m-4">
 		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
 	</div>
 </div>{# <p>{{soustraction(1,2)}};</p>
-																																																																																																									<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
-																																																																																																									<pre>
-																																																																																																																						{{dump("##un Filtre## **ajouté** " | textadd)}}
-																																																																																																																						</pre> #}{% endblock %}
+																																																																																																																			<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
+																																																																																																																			<pre>
+																																																																																																																																{{dump("##un Filtre## **ajouté** " | textadd)}}
+																																																																																																																																</pre> #}{% endblock %}

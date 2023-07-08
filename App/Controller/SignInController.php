@@ -15,7 +15,10 @@ class SignInController
     {
         $this->sessionModel = $sessionModel;
     }
-
+    /**
+     * Store a new user in Database
+     *
+     */
     public function signIn()
     {
         try {
@@ -53,6 +56,10 @@ class SignInController
         }
     }
 
+    /**
+     * Store a new message for new User
+     *
+     */
 
     protected function messageWelcome(string $username, string $email, string $first_name, string $last_name, string $password)
     {

@@ -18,7 +18,7 @@
 									<h4 class="card-title">{{comment.title}}</h4>
 									<small class="text-muted">le
 										{{comment.created_at|date("d/m/Y à H:i:s")}}</small>
-									<div class="card-text">{{comment.content}}</div>
+									<div class="card-text">{{comment.content|raw}}</div>
 								</div>
 							</div>
 						</div>
@@ -35,28 +35,32 @@
 	</div>
 	<div class="row">
 		<div class="col my-4">
-			{% if message %}
+			{% if messageComment is defined and messageComment is not empty %}
 				<div class="alert alert-dismissible alert-success">
 					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-					{{ message }}
+					{{ messageComment }}
 				</div>
 			{% endif %}
+
 			<form
 				method="post" action="/post/{{post.id}}/add-comment">
 				{# {{ form_token("/post/#{post.id}/add-comment") }} #}
 				<legend>Laisser un commentaire sur cet article</legend>
-				<small class="text-muted">Vous devez
-					<a href="/login">être connecté(e)</a>
-					à votre compte utilisateur pour pouvoir laisser un commentaire.</small>
-				<div class="my-3">
-					<label for="commentTitle" class="form-label">Titre</label>
-					<input type="text" class="form-control" id="commentTitle" name="commentTitle" required>
-				</div>
-				<div class="mb-3">
-					<label for="commentContent" class="form-label">Votre commentaire</label>
-					<textarea name="commentContent" class="form-control" id="commentContent" rows="4" maxlength="250"></textarea>
-				</div>
-				<button type="submit" class="btn btn-primary">Envoyer</button>
+				{% if user.id is null %}
+					<small class="text-muted">Vous devez
+						<a href="login">être connecté·e</a>
+						à votre compte utilisateur pour pouvoir laisser un commentaire.</small>
+				{% else %}
+					<div class="my-3">
+						<label for="commentTitle" class="form-label">Titre</label>
+						<input type="text" class="form-control" id="commentTitle" name="commentTitle" required>
+					</div>
+					<div class="mb-3">
+						<label for="commentContent" class="form-label">Votre commentaire</label>
+						<textarea name="commentContent" class="form-control" id="commentContent" rows="4" maxlength="250"></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary">Envoyer</button>
+				{% endif %}
 			</form>
 		</div>
 	</div>

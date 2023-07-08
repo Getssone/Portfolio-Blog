@@ -2,19 +2,21 @@
 
 {% block title %}
 
-	<title>Article</title>
+	<title>Post :"
+		{{ post.title }}"
+	</title>
 {% endblock %}
 
 {% block styles %}
 	<link rel="stylesheet" href="public\css\post/post.css">
 {% endblock %}
 {% block header %}
-	<header class="masthead" style="background-image: url('https://img.freepik.com/photos-gratuite/rue-medievale_1182-805.jpg?w=1380&t=st=1686927519~exp=1686928119~hmac=4856197d4726582142f399f0c97c3b84e851e61801d9672e45d7e3b11e13aaef')">
+	<header class="masthead" style="background-image: url('{{ post.image }}'); background-repeat: no-repeat; background-position-y: -15rem;">
 		<div class="container position-relative px-4 px-lg-5">
 			<div class="row gx-4 gx-lg-5 align-content-center justify-content-center pt-5">
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<div class="post-heading">
-						<h1 class="display-2">{{ post.title }}</h1>
+						<h1 class="display-2">{{ post.title|raw }}</h1>
 						<span class="meta">
 							Publié par
 							<a href="#!">{{ author.username }}</a>
@@ -25,7 +27,7 @@
 
 						<q class="subheading">
 
-							{{ post.lead_sentence }}
+							{{ post.lead_sentence|raw }}
 
 						</q>
 					</div>
@@ -38,15 +40,15 @@
 {% block content %}
 	<div id="content" class="container mb-5">
 		<main class="pb-5">
+			{% if message is defined and message is not empty %}
+				<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
+			{% endif %}
 			<article class="my-5 text-center">
-
-				<img class="card-img-top mb-5" src="https://picsum.photos/900/400">
-				<p class="badge rounded-pill bg-secondary">{{ post.slug }}</p>
 				<div class="fw-bold display-6 mb-4">
-					{{ post.lead_sentence }}
+					{{ post.lead_sentence|raw }}
 				</div>
 				<div class="">
-					{{ post.content }}
+					{{ post.content|raw }}
 				</div>
 			</article>
 			{{ include('comments.twig') }}

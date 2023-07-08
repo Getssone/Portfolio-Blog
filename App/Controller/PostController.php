@@ -27,6 +27,15 @@ class PostController
         $this->userModel = new UserModel();
     }
 
+    public function seePostID(int $id)
+    {
+        $thisPosts = $this->postModel->read($id);
+        // $author = $this->userModel->read($thisPosts->getCreated_By());
+        // $comments = $this->commentModel->getApprovedComments($id);
+        $this->sessionModel->set('message', "Voici le récit que vous souhaitez découvrir ");
+        $this->sessionModel->set('post', $thisPosts);
+        header('Location: post');
+    }
 
     public function seeAllPosts()
     {
@@ -36,12 +45,8 @@ class PostController
             $author = $this->userModel->read($authorID);
             $post->setCreated_By($author->getUsername());
         }
-        // var_dump($allPosts);
-        // die;
         $this->sessionModel->set('message', "Cher visiteur, quel récit souhaitez-vous découvrir parmi nos derniers chroniques publiés ? ");
         $this->sessionModel->set('posts', $allPosts);
-        // var_dump($this->sessionModel->get('posts'));
-        // die;
         header('Location: posts');
     }
 

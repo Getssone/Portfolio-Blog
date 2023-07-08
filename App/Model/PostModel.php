@@ -35,6 +35,26 @@ class PostModel extends DatabaseConnection
         // return $posts;
     }
 
+    /**
+     * Find a blogpost by ID
+     *
+     * @param  integer $id
+     * @return Post
+     */
+    public function read(int $id)
+    {
+        $querySQL = "SELECT * FROM posts WHERE id = :id";
+        $response = $this->database->prepare($querySQL);
+        $response->bindValue(":id", $id, PDO::PARAM_INT);
+        $response->execute();
+        $arrayPost = $response->fetch(PDO::FETCH_ASSOC);
+        if (!$arrayPost) {
+            return null;
+        }
+        //$postData = get_object_vars($result);
+        return new Post($arrayPost);
+    }
+
     public function findByTitle(string $title)
     {
         // var_dump($title);
@@ -47,10 +67,12 @@ class PostModel extends DatabaseConnection
         if (!$result) {
             return null;
         }
-        $postData = (array) $result;
+        // $postData = (array) $result;
         //$postData = get_object_vars($result);
-        return new Post($postData);
+        // return new Post($postData);
+        return new Post($result);
     }
+
 
     public function create(string $title, string $image, int $created_by, string $lead_sentence, string $content)
     {
