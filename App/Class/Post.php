@@ -112,6 +112,7 @@ class Post
 
     public function getUpdated_At()
     {
+
         return $this->updatedAt;
     }
 

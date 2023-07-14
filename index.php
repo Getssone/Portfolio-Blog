@@ -11,14 +11,17 @@ session_start();
 // use PDO;
 // use Twig\TwigFunction;
 
+use App\Controller\SignInController;
+use App\Controller\UserController;
 use App\Controller\PostController;
+use App\Controller\CommentController;
+use App\Controller\EmailController;
+use App\Model\EmailModel;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use App\Model\SessionModel;
 use App\Model\TwigRenderer;
 // use App\Controller\EmailController;
-use App\Controller\SignInController;
-use App\Controller\UserController;
 use App\Service\DatabaseConnection\DatabaseConnection;
 
 
@@ -68,95 +71,138 @@ if (isset($_GET["page"])) {
 switch ($page) {
     case 'signIn':
         echo $twig->render('sign_In.twig', ['message' => $message]);
+        exit();
         break;
 
     case 'signInAction':
         $signInController = new SignInController($sessionModel);
         $signInController->signIn();
+        exit();
         break;
 
     case 'login':
         echo $twig->render('login.twig', ['message' => $message]);
+        exit();
         break;
 
     case 'logInAction':
         $userController = new UserController($sessionModel);
         $userController->connect($_POST['email'], $_POST['password']);
+        exit();
         break;
 
     case 'logOut':
         $userController = new UserController($sessionModel);
         $userController->logoutUser();
         echo $twig->render('login.twig');
+        exit();
         break;
 
     case 'postsAccess':
         $postController = new PostController($sessionModel);
         $postController->seeAllPosts();
+        exit();
+        break;
 
 
-    case 'posts':
+    case 'posts': //Tout les posts
         $user = $sessionModel->get('user');
         $posts = $sessionModel->get('posts');
         echo $twig->render('posts.twig', ["user" => $user, 'posts' => $posts]);
+        exit();
         break;
 
-    case 'postAccess':
+    case 'postAccess': // Vérification si le Post existe
+        // var_dump("postAccessok");
+        // var_dump($_GET['id']);
+        // die;
         $postController = new PostController($sessionModel);
-        $postController->seePostID($_GET['id']);
+        $postController->seePostID();
+        exit();
         break;
 
-    case 'post':
-
+    case 'post': // 1 Post
         $user = $sessionModel->get('user');
         $post = $sessionModel->get('post');
-        // var_dump($user);
-        // var_dump($post);
-        // die;
+        $authorPost = $sessionModel->get('authorPost');
+        $authorComments = $sessionModel->get('authorComments');
+        $comments = $sessionModel->get('comments');
+        $messageComment = $sessionModel->get('messageComment');
+        $sessionModel->deleteKey('messageComment');
+        // Envoyé uniquement quand le page "post/add-comment" à validé l'enregistrement
+
         echo $twig->render('post.twig', [
             'user' => $user,
-            'message' => $message,
-            "author" => [], "post" => $post,
-            "comments" => []
+            'message' => $message, //Appeler tous en haut de l'index.php
+            "post" => $post,
+            "authorPost" => $authorPost,
+            "authorComments" => $authorComments,
+            "comments" => $comments,
+            "messageComment" => $messageComment,
         ]);
+        exit();
+        break;
+
+    case 'post/add-comment':
+
+        $commentController = new CommentController($sessionModel);
+        $commentController->registerComment();
+        exit();
         break;
 
     case 'aboutme':
-        echo $twig->render('aboutme.twig');
+        $user = $sessionModel->get('user');
+        echo $twig->render('aboutme.twig', ["user" => $user]);
+        exit();
         break;
 
     case 'contact':
-        echo $twig->render('contact.twig');
+        $user = $sessionModel->get('user');
+        echo $twig->render('contact.twig', ["user" => $user, 'message' => $message]);
+        exit();
+        break;
+    case 'contactSendMail':
+        $user = $sessionModel->get('user');
+        $sendEmail = new EmailController($sessionModel);
+        $sendEmail->sendMailViaContact();
+        exit();
         break;
 
     case 'CGU':
-        echo $twig->render('CGU.twig');
+        $user = $sessionModel->get('user');
+        echo $twig->render('CGU.twig', ["user" => $user]);
+        exit();
         break;
 
     case 'profile':
         $user = $sessionModel->get('user');
         echo $twig->render('profile.twig', ["user" => $user,]);
+        exit();
         break;
 
     case 'admin_create_post_Action':
         $postController = new PostController($sessionModel);
         $postController->createPost();
+        exit();
         break;
 
     case 'admin_create_post':
         $user = $sessionModel->get('user');
         echo $twig->render('admin_create_post.twig', ["user" => $user, 'message' => $message]);
+        exit();
         break;
 
     case 'admin_add_post_Action':
         $postController = new PostController($sessionModel);
         $postController->addPost();
+        exit();
         break;
     case 'admin':
         $user = $sessionModel->get('user');
         // var_dump($user);
         // die;
         echo $twig->render('admin.twig', ["user" => $user, 'message' => $message]);
+        exit();
         break;
 
         // case 'admin_show_posts':
@@ -204,8 +250,16 @@ switch ($page) {
         //     break;
 
 
-    default:
-        header('HTTP/1.0 404 Not Found');
+
+    case 'error_404':
         echo $twig->render('404.twig');
+        exit();
+        break;
+
+
+    default:
+        // header('Location: error_404');
+        echo $twig->render('404.twig');
+        exit();
         break;
 }

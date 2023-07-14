@@ -19,10 +19,15 @@
 						<h1 class="display-2">{{ post.title|raw }}</h1>
 						<span class="meta">
 							Publié par
-							<a href="#!">{{ author.username }}</a>
+							<a href="#!">{{ authorPost }}</a>
 							<span class="meta">
 								le
-								{{ post.created_at|date("d/m/Y") }}</span>
+								{% if post.updated_at is not null %}
+									{{ post.updated_at|date("d/m/Y") }}
+								{% else %}
+									{{ post.created_at|date("d/m/Y") }}
+								{% endif %}
+							</span>
 						</span>
 
 						<q class="subheading">

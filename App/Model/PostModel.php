@@ -18,10 +18,11 @@ class PostModel extends DatabaseConnection
     public function getAllPosts()
     {
         $posts = [];
-        $requeteSQL = "SELECT * FROM posts ORDER BY created_at DESC";
+        $requeteSQL = "SELECT * FROM posts ORDER BY updated_at DESC, created_at DESC";
+
         // TODO: jointure sur le User pour éviter d'avoir à appeler un READ supplémentaire pour chaque userID
-        $results = $this->database->query($requeteSQL);
-        while ($post = $results->fetch(PDO::FETCH_ASSOC)) {
+        $requete = $this->database->query($requeteSQL);
+        while ($post = $requete->fetch(PDO::FETCH_ASSOC)) {
             $posts[] = new Post($post);
         }
         // var_dump("--posts--");
@@ -41,18 +42,18 @@ class PostModel extends DatabaseConnection
      * @param  integer $id
      * @return Post
      */
-    public function read(int $id)
+    public function getPost(int $id)
     {
+        $posts = [];
         $querySQL = "SELECT * FROM posts WHERE id = :id";
-        $response = $this->database->prepare($querySQL);
-        $response->bindValue(":id", $id, PDO::PARAM_INT);
-        $response->execute();
-        $arrayPost = $response->fetch(PDO::FETCH_ASSOC);
-        if (!$arrayPost) {
+        $requete = $this->database->prepare($querySQL);
+        $requete->bindValue(":id", $id, PDO::PARAM_INT);
+        $requete->execute();
+        $posts = $requete->fetch(PDO::FETCH_ASSOC);
+        if (!$posts) {
             return null;
         }
-        //$postData = get_object_vars($result);
-        return new Post($arrayPost);
+        return new Post($posts);
     }
 
     public function findByTitle(string $title)

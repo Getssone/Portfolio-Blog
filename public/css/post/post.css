@@ -24,8 +24,8 @@ header.masthead {
 }
 .comments .comment img,
 .comments .add-comment img {
-  width: 5rem;
-  height: 5rem;
+  width: 8rem;
+  height: 8rem;
   -o-object-fit: cover;
      object-fit: cover;
   border-radius: 50%;

@@ -7,14 +7,16 @@ use App\Model\AuthModel;
 use App\Model\PostModel;
 use App\Model\UserModel;
 use App\Model\SessionModel;
+use App\Controller\CommentController;
 
 class PostController
 {
-    private $sessionModel;
-    private $authModel;
-    private $user;
-    private $postModel;
-    private $userModel;
+    protected $sessionModel;
+    protected $authModel;
+    protected $user;
+    protected $postModel;
+    protected $userModel;
+    protected $commentController;
 
 
 
@@ -25,16 +27,57 @@ class PostController
         $this->user = $this->authModel->getCurrentUser();
         $this->postModel = new PostModel();
         $this->userModel = new UserModel();
+        $this->commentController = new CommentController($this->sessionModel);
     }
 
-    public function seePostID(int $id)
+
+    public function seePostID()
     {
-        $thisPosts = $this->postModel->read($id);
-        // $author = $this->userModel->read($thisPosts->getCreated_By());
-        // $comments = $this->commentModel->getApprovedComments($id);
-        $this->sessionModel->set('message', "Voici le récit que vous souhaitez découvrir ");
-        $this->sessionModel->set('post', $thisPosts);
-        header('Location: post');
+        try {
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+                // Récupérer les paramètres GET
+                $postId = $_GET['id'];
+
+                if (isset($postId) && !empty($postId)) {
+                    $thisPost = $this->postModel->getPost($postId);
+                    $idAuthorPost = $thisPost->getCreated_By();
+                    $infosAuthorPost = $this->userModel->read($idAuthorPost);
+                    $comments = $this->commentController->getCommentsWithAuthors();
+                    // $authorComments = $this->commentController->getAuthorComment();
+                    // foreach ($comments as $comment) {
+                    //     $idAuthorComments = $comment->getCreated_By();
+                    //     $infosAuthorComments = $this->userModel->read($idAuthorComments);
+                    //     $authorName = $infosAuthorComments->getUsername();
+                    //     $comment->setCreated_By($authorName);
+                    // }
+                    $this->sessionModel->set('post', $thisPost);
+                    $this->sessionModel->set('authorPost', $infosAuthorPost->getUsername());
+                    $this->sessionModel->set('comments', $comments["comments"]);
+                    $this->sessionModel->set('authorComments', $comments["authors"]);
+                    $this->sessionModel->set('message', "Voici le récit que vous souhaitez découvrir ");
+                    header('Location: post');
+                    exit();
+                } else {
+                    $this->sessionModel->set('error_message', "Nous n'avons pas pu accéder à ce post");
+                    header('Location: error_404');
+                    exit;
+                }
+            }
+        } catch (Exception $e) {
+            $this->sessionModel->set('message', $e->getMessage());
+            // Redirection vers le post
+            header('Location: error_404');
+            exit;
+        }
+        // $thisPost = $this->postModel->getPost($id);
+        // $idAuthorPost = $thisPost->getCreated_By();
+        // $infosAuthor = $this->userModel->read($idAuthorPost);
+        // // $comments = $this->commentModel->getApprovedComments($id);
+        // $this->sessionModel->set('post', $thisPost);
+        // $this->sessionModel->set('message', "Voici le récit que vous souhaitez découvrir ");
+        // header('Location: post');
+        // exit;
     }
 
     public function seeAllPosts()
@@ -42,8 +85,8 @@ class PostController
         $allPosts = $this->postModel->getAllPosts();
         foreach ($allPosts as $post) {
             $authorID = $post->getCreated_By();
-            $author = $this->userModel->read($authorID);
-            $post->setCreated_By($author->getUsername());
+            $infosAuthor = $this->userModel->read($authorID);
+            $post->setCreated_By($infosAuthor->getUsername());
         }
         $this->sessionModel->set('message', "Cher visiteur, quel récit souhaitez-vous découvrir parmi nos derniers chroniques publiés ? ");
         $this->sessionModel->set('posts', $allPosts);
@@ -111,9 +154,5 @@ class PostController
                 exit;
             }
         }
-    }
-
-    public function profil()
-    {
     }
 }

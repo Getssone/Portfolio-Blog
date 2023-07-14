@@ -4,7 +4,9 @@
 	<title>Contact</title>
 {% endblock %}
 
-{% block styles %}{% endblock %}
+{% block styles %}
+	<!-- Ajoutez ici les liens vers les fichiers CSS de Bootstrap ou autres bibliothèques -->
+{% endblock %}
 
 {% block header %}
 	<header class="masthead" style="background-image: url('public/assets/img/home-bg.jpg')">
@@ -12,16 +14,15 @@
 			<div class="row gx-4 gx-lg-5 justify-content-center">
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<div class="site-heading">
-						<h1>Me contacter
-						</h1>
-						<span class="subheading">
-							Vous avez des questions ? J'ai la réponse</span>
+						<h1>Me contacter</h1>
+						<span class="subheading">Vous avez des questions ? J'ai la réponse</span>
 					</div>
 				</div>
 			</div>
 		</div>
 	</header>
 {% endblock %}
+
 {% block content %}
 	<main class="mb-4">
 		<div class="container px-4 px-lg-5">
@@ -29,96 +30,43 @@
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<p>Vous souhaitez prendre contact avec moi ? Remplissez le formulaire ci-dessous pour m'envoyer un message et je vous répondrai dès que possible !</p>
 					<div class="my-5">
-						<!-- * * * * * * * * * * * * * * *-->
-						<!-- * * SB Forms Contact Form * *-->
-						<!-- * * * * * * * * * * * * * * *-->
-						<!-- This form is pre-integrated with SB Forms.-->
-						<!-- To make this form functional, sign up at-->
-						<!-- https://startbootstrap.com/solution/contact-forms-->
-						<!-- to get an API token!-->
-
-							{% if app.request.getMethod() == 'POST' %}
-							{% set name = app.request.post('name') %}
-							{% set email = app.request.post('email') %}
-							{% set phone = app.request.post('phone') %}
-							{% set message = app.request.post('message') %}
-
-							{% set errors = {} %}
-
-								{% if name is empty %}
-							{% set errors = errors|merge({'name': 'Un nom est requis'}) %}
-							{% endif %}
-
-								{% if email is empty %}
-								{% set errors = errors|merge({'email': 'un E-mail est requis si vous souhaitez que je vous réponde 😄.'}) %}
-							{% elseif not email|filter('email') %}
-								{% set errors = errors|merge({'email': 'L\'email n\'est pas valide'}) %}
-							{% endif %}
-
-							{% if message is empty %}
-								{% set errors = errors|merge({'message': "un message est requis si vous souhaitez que l'on échange sur un sujet 😄."}) %}
-							{% endif %}
-
-							{% if errors is empty %}
-								{# Traitement des données et redirection vers une page de succès #}
-								{% set successMessage = 'Le message a bien été envoyé!' %}
-								{% include 'success.html.twig' %}
-							{% endif %}
+						{% if errors is not empty %}
+							<div class="alert alert-danger">
+								<ul>
+									{% for error in errors %}
+										<li>{{ error }}</li>
+									{% endfor %}
+								</ul>
+							</div>
 						{% endif %}
-						<form id="contactForm" action="?p=home">
-							<div class="form-floating">
-								<input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required"/>
-								<label for="name">Un nom
-									<span class="align-top text-danger">
-										<small>*</small>
-									</span>
-								</label>
-								{% if errors.name %}
-									<div class="invalid-feedback">{{ errors.name }}</div>
-								{% endif %}
-							</div>
-							<div class="form-floating">
-								<input class="form-control" id="email" type="email" placeholder="votrEmail@votreBoiteMailFavorite.fr..." data-sb-validations="required,email"/>
-								<label for="email">E-mail
-									<span class="align-top text-danger">
-										<small>*</small>
-									</span>
-								</label>
-								{% if errors.email %}
-									<div class="invalid-feedback">{{ errors.email }}</div>
-								{% endif %}
-								<div class="invalid-feedback" data-sb-feedback="email:email">l'email n'est pas valide.</div>
-							</div>
-							<div class="form-floating">
-								<input class="form-control" id="phone" type="tel" placeholder=" 06-xx-xx-xx-xx"/>
-								<label for="phone">Téléphone
-									<span class="align-top text-danger"></span>
+						{% if message is defined and message is not empty %}
+							<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
+						{% endif %}
+						<form id="contactForm" action="contactSendMail" method="post">
+							<div class="form-floating mb-3">
+								<input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." required/>
+								<label for="name">Un nom<span class="text-danger">*</span>
 								</label>
 							</div>
-							<div class="form-floating">
-								<textarea class="form-control" id="message" placeholder="Dite moi votre besoin ... ✒" style="height: 12rem" data-sb-validations="required"></textarea>
-								<label for="message">Message</label>
-								{% if errors.message %}
-									<div class="invalid-feedback">{{ errors.message }}</div>
-								{% endif %}
+							<div class="form-floating mb-3">
+								<input class="form-control" id="email" name="email" type="email" placeholder="votreEmail@votreBoiteMailFavorite.fr..." required/>
+								<label for="email">E-mail<span class="text-danger">*</span>
+								</label>
+							</div>
+							<div class="form-floating mb-3">
+								<input class="form-control" id="object" name="object" type="text" placeholder=" New Project "/>
+								<label for="phone">Object</label>
+							</div>
+							<div class="form-floating mb-3">
+								<textarea class="form-control" id="message" name="message" placeholder="Dites-moi votre besoin... ✒" style="height: 12rem" required></textarea>
+								<label for="message">Message<span class="text-danger">*</span>
+								</label>
 							</div>
 							<br/>
-							<!-- Submit success message-->
-							<!---->
-							<!-- This is what your users will see when the form-->
-							<!-- has successfully submitted-->
-								<div class="d-none" id="submitSuccessMessage"> <div class="text-center mb-3">
-									<div class="fw-bolder">Le message a bien été envoyé!</div>
-								</div>
+							<!-- Submit Button -->
+							<div class="d-flex justify-content-center">
+								<button class="btn btn-primary text-uppercase" id="submitButton" type="submit">Envoyer</button>
 							</div>
-							<!-- Submit error message-->
-							<!---->
-							<!-- This is what your users will see when there is-->
-							<!-- an error submitting the form-->
-								<div class="d-none" id="submitErrorMessage"> <div class="text-center text-danger mb-3">Le message à eu un souci d'envoi!</div>
-							</div>
-							<!-- Submit Button-->
-							<button class="btn btn-primary text-uppercase {{ errors is empty ? 'disabled' : '' }}" id="submitButton" type="submit">Envoyer</button>
 						</form>
 					</div>
 				</div>

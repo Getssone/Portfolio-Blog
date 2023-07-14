@@ -31,7 +31,6 @@ class UserModel extends DatabaseConnection
         if (!$result) {
             return null; // Aucun utilisateur trouvé, retourne null
         }
-        var_dump($result);
         return new User($result);
     }
 
@@ -74,8 +73,8 @@ class UserModel extends DatabaseConnection
 
         $querySQL = "INSERT INTO users(username, email, first_name, last_name, password, role) 
                 VALUES(:username, :email, :first_name, :last_name, :password, :role)";
-        $reponse = $this->database->prepare($querySQL);
-        $reponse->execute(
+        $requete = $this->database->prepare($querySQL);
+        $requete->execute(
             array(
                 ':username' => $username,
                 ':email' => $email,
@@ -92,13 +91,13 @@ class UserModel extends DatabaseConnection
     public function getUsernameById(int $userId)
     {
         $querySQL = "SELECT username FROM users WHERE id = :userId";
-        $reponse = $this->database->prepare($querySQL);
-        $reponse->bindValue(":userId", $userId, PDO::PARAM_INT);
-        $reponse->execute();
+        $request = $this->database->prepare($querySQL);
+        $request->bindValue(":userId", $userId, PDO::PARAM_INT);
+        $request->execute();
         // $reponse = $this->database->prepare($querySQL);
         // $reponse->execute(array(':userId' => $userId));
 
-        $user = $reponse->fetch(PDO::FETCH_ASSOC); //les résultats seront sous forme de tableau associatif
+        $user = $request->fetch(PDO::FETCH_ASSOC); //les résultats seront sous forme de tableau associatif
 
         return $user['username'];
     }

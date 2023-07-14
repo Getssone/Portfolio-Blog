@@ -54,27 +54,18 @@
 			<div class="card m-2" style="width: 18rem;">
 				<img src="{{post.image}}" class="card-img-top" alt="image de l'article">
 				<div class="card-body">
-					<h5 class="card-title">
-						<div class="container">
-							<div class="row justify-content-center">
-								<div class="col-md-4 m-3">
-									<div class="rounded-circle  d-flex align-items-center justify-content-center bg-primary text-center" style="width: 40px; height: 40px; line-height: 30px;">
-										<span class="rounded-circle text-center" style="color:white">
-											{{post.id}}
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						{{post.title}}
+					<h5 class="card-title">{{post.title|raw}}
 					</h5>
 					<small class="post-subtitle">
 						Dernière Modification
-						{{ post.created_at|date("d/m/Y")}}
+						{% if post.updated_at is not null %}
+							{{ post.updated_at|date("d/m/Y") }}
+						{% else %}
+							{{ post.created_at|date("d/m/Y") }}
+						{% endif %}
 					</small>
 					<p class="card-text">
-						{{post.lead_sentence}}
+						{{post.lead_sentence|raw}}
 					</p>
 				</a>
 				<p class="post-meta">
@@ -91,8 +82,4 @@
 	{% endfor %}<!-- Pager--><div class="d-flex justify-content-end m-4">
 		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
 	</div>
-</div>{# <p>{{soustraction(1,2)}};</p>
-																																																																																																																			<p>{{("##un Filtre## **ajouté** "|textadd)}}</p>
-																																																																																																																			<pre>
-																																																																																																																																{{dump("##un Filtre## **ajouté** " | textadd)}}
-																																																																																																																																</pre> #}{% endblock %}
+</div>{% endblock %}
