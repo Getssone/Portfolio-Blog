@@ -40,19 +40,17 @@ class SignInController
                     header('Location: login');
 
                     // Terminer l'exécution du script pour éviter tout affichage supplémentaire
-                    exit;
+
                 } else {
                     // Les mots de passe ne correspondent pas, afficher un message d'erreur
                     $this->sessionModel->set('error_message', 'Les mots de passe ne correspondent pas.');
                     header('Location: signIn');
-                    exit;
                 }
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
             // Redirection vers la page de connexion
             header('Location: signIn');
-            exit;
         }
     }
 

@@ -1,0 +1,15 @@
+.btn {
+  width: 10rem;
+}
+
+.table-responsive {
+  margin: 2rem 0rem;
+}
+.table-responsive h2 {
+  margin: 2rem 0rem;
+}
+.table-responsive .form-edition {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}/*# sourceMappingURL=admin_show_users.css.map */

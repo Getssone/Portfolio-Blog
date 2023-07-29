@@ -1,0 +1,112 @@
+{% extends './Layout/base.twig' %}
+
+{% block title %}
+	<title>
+		Edit Post : "{{ post.title }}"</title>
+{% endblock %}
+
+{% block styles %}
+	<link rel="stylesheet" href="public\css\post/post.css">
+{% endblock %}
+
+{% block header %}
+	<header class="masthead" style="background-image: url('https://image.lexica.art/full_jpg/561e6e89-c73c-4e26-b28c-587956bb4349'); background-repeat: no-repeat; background-position-y: -15rem;">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 align-content-center justify-content-center pt-5">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="post-heading">
+						<h1 class="display-2">
+							Améliorer le récit à compter
+						</h1>
+						<span class="meta">
+							Publié par
+							<a href="#!">{{ authorPost }}</a>
+							<span class="meta">
+								le
+								{% if post.updated_at is not null %}
+									{{ post.updated_at|date("d/m/Y") }}
+								{% else %}
+									{{ post.created_at|date("d/m/Y") }}
+								{% endif %}
+							</span>
+						</span>
+						<q class="subheading">
+							il y a toujours des amélioration à faire
+						</q>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{% endblock %}
+
+{% block content %}
+	{% if user is defined and user.role == 1 %}
+		<div id="content" class="container mb-5">
+			<main class="pb-5">
+				{% if message is defined and message is not empty %}
+					<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
+				{% endif %}
+				<article class="my-5 text-center">
+
+					<form action="adminEditPostSuccess" method="post">
+						<input type="hidden" name="postId" value="{{ post.id }}">
+						<div class="fw-bold display-6 mb-4">
+							<p>
+								<stong>Titre</strong>
+							</p>
+							<div class="">
+								<input type="text" name="title" value="{{ post.title }}"/>
+							</div>
+						</div>
+						<span class="meta">
+							Publié par
+							<a href="#!">{{ authorPost }}</a>
+							<span class="meta">
+								le
+								{% if post.updated_at is not null %}
+									{{ post.updated_at|date("d/m/Y") }}
+								{% else %}
+									{{ post.created_at|date("d/m/Y") }}
+								{% endif %}
+							</span>
+						</span>
+
+						<div class="fw-bold display-6 mb-4">
+							<p>
+								<stong>Chapô</strong>
+							</p>
+							<textarea rows="2" type="text" name="lead_sentence"/>{{ post.lead_sentence }}
+						</textarea>
+
+					</div>
+					<div class="fw-bold display-6 mb-4">
+						<p>
+							<stong>Contenu</strong>
+						</p>
+						<div class="">
+							<textarea name="content" rows="5">{{ post.content }}</textarea>
+						</div>
+					</article>
+					<div class="d-flex justify-content-center align_items-center">
+						<button type="submit" class="btn btn-success">
+							Valider l'édition
+							<i class="fa-solid fa-feather"></i>
+						</button>
+					</div>
+				</form>
+			</main>
+		</div>
+	{% else %}
+
+		<main class="d-flex flex-column align-items-center justify-content-center">
+			<h1 class="mb-5">Vous n'etes pas administateur</h1>
+			<button class=" btn btn-info">
+				<a href="postsAccess">
+					Voir les diférent récit
+					<i class="fa-solid fa-book"></i>
+				</a>
+			</button>
+		</main>
+	{% endif %}
+{% endblock %}

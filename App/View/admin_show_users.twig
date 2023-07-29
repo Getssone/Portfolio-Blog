@@ -6,6 +6,7 @@
 	</title>
 {% endblock %}
 {% block styles %}<link href="public\css\admin\admin.css" rel="stylesheet"/>
+	<link href="public\css\admin_show_users\admin_show_users.css" rel="stylesheet"/>
 {% endblock %}
 
 {% block header %}
@@ -26,149 +27,258 @@
 {% endblock %}
 
 {% block admin_nav %}
+
 	<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
 		<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-				{% if user is defined %}
-					{% if user.role is same as 1 %}
-						<span class="fs-4">
-							<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
-							{{user.username}}
-						</span>
-					{% endif %}
+				{% if user is defined and user.role == 1 %}
+					<span class="fs-4">
+						<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
+						{{user.username}}
+					</span>
+				{% else %}
+					<span class="fs-4">
+						Vous n'etes pas administateur
+					</span>
 				{% endif %}
 			</a>
-			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-				<li>
-					<a class="dropdown-item" href="#">Paramètres</a>
-				</li>
-				<li>
-					<a class="dropdown-item" href="profile">Profil</a>
-				</li>
-				<li><hr class="dropdown-divider"></li>
-				<li>
-					<form
-						action="logout-user" method="post">
-						{# {{ form_token("/logout-user")}} #}
-						<button class="dropdown-item" type="submit">Déconnexion</button>
-					</form>
-				</li>
-			</ul>
+			{% if user is defined and user.role == 1 %}
+				<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+					<li>
+						<a class="dropdown-item" href="#">Paramètres</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="profile">Profil</a>
+					</li>
+					<li><hr class="dropdown-divider"></li>
+					<li>
+						<form
+							action="logOut" method="post">
+							{# {{ form_token("/logout-user")}} #}
+							<button class="dropdown-item" type="submit">Déconnexion</button>
+						</form>
+					</li>
+				</ul>
+
+			{% endif %}
 		</div>
 		<hr>
-		<ul class="nav nav-pills flex-column mb-auto">
-			<li class="nav-item">
-				<a href="admin" class="nav-link text-white">
-					Tableau de bord
-				</a>
-			</li>
-			<li>
-				<a href="admin_show_posts" class="nav-link text-white" aria-current="page">
-					Articles
-				</a>
-			</li>
-			<li>
-				<a href="admin_create_post" class=" nav-link text-white">
-					Ajouter un article
-				</a>
-			</li>
+		{% if user is defined and user.role == 1 %}
+			<ul class="nav nav-pills flex-column mb-auto">
+				<li class="nav-item">
+					<a href="admin" class="nav-link text-white">
+						Tableau de bord
+					</a>
+				</li>
+				<li>
+					<a href="adminShowPostsAccess" class="nav-link text-white">
+						Articles
+					</a>
+				</li>
+				<li>
+					<a href="admin_create_post" class=" nav-link text-white">
+						Ajouter un article
+					</a>
+				</li>
 
-			<li>
-				<a href="admin_pending_comments" class="nav-link text-white">
-					Commentaires
-				</a>
-			</li>
-			<li>
-				<a href="admin_show_users" class="nav-link active">
-					Utilisateurs
-				</a>
-			</li>
-		</ul>
+				<li>
+					<a href="admin_pending_comments_access" class="nav-link text-white">
+						Commentaires
+					</a>
+				</li>
+				<li>
+					<a href="adminShowUsersAccess" class="nav-link active" aria-current="page">
+						Utilisateurs
+					</a>
+				</li>
+			</ul>
 
+		{% endif %}
 
 	</div>
 {% endblock %}
 {% block admin_content %}
 	{% block admin_title %}{% endblock %}
-	<main class="mb-5 pb-5">
-		<h2 class="text-secondary">Liste des utilisateurs</h2>
-		<p class="lead">Gérez ici les utilisateurs et définissez leurs rôles.</p>
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<caption>Liste des utilisateurs actifs</caption>
-				<thead>
-					<tr>
-						<th scope="col">ID</th>
-						<th scope="col">Pseudo</th>
-						<th scope="col">Prénom</th>
-						<th scope="col">Nom</th>
-						<th scope="col">Email</th>
-						<th scope="col">Rôle</th>
-						<th scope="col" colspan="5">Edition</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for user in  users %}
-						{% if user.deleted == 0 %}
-							<tr>
-								<th scope="row">{{ user.id }}</th>
-								<td>{{ user.username }}</td>
-								<td>{{ user.first_name }}</td>
-								<td>{{ user.last_name }}</td>
-								<td>{{ user.email }}</td>
-								<td>
-									{% if user.role == 0 %}
-										Utilisateur
-									{% else %}
-										Administrateur
-									{% endif %}
-								</td>
-								<td>
-									<a href="/admin/user/{{user.id}}" class="btn btn-warning" role="button">Editer</a>
-								</td>
-								<td>
-									<a href="/admin/delete-user/{{user.id}}" class="btn btn-danger" role="button">Désactiver</a>
-								</td>
-							</tr>
-						{% endif %}
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-		<div class="table-responsive">
-			<table class="table table-hover my-5 py-5">
-				<caption>Liste des utilisateurs désactivés</caption>
-				<thead>
-					<tr>
-						<th scope="col">ID</th>
-						<th scope="col">Pseudo</th>
-						<th scope="col">Prénom</th>
-						<th scope="col">Nom</th>
-						<th scope="col">Email</th>
-						<th scope="col">Rôle</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for user in  users %}
-						{% if user.deleted == 1 %}
-							<tr>
-								<th scope="row">{{ user.id }}</th>
-								<td>{{ user.username }}</td>
-								<td>{{ user.first_name }}</td>
-								<td>{{ user.last_name }}</td>
-								<td>{{ user.email }}</td>
-								<td>
-									{% if user.role == 0 %}
-										Utilisateur
-									{% else %}
-										Administrateur
-									{% endif %}
-								</td>
-							</tr>
-						{% endif %}
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</main>
+	{% if user is defined and user.role == 1 %}
+		<main class="mb-5 pb-5">
+			<h2 class="text-secondary">Liste des utilisateurs</h2>
+			<p class="lead">Gérez ici les utilisateurs et définissez leurs rôles.</p>
+			<div class="table-responsive">
+				<h2>Liste des utilisateurs à actif</h2>
+				<table class="table table-hover">
+					<caption>Liste des utilisateurs actifs</caption>
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Pseudo</th>
+							<th scope="col">Prénom</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Email</th>
+							<th scope="col">Rôle</th>
+							<th scope="col" colspan="5">Edition</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in  users %}
+							{% if user.role == 0 or user.role == 1 %}
+								<tr>
+									<th scope="row">{{ user.id }}</th>
+									<td>{{ user.username }}</td>
+									<td>{{ user.first_name }}</td>
+									<td>{{ user.last_name }}</td>
+									<td>{{ user.email }}</td>
+									<td>
+										<form class="form-edition" action="adminUpdateRoleUser?id={{user.id}}&newStateRole={{user.role}}" method="GET">
+											<div class="input-group">
+												<input type="hidden" name="id" value="{{ user.id }}">
+												<select class="form-select" name="newStateRole">
+													<option value="admin" {% if user.role == 1 %} selected {% endif %}>Admin</option>
+													<option value="blocked" {% if user.role == 2 %} selected {% endif %}>Bloquer</option>
+													<option value="deleted" {% if user.role == 3 %} selected {% endif %}>Supprimer</option>
+													<option value="guest" {% if user.role == 0 %} selected {% endif %}>Utilisateur</option>
+												</select>
+											</div>
+											<button type="submit" class="btn btn-warning">
+												Valider le role
+												<i class="fa-solid fa-feather"></i>
+											</button>
+										</form>
+									</td>
+									<td>
+										<form class="form-edition" action="adminDeleteUserAccess?id={{user.id}}" method="get">
+											<input type="hidden" name="id" value={{user.id}}>
+											<button class="btn btn-danger" type="submit">Supprimer l'utilisateur
+												<i class="fa-solid fa-user-slash"></i>
+											</button>
+										</form>
+									</td>
+								</tr>
+							{% endif %}
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="table-responsive">
+				<h2>Liste des utilisateurs à bloquer</h2>
+				<table class="table table-hover">
+					<caption>Liste des utilisateurs à bloquer</caption>
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Pseudo</th>
+							<th scope="col">Prénom</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Email</th>
+							<th scope="col">Rôle</th>
+							<th scope="col" colspan="5">Edition</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in  users %}
+							{% if user.role == 2 %}
+								<tr>
+									<th scope="row">{{ user.id }}</th>
+									<td>{{ user.username }}</td>
+									<td>{{ user.first_name }}</td>
+									<td>{{ user.last_name }}</td>
+									<td>{{ user.email }}</td>
+									<td>
+										<form class="form-edition" action="adminUpdateRoleUser?id={{user.id}}&newStateRole={{user.role}}" method="GET">
+											<div class="input-group">
+												<input type="hidden" name="id" value="{{ user.id }}">
+												<select class="form-select" name="newStateRole">
+													<option value="admin" {% if user.role == 1 %} selected {% endif %}>Admin</option>
+													<option value="blocked" {% if user.role == 2 %} selected {% endif %}>Bloquer</option>
+													<option value="deleted" {% if user.role == 3 %} selected {% endif %}>Supprimer</option>
+													<option value="guest" {% if user.role == 0 %} selected {% endif %}>Utilisateur</option>
+												</select>
+											</div>
+											<button type="submit" class="btn btn-warning">
+												Valider le role
+												<i class="fa-solid fa-feather"></i>
+											</button>
+										</form>
+									</td>
+									<td>
+										<form class="form-edition" action="adminDeleteUserAccess?id={{user.id}}" method="get">
+											<input type="hidden" name="id" value={{user.id}}>
+											<button class="btn btn-danger" type="submit">Supprimer l'utilisateur
+												<i class="fa-solid fa-user-slash"></i>
+											</button>
+										</form>
+									</td>
+								</tr>
+							{% endif %}
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="table-responsive">
+				<h2>Liste des utilisateurs à supprimer</h2>
+				<table class="table table-hover">
+					<caption>Liste des utilisateurs à supprimer</caption>
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Pseudo</th>
+							<th scope="col">Prénom</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Email</th>
+							<th scope="col">Rôle</th>
+							<th scope="col" colspan="5">Edition</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in  users %}
+							{% if user.role == 3 %}
+								<tr>
+									<th scope="row">{{ user.id }}</th>
+									<td>{{ user.username }}</td>
+									<td>{{ user.first_name }}</td>
+									<td>{{ user.last_name }}</td>
+									<td>{{ user.email }}</td>
+									<td>
+										<form class="form-edition" action="adminUpdateRoleUser?id={{user.id}}&newStateRole={{user.role}}" method="GET">
+											<div class="input-group">
+												<input type="hidden" name="id" value="{{ user.id }}">
+												<select class="form-select" name="newStateRole">
+													<option value="admin" {% if user.role == 1 %} selected {% endif %}>Admin</option>
+													<option value="blocked" {% if user.role == 2 %} selected {% endif %}>Bloquer</option>
+													<option value="deleted" {% if user.role == 3 %} selected {% endif %}>Supprimer</option>
+													<option value="guest" {% if user.role == 0 %} selected {% endif %}>Utilisateur</option>
+												</select>
+											</div>
+											<button type="submit" class="btn btn-warning">
+												Valider le role
+												<i class="fa-solid fa-feather"></i>
+											</button>
+										</form>
+									</td>
+									<td>
+										<form class="form-edition" action="adminDeleteUserAccess?id={{user.id}}" method="get">
+											<input type="hidden" name="id" value={{user.id}}>
+											<button class="btn btn-danger" type="submit">Supprimer l'utilisateur
+												<i class="fa-solid fa-user-slash"></i>
+											</button>
+										</form>
+									</td>
+								</tr>
+							{% endif %}
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</main>
+	{% else %}
+
+		<main class="d-flex flex-column align-items-center justify-content-center">
+			<h1 class="mb-5">Vous n'etes pas administateur</h1>
+			<button class=" btn btn-info">
+				<a href="postsAccess">
+					Voir les diférent récit
+					<i class="fa-solid fa-book"></i>
+				</a>
+			</button>
+		</main>
+	{% endif %}
 {% endblock %}

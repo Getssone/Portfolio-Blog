@@ -11,11 +11,111 @@ use App\Service\DatabaseConnection\DatabaseConnection;
 class CommentModel extends DatabaseConnection
 {
     /**
+     * Get all rejected comments for a single blog post with its author's username
+     *
+     * @param  int $postID
+     * @return void
+     */
+    public function  updateCommentStatus(int $id, $status)
+    {
+        $querySQL = "UPDATE comments SET comments.status=:status WHERE id = :id";
+        $request = $this->database->prepare($querySQL);
+        $request->execute(
+            array(
+                ':id' => $id,
+                ':status' => $status,
+            )
+        );
+    }
+
+
+    /**
+     * Get all rejected comments for a single blog post with its author's username
+     *
+     * @param  int $postID
+     * @return void
+     */
+    public function  getAllRejectedComments()
+    {
+        $requeteSQL = "SELECT * FROM comments WHERE comments.status = 'REJECTED' ORDER BY created_at DESC;";
+        $requete = $this->database->prepare($requeteSQL);
+        $requete->execute();
+        $comments = $requete->fetchAll(PDO::FETCH_ASSOC);
+        $commentRejected = []; //on crée un tableau avant afin d'évité d'écraser la valeur du $commentRejected dans la condition foreach à chaque itération
+        if ($comments) {
+            foreach ($comments as $comment) {
+                $commentRejected[] = new Comment($comment);
+            }
+        }
+        // var_dump($commentApproved);
+        // die;
+        return $commentRejected;
+    }
+
+    /**
+     * Get all approved comments for a single blog post with its author's username
+     *
+     * @param  int $postID
+     * @return void
+     */
+    public function  getAllApprovedComments()
+    {
+        $requeteSQL = "SELECT * FROM comments WHERE comments.status = 'APPROVED' ORDER BY created_at DESC;";
+        $requete = $this->database->prepare($requeteSQL);
+        $requete->execute();
+        $comments = $requete->fetchAll(PDO::FETCH_ASSOC);
+        $commentApproved = [];
+        if ($comments) {
+            foreach ($comments as $comment) {
+                $commentApproved[] = new Comment($comment);
+            }
+        }
+        // var_dump($commentApproved);
+        // die;
+        return $commentApproved;
+    }
+
+    /**
      * Get all comments
      *
      * @return array of Comment objects
      */
-    public function getAllComments($idPost)
+    public function getAllPendingComments()
+    {
+        $requeteSQL = "SELECT * FROM comments WHERE comments.status = 'PENDING' ORDER BY created_at DESC;";
+        $requete = $this->database->prepare($requeteSQL);
+        $requete->execute();
+        $comments = $requete->fetchAll(PDO::FETCH_ASSOC);
+        $commentPending = [];
+        // print_r($comments);
+        // print_r($comments);
+        // die;
+        if ($comments) {
+            foreach ($comments as $comment) {
+                $commentPending[] = new Comment($comment);
+            }
+        }
+        // print_r($commentPending);
+        // die;
+        return $commentPending;
+    }
+
+    /**
+     * Find 1 comment by ID
+     *
+     * @param  integer $id
+     * @return Comment
+     */
+    public function getCommentsWith(int $id)
+    {
+        $requeteSQL = "SELECT * FROM comments WHERE id = :id";
+        $requete = $this->database->prepare($requeteSQL);
+        $requete->bindValue(':id', $id, PDO::PARAM_INT);
+        $requete->execute();
+        return new Comment($requete->fetch(PDO::FETCH_ASSOC));
+    }
+
+    public function getAllCommentsWith($idPost)
     {
         $requeteSQL = "SELECT * FROM comments WHERE post_id = :id AND status = 'APPROVED' ORDER BY created_at DESC;";
         $requete = $this->database->prepare($requeteSQL);
@@ -40,7 +140,7 @@ class CommentModel extends DatabaseConnection
      */
     public function getComment(int $id)
     {
-        $requeteSQL = "SELECT * FROM comment WHERE id = ?";
+        $requeteSQL = "SELECT * FROM comments WHERE id = ?";
         $requete = $this->database->prepare($requeteSQL);
         $requete->bindValue(1, $id, PDO::PARAM_INT);
         $requete->execute();

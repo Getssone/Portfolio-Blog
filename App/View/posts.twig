@@ -75,11 +75,13 @@
 					</a>
 
 				</p>
-				<a href="postAccess?id={{ post.id }}" class="btn btn-primary">En savoir plus 😉</a>
+				<a href="postAccess?id={{ post.id }}&location=post" class="btn btn-primary">En savoir plus 😉</a>
 
 			</div>
 		</div>
-	{% endfor %}<!-- Pager--><div class="d-flex justify-content-end m-4">
-		<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
-	</div>
+	{% endfor %}
+	<!-- Pager-->
+	{# <div class="d-flex justify-content-end m-4">
+			<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
+		</div> #}
 </div>{% endblock %}

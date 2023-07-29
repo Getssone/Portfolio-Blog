@@ -25,32 +25,125 @@
 	</header>
 {% endblock %}
 {% block content %}
-	{% if user.role is same as 1 %}
-		<div class="row">
-			<div class="col-md-10 col-lg-12 col-xl-7">
-				<h2 class="section-heading">Comments</h2>
-				<div
-					class="container">
-					<!-- Zone de commentaires -->
-					<div
-						class="comments">
-						{# {{dump(comments)}} #}
-						<div class="comment">
-							<img src={{ comment.picture }} alt="picture">
-							<div class="user-name_date">
-								<h5>{{ comment.author }}</h5>
-								<small class="comment-date">{{ comment.date }}</small>
+
+	<div class="content-dashboard d-flex justify-content-between">
+		{% block admin_nav %}
+
+			<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
+				<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+					<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+						{% if user is defined and user.role == 1 %}
+							<span class="fs-4">
+								<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
+								{{user.username}}
+							</span>
+						{% else %}
+							<span class="fs-4">
+								Vous n'etes pas administateur
+							</span>
+						{% endif %}
+					</a>
+					{% if user is defined and user.role == 1 %}
+						<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+							<li>
+								<a class="dropdown-item" href="#">Paramètres</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="profile">Profil</a>
+							</li>
+							<li><hr class="dropdown-divider"></li>
+							<li>
+								<form
+									action="logOut" method="post">
+									{# {{ form_token("/logout-user")}} #}
+									<button class="dropdown-item" type="submit">Déconnexion</button>
+								</form>
+							</li>
+						</ul>
+
+					{% endif %}
+				</div>
+				<hr>
+				{% if user is defined and user.role == 1 %}
+					<ul class="nav nav-pills flex-column mb-auto">
+						<li class="nav-item">
+							<a href="admin" class="nav-link text-white">
+								Tableau de bord
+							</a>
+						</li>
+						<li>
+							<a href="adminShowPostsAccess" class="nav-link text-white">
+								Articles
+							</a>
+						</li>
+						<li>
+							<a href="admin_create_post" class=" nav-link text-white">
+								Ajouter un article
+							</a>
+						</li>
+
+						<li>
+							<a href="admin_pending_comments_access" class="nav-link active" aria-current="page">
+								Commentaires
+							</a>
+						</li>
+						<li>
+							<a href="adminShowUsersAccess" class="nav-link text-white">
+								Utilisateurs
+							</a>
+						</li>
+					</ul>
+
+				{% endif %}
+
+			</div>
+		{% endblock %}
+		<div class="container d-flex flex-column justify-content-center  " style="overflow-x: hidden;">
+
+			{% block admin_title %}
+				<h2 class="display-6 d-flex justify-content-center py-3">Interface administrateur</h2>
+			{% endblock %}
+			{% if user is defined and user.role == 1 %}
+
+				{% if user.role is same as 1 %}
+					<div class="row">
+						<div class="col-md-10 col-lg-12 col-xl-7">
+							<h2 class="section-heading">Comments</h2>
+							<div
+								class="container">
+								<!-- Zone de commentaires -->
+								<div
+									class="comments">
+									{# {{dump(comments)}} #}
+									<div class="comment">
+										<img src={{ comment.picture }} alt="picture">
+										<div class="user-name_date">
+											<h5>{{ comment.author }}</h5>
+											<small class="comment-date">{{ comment.date }}</small>
+										</div>
+										<div class="stick"></div>
+										<form action="/update-comment/{{ comment.id }}" method="post">
+											<textarea class="form-control" name="content" rows="3">{{ comment.content }}</textarea>
+											<button type="submit" class="btn btn-primary">Enregistrer</button>
+											<a href="/cancel-edit/{{ comment.id }}" class="btn btn-secondary">Annuler</a>
+										</form>
+									</div>
+								</div>
 							</div>
-							<div class="stick"></div>
-							<form action="/update-comment/{{ comment.id }}" method="post">
-								<textarea class="form-control" name="content" rows="3">{{ comment.content }}</textarea>
-								<button type="submit" class="btn btn-primary">Enregistrer</button>
-								<a href="/cancel-edit/{{ comment.id }}" class="btn btn-secondary">Annuler</a>
-							</form>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-	{% endif %}
-{% endblock %}
+				{% endif %}
+
+			{% else %}
+
+				<main class="d-flex flex-column align-items-center justify-content-center">
+					<h1 class="mb-5">Vous n'etes pas administateur</h1>
+					<button class=" btn btn-info">
+						<a href="postsAccess">
+							Voir les diférent récit
+							<i class="fa-solid fa-book"></i>
+						</a>
+					</button>
+				</main>
+			{% endif %}
+		{% endblock %}

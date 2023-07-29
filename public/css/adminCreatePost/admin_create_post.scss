@@ -26,15 +26,20 @@
     background: rgba(215, 215, 215, 0.3411764706);
     height: 10rem;
     width: 14rem;
+    margin: 0rem 1rem;
 
     .form-group {
       margin: 1rem;
       display: flex;
       flex-direction: column;
+      padding-left: 0.8rem;
       align-items: center;
     }
     input {
-      width: 11.1rem;
+      width: 10.1rem;
+
+      border-color: transparent;
+      border-radius: 0rem;
     }
   }
   img {

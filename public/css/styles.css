@@ -394,6 +394,18 @@ textarea {
   line-height: inherit;
 }
 
+input {
+  width: 65%;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.5;
+  border: 2px solid;
+  border-color: tan;
+  border-radius: 1rem;
+  color: #606c5d;
+  background-color: #f7e6c430;
+}
+
 button,
 select {
   text-transform: none;
@@ -436,6 +448,16 @@ button:not(:disabled),
 
 textarea {
   resize: vertical;
+  width: 60%;
+  border: 2px solid;
+  border-color: tan;
+  border-radius: 1rem;
+  padding: 1rem;
+  overflow: auto;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #606c5d;
+  background-color: #f7e6c430;
 }
 
 fieldset {
@@ -704,7 +726,7 @@ progress {
   .container-md,
   .container-sm,
   .container {
-    max-width: 1140px;
+    max-width: 1300px;
   }
 }
 @media (min-width: 1400px) {
@@ -2553,8 +2575,8 @@ textarea.form-control-lg {
 .input-group > .form-floating {
   position: relative;
   flex: 1 1 auto;
-  width: 1%;
-  min-width: 0;
+  width: 20%;
+  min-width: 10rem;
 }
 .input-group > .form-control:focus,
 .input-group > .form-select:focus,

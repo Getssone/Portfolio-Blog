@@ -1,25 +1,26 @@
-{% extends 'admin.twig' %}
-{% block title %}
-	<title>Tous les articles</title>
-{% endblock %}
-{% block styles %}<link href="public\css\admin\admin.css" rel="stylesheet"/>
-{% endblock %}
-{% block header %}
+{% extends "admin.twig" %}
 
-	<header class="masthead" style="background-image: url('https://cdn.pixabay.com/photo/2015/07/19/18/33/letters-851820_1280.jpg')">
+{% block title %}
+	<title>Utilisateurs</title>
+{% endblock %}
+
+{% block styles %}
+	<link href="public\css\admin\admin.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block header %}
+	<header class="masthead" style="background-image: url('https://cdn.pixabay.com/photo/2017/11/12/22/50/exhibition-2944064_1280.jpg')">
 		<div class="container position-relative px-4 px-lg-5">
 			<div class="row gx-4 gx-lg-5 align-content-center justify-content-center pt-5">
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<div class="page-heading">
-						<h1>Articles</h1>
-						<span class="subheading">Gérer les écrits légendaires du blog
-						</span>
+						<h1>Tableau de Bord</h1>
+						<span class="subheading">La danation des récit</span>
 					</div>
 				</div>
 			</div>
 		</div>
 	</header>
-
 {% endblock %}
 
 {% block admin_nav %}
@@ -93,60 +94,44 @@
 
 	</div>
 {% endblock %}
-{% block admin_title %}{% endblock %}
 
 {% block admin_content %}
-
+	{% block admin_title %}{% endblock %}
 	{% if user is defined and user.role == 1 %}
-		<div class="mb-5 pb-5" style="width: inherit">
-			<h2 class="text-secondary">Articles</h2>
-			<div class="flex-wrap">
-				<button type="button" class="btn btn-outline-info border-5 rounded ">
-					<a href="admin_create_post">
-						Ajouter +
-					</a>
-				</button>
-			</div>
+		<main class="mb-5 pb-5">
+			<h2 class="text-secondary">Liste des articles</h2>
+			<p class="lead border border-danger border-5 d-flex align-items-center justify-content-center p-5">
+				⚔ Etes vous sur de vouloir bannir ceux récits ⚔</p>
 			<div class="table-responsive">
-				<table class="table ">
-					<thead class="thead-dark">
+				<table class="table table-hover">
+					<caption>Articles</caption>
+					<thead>
 						<tr>
 							<th scope="col">ID</th>
 							<th scope="col">Titre</th>
-							<th scope="col">Chapô</th>
+							<th scope="col">Phrase d'accroche</th>
 							<th scope="col">Date de création</th>
-							<th scope="col">Date de modification</th>
-							<th scope="col">Auteur</th>
-							<th scope="col" colspan="5">Edition</th>
+							<th scope="col">Date de mise à jour</th>
+							<th scope="col">Créé par</th>
+							<th scope="col" colspan="3">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for post in  posts %}
-							<tr>
-								<th scope="row">{{ post.id }}</th>
-								<td>{{ post.title }}</td>
-								<td>{{ post.lead_sentence }}</td>
-								<td>{{ post.created_at|date("d/m/Y à H:i:s") }}</td>
-								<td>{{ post.updated_at|date("d/m/Y à H:i:s") }}</td>
-								<td>
-									{{post.created_by}}
-								</td>
-								<td>
-									<a href="postAccess?id={{ post.id }}&location=post" class="btn btn-primary border-5 rounded" role="button">Voir</a>
-								</td>
-								<td>
-									<a href="adminEditPostAccess?id={{ post.id }}" class="btn btn-secondary border-5 rounded" role="button">Editer</a>
-								</td>
-								<td>
-									<a href="postAccess?id={{ post.id }}&location=admin_delete_post" class="btn btn-danger border-5 rounded" role="button">Supprimer</a>
-								</td>
-							</tr>
-						{% endfor %}
+						<tr>
+							<th scope="row">{{ post.id }}</th>
+							<td>{{ post.title }}</td>
+							<td>{{ post.lead_sentence }}</td>
+							<td>{{ post.created_at|date("d/m/Y à H:i:s") }}</td>
+							<td>{{ post.updated_at|date("d/m/Y à H:i:s") }}</td>
+							<td>{{ authorPost }}</td>
+							<td>
+								<a href="admin_delete_post_access?id={{post.id}}" class="btn btn-danger border-5 rounded" data-post-id="{{ post.id }}" role="button">Supprimer</a>
+							</td>
+						</tr>
 					</tbody>
-					<caption>Liste des articles</caption>
 				</table>
 			</div>
-		</div>
+		</main>
 	{% else %}
 
 		<main class="d-flex flex-column align-items-center justify-content-center">

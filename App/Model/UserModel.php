@@ -9,12 +9,28 @@ use App\Service\DatabaseConnection\DatabaseConnection;
 
 class UserModel extends DatabaseConnection
 {
+
+    public function updateRole(int $id, $role)
+    {
+        $querySQL = "UPDATE users SET role = :role WHERE id = :id";
+        // var_dump($querySQL);
+        // die;
+
+        $request = $this->database->prepare($querySQL);
+        $request->execute(
+            array(
+                ':role' => $role,
+                ':id' => $id,
+            )
+        );
+    }
+
     public function readAll()
     {
         $usersArray = [];
         $querySQL = "SELECT * FROM users";
         $reponse = $this->database->query($querySQL);
-        while ($user = $reponse->fetch()) {
+        while ($user = $reponse->fetch(PDO::FETCH_ASSOC)) {
             $usersArray[] = new User($user);
         }
         return $usersArray;
@@ -100,5 +116,14 @@ class UserModel extends DatabaseConnection
         $user = $request->fetch(PDO::FETCH_ASSOC); //les résultats seront sous forme de tableau associatif
 
         return $user['username'];
+    }
+    public function deleteUser(int $userId)
+    {
+        $querySQL = "DELETE FROM users WHERE id = :id";
+        $requete = $this->database->prepare($querySQL);
+        $requete->bindValue(":id", $userId, PDO::PARAM_INT);
+        $success = $requete->execute();
+
+        return $success;
     }
 }

@@ -1,0 +1,145 @@
+{% extends "admin.twig" %}
+
+{% block title %}
+	<title>Utilisateurs</title>
+{% endblock %}
+
+{% block styles %}
+	<link href="public\css\admin\admin.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block header %}
+	<header class="masthead" style="background-image: url('https://cdn.pixabay.com/photo/2017/11/12/22/50/exhibition-2944064_1280.jpg')">
+		<div class="container position-relative px-4 px-lg-5">
+			<div class="row gx-4 gx-lg-5 align-content-center justify-content-center pt-5">
+				<div class="col-md-10 col-lg-8 col-xl-7">
+					<div class="page-heading">
+						<h1>Tableau de Bord</h1>
+						<span class="subheading">La danation des récit</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{% endblock %}
+
+{% block admin_nav %}
+
+	<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
+		<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+				{% if user is defined and user.role == 1 %}
+					<span class="fs-4">
+						<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
+						{{user.username}}
+					</span>
+				{% else %}
+					<span class="fs-4">
+						Vous n'etes pas administateur
+					</span>
+				{% endif %}
+			</a>
+			{% if user is defined and user.role == 1 %}
+				<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+					<li>
+						<a class="dropdown-item" href="#">Paramètres</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="profile">Profil</a>
+					</li>
+					<li><hr class="dropdown-divider"></li>
+					<li>
+						<form
+							action="logout-user" method="post">
+							{# {{ form_token("/logout-user")}} #}
+							<button class="dropdown-item" type="submit">Déconnexion</button>
+						</form>
+					</li>
+				</ul>
+
+			{% endif %}
+		</div>
+		<hr>
+		{% if user is defined and user.role == 1 %}
+			<ul class="nav nav-pills flex-column mb-auto">
+				<li class="nav-item">
+					<a href="admin" class="nav-link text-white">
+						Tableau de bord
+					</a>
+				</li>
+				<li>
+					<a href="adminShowPostsAccess" class="nav-link text-white">
+						Articles
+					</a>
+				</li>
+				<li>
+					<a href="admin_create_post" class=" nav-link text-white">
+						Ajouter un article
+					</a>
+				</li>
+
+				<li>
+					<a href="admin_pending_comments_access" class="nav-link text-white">
+						Commentaires
+					</a>
+				</li>
+				<li>
+					<a href="adminShowUsersAccess" class="nav-link active" aria-current="page">
+						Utilisateurs
+					</a>
+				</li>
+			</ul>
+
+		{% endif %}
+
+	</div>
+{% endblock %}
+
+{% block admin_content %}
+	{% if user is defined and user.role == 1 %}
+		{% block admin_title %}{% endblock %}
+		<main class="mb-5 pb-5">
+			<h2 class="text-secondary">User à Bannir</h2>
+			<p class="lead border border-danger border-5 d-flex align-items-center justify-content-center p-5">
+				⚔ Etes vous sur de vouloir bannir cette rencontre ⚔</p>
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<caption>User à Bannir</caption>
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Pseudo</th>
+							<th scope="col">Prénom</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Email</th>
+							<th scope="col">Rôle</th>
+							<th scope="col" colspan="5">Edition</th>
+						</tr>
+					</thead>
+				</</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">{{ userToDeleted.id }}</th>
+					<td>{{ userToDeleted.username }}</td>
+					<td>{{ userToDeleted.first_name }}</td>
+					<td>{{ userToDeleted.last_name }}</td>
+					<td>{{ userToDeleted.email }}</td>
+					<td>
+						{% if userToDeleted.role == 1 %}Admin
+						{% elseif userToDeleted.role == 2 %}
+							Bloquer
+						{% elseif userToDeleted.role == 3 %}
+							Supprimer
+						{% elseif userToDeleted.role == 0 %}
+							Utilisateur
+						{% endif %}
+					</td>
+					<td>
+						<a href="adminDeletedUserSuccess?id={{userToDeleted.id}}" class="btn btn-danger border-5 rounded" data-post-id="{{ userToDeleted.id }}" role="button">Supprimer</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</td>
+</tr></tbody></div></td></tr></tbody></main>{% else %}<main class="d-flex flex-column align-items-center justify-content-center"><h1 class="mb-5">Vous n'etes pas administateur</h1><button class=" btn btn-info"><a href="postsAccess">Voir les diférent récit<i class="fa-solid fa-book"></i></a></button></main>{% endif %}{% endblock %}

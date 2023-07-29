@@ -101,6 +101,7 @@ switch ($page) {
     case 'postsAccess':
         $postController = new PostController($sessionModel);
         $postController->seeAllPosts();
+        header("Location: posts");
         exit();
         break;
 
@@ -113,11 +114,13 @@ switch ($page) {
         break;
 
     case 'postAccess': // Vérification si le Post existe
-        // var_dump("postAccessok");
+        // var_dump("postAccess");
         // var_dump($_GET['id']);
         // die;
+        $location = $_GET['location'];
         $postController = new PostController($sessionModel);
         $postController->seePostID();
+        header("Location: $location");
         exit();
         break;
 
@@ -205,61 +208,170 @@ switch ($page) {
         exit();
         break;
 
-        // case 'admin_show_posts':
-        //     echo $twig->render('admin_show_posts.twig', [
-        //         "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
-        //         'posts' => $posts
-        //     ]);
-        //     break;
+    case 'adminShowPostsAccess':
+        $postController = new PostController($sessionModel);
+        $postController->seeAllPosts();
+        header("Location: admin_show_posts");
+        exit();
+        break;
+
+    case 'admin_show_posts':
+        $user = $sessionModel->get('user');
+        $posts = $sessionModel->get('posts');
+        // var_dump($user);
+        // die;
+        echo $twig->render('admin_show_posts.twig', [
+            'user' => $user,
+            'posts' => $posts,
+            'message' => $message
+        ]);
+        exit();
+        break;
+
+    case 'adminEditPostAccess':
+        // var_dump("adminEditPostAccess");
+        // var_dump($_GET['id']);
+        // die;
+        $postController = new PostController($sessionModel);
+        $postController->seePostID();
+        header("Location: admin_edit_post");
+        exit();
+        break;
+
+    case 'admin_edit_post':
+        $user = $sessionModel->get('user');
+        $post = $sessionModel->get('post');
+        $authorPost = $sessionModel->get('authorPost');
+        // Envoyé uniquement quand le page "post/add-comment" à validé l'enregistrement
+
+        echo $twig->render('admin_edit_post.twig', [
+            'user' => $user,
+            'message' => $message, //Appeler tous en haut de l'index.php
+            "post" => $post,
+            "authorPost" => $authorPost,
+        ]);
+        exit();
+        break;
+
+    case 'adminEditPostSuccess':
+        // var_dump("adminEditPostSuccess");
+        $postController = new PostController($sessionModel);
+        $postController->updatePostID();
+        header("Location: admin");
+        exit();
+        break;
+
+
+    case 'admin_delete_post_access': // Vérification si le Post existe
+        // var_dump($_GET['id']);
+        // die;
+        $postController = new PostController($sessionModel);
+        $postController->deletePostID();
+        exit();
+        break;
+
+    case 'admin_delete_post':
+        $user = $sessionModel->get('user');
+        $post = $sessionModel->get('post');
+        $authorPost = $sessionModel->get('authorPost');
+
+        echo $twig->render('admin_delete_post.twig', [
+            'user' => $user,
+            "post" => $post,
+            "authorPost" => $authorPost
+        ]);
+        break;
 
 
 
-        // case 'admin_pending_comments':
-        //     echo $twig->render('admin_pending_comments.twig', [
-        //         "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
-        //         'posts' => $posts
-        //     ]);
-        //     break;
+    case 'admin_pending_comments_access':
+        $commentController = new CommentController($sessionModel);
+        $commentController->getAllApprovedComments();
+        $commentController->getAllPendingComments();
+        $commentController->getAllRejectedComments();
+        header('Location: admin_pending_comments');
+        exit();
+        break;
 
-        // case 'admin_show_users':
-        //     echo $twig->render('admin_show_users.twig', [
-        //         "users" => [["id" => 1, "username" => "Getssone", "email" => "getssone@mailo.com", "first_name" => "Gaëtan", "last_name" => "Solis", "role" => 1,], ["id" => 2, "username" => "TotoLescargot", "email" => "totoLescargot@mailo.com", "first_name" => "Toto", "last_name" => "Lescargot", "role" => 0]],
-        //         'posts' => $posts
-        //     ]);
-        //     break;
+    case 'admin_pending_comments':
+        $user = $sessionModel->get('user');
+        $commentsPending = $sessionModel->get('commentsPending');
+        $commentsApproved = $sessionModel->get('commentsApproved');
+        $commentsRejected = $sessionModel->get('commentsRejected');
+        echo $twig->render('admin_pending_comments.twig', [
+            'user' => $user,
+            'commentsPending' => $commentsPending,
+            'commentsApproved' => $commentsApproved,
+            'commentsRejected' => $commentsRejected,
+        ]);
+        break;
 
+    case 'adminUpdateStatusComment':
+        // var_dump("adminUpdateStatusComment");
+        $commentController = new CommentController($sessionModel);
+        $commentController->updateCommentStatus();
+        header("Location: admin");
+        exit();
+        break;
 
+    case 'adminShowUsersAccess':
+        // var_dump("adminShowUsersAccess");
+        // die;
+        $userController = new UserController($sessionModel);
+        $userController->seeAllUsers();
+        header("Location: admin_show_users");
+        exit();
+        break;
 
+    case 'admin_show_users':
+        $user = $sessionModel->get('user');
+        $users = $sessionModel->get('users');
+        echo $twig->render('admin_show_users.twig', [
+            'user' => $user,
+            "users" => $users
+        ]);
+        break;
 
-        // case 'admin_edit_comment':
-        //     if (isset($_GET['commentId'])) {
-        //         var_dump($PHP_SELF . "?" . $_SERVER['QUERY_STRING']);
-        //         die;
-        //         $commentId = $_GET['commentId'];
-        //         echo $twig->render('admin_edit_comment.twig', [
-        //             "user" => ["name" => "Solis", "alias" => "Getssone", "picture" => "public\assets\img\Accueil.jpg", "role" => 1,], "comments" => [["id" => $commentId, "author" => "Toto", "content" => "Very interesting", "date" => "24-05-2023", "picture" => "public\assets\img\CGU.jpg",], ["id" => $commentId, "author" => "Titi", "content" => "Thank you for every thing", "date" => "24-05-2023", "picture" => "public\assets\img\Accueil.jpg",]]
-        //         ]);
-        //         header('Location: /post');
-        //         exit();
-        //     } else {
-        //         // L'ID du commentaire n'est pas spécifié, affichez une erreur ou redirigez l'utilisateur
-        //         header('HTTP/1.0 404 Not Found');
-        //         echo $twig->render('404.twig');
-        //         exit();
-        //     }
-        //     break;
+    case 'adminDeleteUserAccess':
+        $userController = new UserController($sessionModel);
+        $userController->seeUserID();
+        header("Location: admin_delete_user");
+        exit();
+        break;
+
+    case 'admin_delete_user':
+        $user = $sessionModel->get('user');
+        $userToDeleted = $sessionModel->get('userToDeleted');
+        echo $twig->render('admin_delete_user.twig', [
+            'user' => $user,
+            "userToDeleted" => $userToDeleted
+        ]);
+        break;
+
+    case 'adminDeletedUserSuccess':
+        // var_dump("adminEditPostSuccess");
+        $userController = new UserController($sessionModel);
+        $userController->deletedUser();
+        header("Location: admin");
+        exit();
+        break;
+
+    case 'adminUpdateRoleUser':
+        var_dump("adminUpdateRoleUser");
+        $userController = new UserController($sessionModel);
+        $userController->updateRole();
+        header("Location: admin");
+        exit();
+        break;
 
 
 
     case 'error_404':
-        echo $twig->render('404.twig');
+        $user = $sessionModel->get('user');
+        echo $twig->render('404.twig', ['user' => $user]);
         exit();
         break;
-
 
     default:
-        // header('Location: error_404');
-        echo $twig->render('404.twig');
-        exit();
-        break;
+        header("Location: error_404");
 }

@@ -2,7 +2,9 @@
 {% block title %}
 	<title>Tous les Commentaires</title>
 {% endblock %}
-{% block styles %}<link href="public\css\admin\admin.css" rel="stylesheet"/>
+{% block styles %}
+	<link href="public\css\admin\admin.css" rel="stylesheet"/>
+	<link href="public\css\admin_pending_comments\admin_pending_comments.css" rel="stylesheet"/>
 {% endblock %}
 {% block header %}
 	<header class="masthead" style="background-image: url('https://th.bing.com/th/id/OIG.d2IYjhm8TJcSN.XwVVAE?pid=ImgGn')">
@@ -21,227 +23,258 @@
 
 {% endblock %}
 {% block admin_nav %}
+
 	<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
 		<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-				{% if user is defined %}
-					{% if user.role is same as 1 %}
-						<span class="fs-4">
-							<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
-							{{user.username}}
-						</span>
-					{% endif %}
+				{% if user is defined and user.role == 1 %}
+					<span class="fs-4">
+						<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
+						{{user.username}}
+					</span>
+				{% else %}
+					<span class="fs-4">
+						Vous n'etes pas administateur
+					</span>
 				{% endif %}
 			</a>
-			<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-				<li>
-					<a class="dropdown-item" href="#">Paramètres</a>
-				</li>
-				<li>
-					<a class="dropdown-item" href="profile">Profil</a>
-				</li>
-				<li><hr class="dropdown-divider"></li>
-				<li>
-					<form
-						action="logout-user" method="post">
-						{# {{ form_token("/logout-user")}} #}
-						<button class="dropdown-item" type="submit">Déconnexion</button>
-					</form>
-				</li>
-			</ul>
+			{% if user is defined and user.role == 1 %}
+				<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+					<li>
+						<a class="dropdown-item" href="#">Paramètres</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="profile">Profil</a>
+					</li>
+					<li><hr class="dropdown-divider"></li>
+					<li>
+						<form
+							action="logOut" method="post">
+							{# {{ form_token("/logout-user")}} #}
+							<button class="dropdown-item" type="submit">Déconnexion</button>
+						</form>
+					</li>
+				</ul>
+
+			{% endif %}
 		</div>
 		<hr>
-		<ul class="nav nav-pills flex-column mb-auto">
-			<li class="nav-item">
-				<a href="admin" class="nav-link text-white">
-					Tableau de bord
-				</a>
-			</li>
-			<li>
-				<a href="admin_show_posts" class="nav-link text-white" aria-current="page">
-					Articles
-				</a>
-			</li>
-			<li>
-				<a href="admin_create_post" class=" nav-link text-white">
-					Ajouter un article
-				</a>
-			</li>
+		{% if user is defined and user.role == 1 %}
+			<ul class="nav nav-pills flex-column mb-auto">
+				<li class="nav-item">
+					<a href="admin" class="nav-link text-white">
+						Tableau de bord
+					</a>
+				</li>
+				<li>
+					<a href="adminShowPostsAccess" class="nav-link text-white">
+						Articles
+					</a>
+				</li>
+				<li>
+					<a href="admin_create_post" class=" nav-link text-white">
+						Ajouter un article
+					</a>
+				</li>
 
-			<li>
-				<a href="admin_pending_comments" class="nav-link   active">
-					Commentaires
-				</a>
-			</li>
-			<li>
-				<a href="admin_show_users" class="nav-link text-white">
-					Utilisateurs
-				</a>
-			</li>
-		</ul>
+				<li>
+					<a href="admin_pending_comments_access" class="nav-link active" aria-current="page">
+						Commentaires
+					</a>
+				</li>
+				<li>
+					<a href="adminShowUsersAccess" class="nav-link text-white">
+						Utilisateurs
+					</a>
+				</li>
+			</ul>
 
+		{% endif %}
 
 	</div>
 {% endblock %}
 {% block admin_content %}
 	{% block admin_title %}{% endblock %}
-	{% set statuses = [{ 'PENDING' : 'En attente'}, {'APPROVED' : 'Accepté' }, {'REJECTED' : 'Rejeté' }] %}
+	{% if user is defined and user.role == 1 %}
+		{% set statuses = [{ 'PENDING' : 'En attente'}, {'APPROVED' : 'Accepté' }, {'REJECTED' : 'Rejeté' }] %}
 
-	<main class="mb-5 pb-5">
-		<h2 class="text-secondary">Liste des commentaires</h2>
-		<p class="lead">Pour chaque commentaire, vous pouvez le valider pour publication ou le rejeter.</p>
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<caption>Commentaires en attente de validation</caption>
-				<thead>
-					<tr>
-						<th scope="col">ID</th>
-						<th scope="col">Titre</th>
-						<th scope="col">Commentaire</th>
-						<th scope="col">Envoyé à</th>
-						<th scope="col">Ecrit par</th>
-						<th scope="col">Article</th>
-						<th scope="col">Statut</th>
-						<th scope="col" colspan="5">Edition</th>
-					</tr>
-				</thead>
-				<tbody>
-					{# 
-																																																																																				{% if comments|filter(comment => comment.status == constant('App\\Class\\Comment::PENDING')) %}
-																																																																																					{% for comment in comments|filter(comment => comment.status == constant('App\\Class\\Comment::PENDING')) %}
-																																																																																						<tr>
-																																																																																							<th scope="row">{{ comment.id }}</th>
-																																																																																							<td>{{ comment.title }}</td>
-																																																																																							<td>{{ comment.content }}</td>
-																																																																																							<td>{{ comment.created_at|date("d/m/Y H:i:s") }}</td>
-																																																																																							<td>{{ comment.username }}</td>
-																																																																																							<td>
-																																																																																								<a href="/post/{{ comment.post_id }}">{{ comment.post_title }}</a>
-																																																																																							</td>
-																																																																																							<td>
-																																																																																								{% for status in  statuses %}
-																																																																																									{% for name,label in  status %}
-																																																																																										{% if comment.status == name %}
-																																																																																											{{  label  }}
-																																																																																										{% endif %}
-																																																																																									{% endfor %}
-																																																																																								{% endfor %}
-																																																																																							</td>
-																																																																																							<td>
-																																																																																								<form
-																																																																																									action="admin_approve_comment/{{comment.id}}" method="post">
-																																																																																									{{ form_token("/admin/approve-comment/#{comment.id}") }}
-																																																																																									<button class="btn btn-success" type="submit">Valider</button>
-																																																																																								</form>
-																																																																																							</td>
-																																																																																							<td>
-																																																																																								<form
-																																																																																									action="admin_reject_comment/{{comment.id}}" method="post">
-																																																																																									{{ form_token("/admin/reject-comment/#{comment.id}") }} 
-																																																																																									<button class="btn btn-danger" type="submit">Rejeter</button>
-																																																																																								</form>
-																																																																																							</td>
-																																																																																						</tr>
-																																																																																					{% endfor %}
-																																																																																				{% else %}
-																																																																																					<tr>
-																																																																																						<td colspan="8">Aucun commentaire en attente.</td>
-																																																																																					</tr>
-																																																																																				{% endif %}
-																																																																																                #}
-				</tbody>
-			</table>
-		</div>
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<caption>Commentaires rejetés</caption>
-				<thead>
-					<tr>
-						<th scope="col">ID</th>
-						<th scope="col">Titre</th>
-						<th scope="col">Commentaire</th>
-						<th scope="col">Envoyé à</th>
-						<th scope="col">Ecrit par</th>
-						<th scope="col">Article</th>
-						<th scope="col">Statut</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#             
-																																																																																{% if comments|filter(comment => comment.status == constant('App\\Class\\Comment::REJECTED')) %}
-																																																																																	{% for comment in comments|filter(comment => comment.status == constant('App\\Class\\Comment::REJECTED')) %}
-																																																																																		<tr>
-																																																																																			<th scope="row">{{ comment.id }}</th>
-																																																																																			<td>{{ comment.title }}</td>
-																																																																																			<td>{{ comment.content }}</td>
-																																																																																			<td>{{ comment.created_at|date("d/m/Y H:i:s") }}</td>
-																																																																																			<td>{{ comment.username }}</td>
-																																																																																			<td>
-																																																																																				<a href="/post/{{ comment.post_id }}">{{ comment.post_title }}</a>
-																																																																																			</td>
-																																																																																			<td class="text-danger fw-bold">
-																																																																																				{% for status in  statuses %}
-																																																																																					{% for name,label in  status %}
-																																																																																						{% if comment.status == name %}
-																																																																																							{{  label  }}
-																																																																																						{% endif %}
-																																																																																					{% endfor %}
-																																																																																				{% endfor %}
-																																																																																			</td>
-																																																																																		</tr>
-																																																																																	{% endfor %}
-																																																																																{% else %}
-																																																																																	<tr>
-																																																																																		<td colspan="7">Aucun commentaire rejeté.</td>
-																																																																																	</tr>
-																																																																																{% endif %} #}
-				</tbody>
-			</table>
-		</div>
-		<div class="table-responsive">
-			<table class="table table-hover mb-5">
-				<caption>Commentaires acceptés</caption>
-				<thead>
-					<tr>
-						<th scope="col">ID</th>
-						<th scope="col">Titre</th>
-						<th scope="col">Commentaire</th>
-						<th scope="col">Envoyé à</th>
-						<th scope="col">Ecrit par</th>
-						<th scope="col">Article</th>
-						<th scope="col">Statut</th>
-					</tr>
-				</thead>
-				<tbody>
-					{# {% if comments|filter(comment => comment.status == constant('App\\Class\\Comment::APPROVED')) %}
-																																																																													{% for comment in comments|filter(comment => comment.status == constant('App\\Class\\Comment::APPROVED')) %}
-																																																																														<tr>
-																																																																															<th scope="row">{{ comment.id }}</th>
-																																																																															<td>{{ comment.title }}</td>
-																																																																															<td>{{ comment.content }}</td>
-																																																																															<td>{{ comment.created_at|date("d/m/Y H:i:s") }}</td>
-																																																																															<td>{{ comment.username }}</td>
-																																																																															<td>
-																																																																																<a href="post/{{ comment.post_id }}">{{ comment.post_title }}</a>
-																																																																															</td>
-																																																																															<td class="text-success fw-bold">
-																																																																																{% for status in  statuses %}
-																																																																																	{% for name,label in  status %}
-																																																																																		{% if comment.status == name %}
-																																																																																			{{  label  }}
-																																																																																		{% endif %}
-																																																																																	{% endfor %}
-																																																																																{% endfor %}
-																																																																															</td>
-																																																																														</tr>
-																																																																													{% endfor %}
-																																																																												{% else %}
-																																																																													<tr>
-																																																																														<td colspan="7">Aucun commentaire publié.</td>
-																																																																													</tr>
-																																																																												{% endif %} #}
-				</tbody>
-			</table>
-		</div>
-	</main>
+		<main class="mb-5 pb-5">
+			<h2 class="text-secondary">Liste des commentaires</h2>
+			<p class="lead">Pour chaque commentaire, vous pouvez le valider pour publication ou le rejeter.</p>
+			<div class="table-responsive">
+				<h2>Commentaires en attente de validation</h2>
+				<table class="table table-hover">
+					<caption>Commentaires en attente de validation</caption>
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Titre</th>
+							<th scope="col">Commentaire</th>
+							<th scope="col">Envoyé à</th>
+							<th scope="col">Auteur</th>
+							<th scope="col">Article</th>
+							<th scope="col">Statut</th>
+							<th scope="col" colspan="5">Edition</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if commentsPending %}
+							{% for comment in commentsPending %}
+								<tr>
+									<th scope="row">{{ comment.id }}</th>
+									<td>{{ comment.title|raw }}</td>
+									<td>{{ comment.content|raw }}</td>
+									<td>{{ comment.getCreatedAt|date("d/m/Y H:i:s") }}</td>
+									<td>{{ comment.getCreatedBy}}</td>
+									<td>
+										<a href="postAccess?id={{ comment.getPostId.id }}&location=post">{{ comment.getPostId.title }}</a>
+									</td>
+									<td>
+										{% for status in  statuses %}
+											{% for keyStatus,valueStatus in  status %}
+												{% if comment.status == keyStatus %}
+													{{  valueStatus  }}
+												{% endif %}
+											{% endfor %}
+										{% endfor %}
+									</td>
+									<td>
+										<form action="adminUpdateStatusComment?id={{ comment.id }}&newStateStatus=approved" method="post">
+											<button class="btn btn-success" type="submit">Valider</button>
+										</form>
+									</td>
+									<td>
+										<form action="adminUpdateStatusComment?id={{ comment.id }}&newStateStatus=rejected" method="post">
+											<button class="btn btn-danger" type="submit">Rejeter</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td colspan="8">Aucun commentaire en attente.</td>
+							</tr>
+						{% endif %}
+
+					</tbody>
+				</table>
+			</div>
+			<div class="table-responsive">
+				<h2>Commentaires Validé</h2>
+				<table class="table table-hover">
+					<caption>Commentaires validé
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Titre</th>
+							<th scope="col">Commentaire</th>
+							<th scope="col">Envoyé à</th>
+							<th scope="col">Ecrit par</th>
+							<th scope="col">Article</th>
+							<th scope="col">Statut</th>
+							<th scope="col" colspan="5">Edition</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if commentsApproved %}
+							{% for comment in commentsApproved %}
+								<tr>
+									<th scope="row">{{ comment.id }}</th>
+									<td>{{ comment.title|raw }}</td>
+									<td>{{ comment.content|raw }}</td>
+									<td>{{ comment.getCreatedAt|date("d/m/Y H:i:s") }}</td>
+									<td>{{ comment.getCreatedBy}}</td>
+									<td>
+										<a href="postAccess?id={{ post.id }}&location=post">{{ comment.getPostId }}</a>
+									</td>
+									<td>
+										{% for status in  statuses %}
+											{% for keyStatus,valueStatus in  status %}
+												{% if comment.status == keyStatus %}
+													{{  valueStatus  }}
+												{% endif %}
+											{% endfor %}
+										{% endfor %}
+									</td>
+									<td>
+										<form action="adminUpdateStatusComment?id={{ comment.id }}&newStateStatus=rejected" method="post">
+											<button class="btn btn-danger" type="submit">Rejeter</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td colspan="8">Aucun commentaire validé.</td>
+							</tr>
+						{% endif %}
+
+					</tbody>
+				</table>
+			</div>
+			<div class="table-responsive">
+				<h2>Commentaires rejeter</h2>
+				<table class="table table-hover mb-5">
+					<caption>Commentaires rejeter</caption>
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Titre</th>
+							<th scope="col">Commentaire</th>
+							<th scope="col">Envoyé à</th>
+							<th scope="col">Ecrit par</th>
+							<th scope="col">Article</th>
+							<th scope="col">Statut</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if commentsRejected %}
+							{% for comment in commentsRejected %}
+								<tr>
+									<th scope="row">{{ comment.id }}</th>
+									<td>{{ comment.title|raw }}</td>
+									<td>{{ comment.content|raw }}</td>
+									<td>{{ comment.getCreatedAt|date("d/m/Y H:i:s") }}</td>
+									<td>{{ comment.getCreatedBy}}</td>
+									<td>
+										<a href="postAccess?id={{ post.id }}&location=post">{{ comment.getPostId }}</a>
+									</td>
+									<td>
+										{% for status in  statuses %}
+											{% for keyStatus,valueStatus in  status %}
+												{% if comment.status == keyStatus %}
+													{{  valueStatus  }}
+												{% endif %}
+											{% endfor %}
+										{% endfor %}
+									</td>
+									<td>
+										<form action="adminUpdateStatusComment?id={{ comment.id }}&newStateStatus=approved" method="post">
+											<button class="btn btn-success" type="submit">Valider</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td colspan="8">Aucun commentaire rejeté.</td>
+							</tr>
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+		</main>
+	{% else %}
+
+		<main class="d-flex flex-column align-items-center justify-content-center">
+			<h1 class="mb-5">Vous n'etes pas administateur</h1>
+			<button class=" btn btn-info">
+				<a href="postsAccess">
+					Voir les diférent récit
+					<i class="fa-solid fa-book"></i>
+				</a>
+			</button>
+		</main>
+	{% endif %}
 {% endblock %}

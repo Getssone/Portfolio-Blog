@@ -34,7 +34,6 @@ class EmailController
                 $this->emailModel->sendMe($name, $email, $object, $message);
                 $this->sessionModel->set('message', 'Votre message a été envoyé avec succès.');
                 header('Location: contact');
-                exit;
             }
         } catch (Exception $e) {
             echo ("Il y a une erreur dans le sendMailViaContact:" . $e);
@@ -56,7 +55,7 @@ class EmailController
     //         if (!$this->password_verify($password, $confirmPassword)) {
     //             $_SESSION['message'] = 'Les mots de passe ne correspondent pas.';
     //             header('Location: ' . $_SERVER['REQUEST_URI']);
-    //             exit();
+    //         
     //         }
 
     //         // Instancier la classe Email
@@ -76,14 +75,14 @@ class EmailController
 
     //         // Rediriger vers la même page pour afficher le message
     //         header('Location: ' . $_SERVER['REQUEST_URI']);
-    //         exit();
+    //
     //     }
 
     //     // Afficher la vue
     //     echo $twig->render('login.twig', ['emailSent' => isset($emailSent) ? $emailSent : false]);
 
     //     // Arrêtez l'exécution du script
-    //     exit();
+
     // }
 
     // public function password_verify($password, $confirmPassword)

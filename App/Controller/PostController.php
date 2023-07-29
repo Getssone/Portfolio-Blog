@@ -31,6 +31,66 @@ class PostController
     }
 
 
+    public function deletePostID()
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+                // Récupérer les paramètres GET
+                $postId = $_GET['id'];
+
+                if (isset($postId) && !empty($postId)) {
+                    $thisPostDeleted = $this->postModel->delPost($postId);
+                    if ($thisPostDeleted === true) {
+                        $this->sessionModel->deleteKey('posts');
+                        $this->seeAllPosts();
+                        $this->sessionModel->set('message', "le récit à été banni de nos terres   ");
+
+                        header('Location: admin');
+                    }
+                } else {
+                    $this->sessionModel->set('error_message', "Nous n'avons pas pu bannir ce récits il doit être ensorceler");
+                    header('Location: admin');
+                }
+            }
+        } catch (Exception $e) {
+            $this->sessionModel->set('message', $e->getMessage());
+            // Redirection vers le post
+            header('Location: error_404');
+        }
+    }
+    public function updatePostID()
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $postId = $_POST['postId'];
+
+                if (isset($postId) && !empty($postId)) {
+                    $id =  ucfirst(strtolower(htmlspecialchars($_POST['postId'])));
+
+                    $title =  ucfirst(strtolower(htmlspecialchars($_POST['title'])));
+
+                    $leadSentence = htmlspecialchars($_POST['lead_sentence']);
+
+                    $content = htmlspecialchars($_POST['content']);
+                    // var_dump($_POST);
+                    // die;
+                    $this->postModel->update($id, $title, $content, $leadSentence);
+
+                    $this->sessionModel->set('message', "Le post a été enregistré avec succès");
+                } else {
+                    // Une erreur s'est produite lors de l'enregistrement du fichier
+                    $this->sessionModel->set('message', "Une erreur s'est produite lors de l'enregistrement");
+                    header('Location: admin');
+                }
+            }
+        } catch (Exception $e) {
+            $this->sessionModel->set('message', $e->getMessage());
+            // Redirection vers le post
+            header('Location: error_404');
+        }
+    }
+
     public function seePostID()
     {
         try {
@@ -38,6 +98,7 @@ class PostController
 
                 // Récupérer les paramètres GET
                 $postId = $_GET['id'];
+                // $location = $_GET['location'];
 
                 if (isset($postId) && !empty($postId)) {
                     $thisPost = $this->postModel->getPost($postId);
@@ -55,29 +116,17 @@ class PostController
                     $this->sessionModel->set('authorPost', $infosAuthorPost->getUsername());
                     $this->sessionModel->set('comments', $comments["comments"]);
                     $this->sessionModel->set('authorComments', $comments["authors"]);
-                    $this->sessionModel->set('message', "Voici le récit que vous souhaitez découvrir ");
-                    header('Location: post');
-                    exit();
+                    $this->sessionModel->set('message', "Voici le récit que vous souhaitiez ");
                 } else {
                     $this->sessionModel->set('error_message', "Nous n'avons pas pu accéder à ce post");
                     header('Location: error_404');
-                    exit;
                 }
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
             // Redirection vers le post
             header('Location: error_404');
-            exit;
         }
-        // $thisPost = $this->postModel->getPost($id);
-        // $idAuthorPost = $thisPost->getCreated_By();
-        // $infosAuthor = $this->userModel->read($idAuthorPost);
-        // // $comments = $this->commentModel->getApprovedComments($id);
-        // $this->sessionModel->set('post', $thisPost);
-        // $this->sessionModel->set('message', "Voici le récit que vous souhaitez découvrir ");
-        // header('Location: post');
-        // exit;
     }
 
     public function seeAllPosts()
@@ -90,7 +139,7 @@ class PostController
         }
         $this->sessionModel->set('message', "Cher visiteur, quel récit souhaitez-vous découvrir parmi nos derniers chroniques publiés ? ");
         $this->sessionModel->set('posts', $allPosts);
-        header('Location: posts');
+        // header('Location: posts');
     }
 
     public function createPost()
@@ -145,13 +194,11 @@ class PostController
                     // Une erreur s'est produite lors de l'enregistrement du fichier
                     $this->sessionModel->set('message', "Une erreur s'est produite lors de l'enregistrement de l'image");
                     header('Location: admin');
-                    exit;
                 }
             } else {
                 // Une erreur s'est produite lors du téléchargement du fichier image
                 $this->sessionModel->set('message', "Une erreur s'est produite lors du téléchargement de l'image");
                 header('Location: admin');
-                exit;
             }
         }
     }

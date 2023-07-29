@@ -5,6 +5,7 @@ namespace App\Model;
 use PDO;
 use DateTime;
 use Exception;
+use PDOException;
 use App\Class\Post;
 use App\Service\DatabaseConnection\DatabaseConnection;
 
@@ -18,7 +19,7 @@ class PostModel extends DatabaseConnection
     public function getAllPosts()
     {
         $posts = [];
-        $requeteSQL = "SELECT * FROM posts ORDER BY updated_at DESC, created_at DESC";
+        $requeteSQL = "SELECT * FROM posts ORDER BY  updated_at DESC";
 
         // TODO: jointure sur le User pour éviter d'avoir à appeler un READ supplémentaire pour chaque userID
         $requete = $this->database->query($requeteSQL);
@@ -55,6 +56,15 @@ class PostModel extends DatabaseConnection
         }
         return new Post($posts);
     }
+    public function delPost(int $id)
+    {
+        $querySQL = "DELETE FROM posts WHERE id = :id";
+        $requete = $this->database->prepare($querySQL);
+        $requete->bindValue(":id", $id, PDO::PARAM_INT);
+        $success = $requete->execute();
+
+        return $success;
+    }
 
     public function findByTitle(string $title)
     {
@@ -63,6 +73,24 @@ class PostModel extends DatabaseConnection
         $querySQL = ("SELECT * FROM posts WHERE title = :title");
         $reponse = $this->database->prepare($querySQL);
         $reponse->bindValue(":title", $title, PDO::PARAM_STR);
+        $reponse->execute();
+        $result = $reponse->fetch(PDO::FETCH_ASSOC);
+        if (!$result) {
+            return null;
+        }
+        // $postData = (array) $result;
+        //$postData = get_object_vars($result);
+        // return new Post($postData);
+        return new Post($result);
+    }
+
+    public function findTitleById(string $id)
+    {
+        // var_dump($title);
+        // die;
+        $querySQL = ("SELECT * FROM posts WHERE id = :id");
+        $reponse = $this->database->prepare($querySQL);
+        $reponse->bindValue(":id", $id, PDO::PARAM_STR);
         $reponse->execute();
         $result = $reponse->fetch(PDO::FETCH_ASSOC);
         if (!$result) {
@@ -83,13 +111,14 @@ class PostModel extends DatabaseConnection
         }
         $now = new DateTime();
         $postArray = [];
-        $querySQL = "INSERT INTO posts (title, image, created_at, created_by,lead_sentence,content) VALUES (:title, :image, :created_at,:created_by,:lead_sentence,:content)";
-        $reponse = $this->database->prepare($querySQL);
-        $reponse->execute(
+        $querySQL = "INSERT INTO posts (title, image, created_at, updated_at,created_by,lead_sentence,content) VALUES (:title, :image, :created_at, :updated_at,:created_by,:lead_sentence,:content)";
+        $request = $this->database->prepare($querySQL);
+        $request->execute(
             array(
                 ':title' => $title,
                 ':image' => $image,
                 ':created_at' => $now->format("Y-m-d H:i:s"),
+                ':updated_at' => $now->format("Y-m-d H:i:s"),
                 ':created_by' => $created_by,
                 ':content' => $content,
                 ':lead_sentence' => $lead_sentence,
@@ -98,5 +127,36 @@ class PostModel extends DatabaseConnection
         $newPostId = $this->database->lastInsertId();
 
         return $newPostId;
+    }
+
+    /**
+     * Update a blog post
+     *
+     * @param  integer $id
+     * @param  string  $title
+     * @param  string  $content
+     * @param  string  $slug
+     * @param  string  $leadSentence
+     * @return void
+     */
+    public function update(int $id, string $title, string $content, string $leadSentence)
+    {
+        // var_dump($id);
+        // die;
+        try {
+            $querySQL = "UPDATE posts SET title = :title, content = :content, lead_sentence = :lead_sentence, updated_at = :updated_at WHERE id = :id";
+            $request = $this->database->prepare($querySQL);
+            $now = new DateTime();
+            $request->bindValue(':title', $title, PDO::PARAM_STR);
+            $request->bindValue(':lead_sentence', $leadSentence, PDO::PARAM_STR);
+            $request->bindValue(':content', $content, PDO::PARAM_STR);
+            $request->bindValue(':updated_at', $now->format('Y-m-d H:i:s'));
+            $request->bindValue(':id', $id, PDO::PARAM_INT);
+            $request->execute();
+        } catch (PDOException $e) {
+            // En cas d'erreur, vous pouvez gérer l'exception ici
+            // Par exemple, vous pouvez enregistrer l'erreur dans un fichier de journal, afficher un message d'erreur, etc.
+            echo "Une erreur est survenue lors de la mise à jour du post : " . $e->getMessage();
+        }
     }
 }

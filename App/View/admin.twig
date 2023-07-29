@@ -27,65 +27,73 @@
 {% block content %}
 	<div class="content-dashboard d-flex justify-content-between">
 		{% block admin_nav %}
+
 			<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
 				<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 					<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-						{% if user is defined %}
-							{% if user.role is same as 1 %}
-								<span class="fs-4">
-									<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
-									{{user.username}}
-								</span>
-							{% endif %}
+						{% if user is defined and user.role == 1 %}
+							<span class="fs-4">
+								<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
+								{{user.username}}
+							</span>
+						{% else %}
+							<span class="fs-4">
+								Vous n'etes pas administateur
+							</span>
 						{% endif %}
 					</a>
-					<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-						<li>
-							<a class="dropdown-item" href="#">Paramètres</a>
-						</li>
-						<li>
-							<a class="dropdown-item" href="profile">Profil</a>
-						</li>
-						<li><hr class="dropdown-divider"></li>
-						<li>
-							<form
-								action="logout-user" method="post">
-								{# {{ form_token("/logout-user")}} #}
-								<button class="dropdown-item" type="submit">Déconnexion</button>
-							</form>
-						</li>
-					</ul>
+					{% if user is defined and user.role == 1 %}
+						<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+							<li>
+								<a class="dropdown-item" href="#">Paramètres</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="profile">Profil</a>
+							</li>
+							<li><hr class="dropdown-divider"></li>
+							<li>
+								<form
+									action="logOut" method="post">
+									{# {{ form_token("/logout-user")}} #}
+									<button class="dropdown-item" type="submit">Déconnexion</button>
+								</form>
+							</li>
+						</ul>
+
+					{% endif %}
 				</div>
 				<hr>
-				<ul class="nav nav-pills flex-column mb-auto">
-					<li class="nav-item">
-						<a href="admin" class="nav-link  active" aria-current="page">
-							Tableau de bord
-						</a>
-					</li>
-					<li>
-						<a href="admin_show_posts" class="nav-link text-white">
-							Articles
-						</a>
-					</li>
-					<li>
-						<a href="admin_create_post" class="nav-link text-white">
-							Ajouter un article
-						</a>
-					</li>
+				{% if user is defined and user.role == 1 %}
+					<ul class="nav nav-pills flex-column mb-auto">
+						<li class="nav-item">
+							<a href="admin" class="nav-link active" aria-current="page">
+								Tableau de bord
+							</a>
+						</li>
+						<li>
+							<a href="adminShowPostsAccess" class="nav-link text-white">
+								Articles
+							</a>
+						</li>
+						<li>
+							<a href="admin_create_post" class=" nav-link text-white">
+								Ajouter un article
+							</a>
+						</li>
 
-					<li>
-						<a href="admin_pending_comments" class="nav-link text-white">
-							Commentaires
-						</a>
-					</li>
-					<li>
-						<a href="admin_show-users" class="nav-link text-white">
-							Utilisateurs
-						</a>
-					</li>
-				</ul>
+						<li>
+							<a href="admin_pending_comments_access" class="nav-link text-white">
+								Commentaires
+							</a>
+						</li>
+						<li>
+							<a href="adminShowUsersAccess" class="nav-link text-white">
+								Utilisateurs
+							</a>
+						</li>
+					</ul>
 
+				{% endif %}
 
 			</div>
 		{% endblock %}
@@ -95,13 +103,13 @@
 				<h2 class="display-6 d-flex justify-content-center py-3">Interface administrateur</h2>
 			{% endblock %}
 			{% block admin_content %}
+				{% if message is defined and message is not empty %}
+					<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
+				{% endif %}
 				<p class="d-flex justify-content-center py-3">
 					Bienvenu à Bord de votre Tableau de Bord 🚢
 				</p>
 			{% endblock %}
-			{% if message is defined and message is not empty %}
-				<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
-			{% endif %}
 		</div>
 	</div>
 {% endblock %}
