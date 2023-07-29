@@ -5,7 +5,7 @@ namespace App\Model;
 use PDO;
 use Exception;
 use App\Class\User;
-use App\Service\DatabaseConnection\DatabaseConnection;
+use App\Service\DatabaseConnection;
 
 class UserModel extends DatabaseConnection
 {

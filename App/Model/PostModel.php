@@ -7,7 +7,7 @@ use DateTime;
 use Exception;
 use PDOException;
 use App\Class\Post;
-use App\Service\DatabaseConnection\DatabaseConnection;
+use App\Service\DatabaseConnection;
 
 class PostModel extends DatabaseConnection
 {

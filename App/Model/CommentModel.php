@@ -6,7 +6,7 @@ use PDO;
 use Exception;
 use DateTime;
 use App\Class\Comment;
-use App\Service\DatabaseConnection\DatabaseConnection;
+use App\Service\DatabaseConnection;
 
 class CommentModel extends DatabaseConnection
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\DatabaseConnection;
+namespace App\Service;
 
 use PDO;
 use PDOException;

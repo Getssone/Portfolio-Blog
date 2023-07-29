@@ -1,7 +1,5 @@
 <?php
 require_once './vendor/autoload.php';
-require_once 'App/Service/DatabaseConnection.php';
-require_once 'App/Service/TwigRenderer.php';
 
 
 
@@ -10,6 +8,9 @@ session_start();
 // use Twig\TwigFilter;
 // use PDO;
 // use Twig\TwigFunction;
+
+use App\Service\DatabaseConnection;
+use App\Service\TwigRenderer;
 
 use App\Controller\SignInController;
 use App\Controller\UserController;
@@ -20,9 +21,7 @@ use App\Model\EmailModel;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use App\Model\SessionModel;
-use App\Model\TwigRenderer;
 // use App\Controller\EmailController;
-use App\Service\DatabaseConnection\DatabaseConnection;
 
 
 // var_dump(basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))); 
