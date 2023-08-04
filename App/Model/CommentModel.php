@@ -183,7 +183,6 @@ class CommentModel extends DatabaseConnection
             throw new Exception("Une erreur est survenue lors de la creation du comment : " . $e->getMessage());
 
             header('Location: posts');
-            exit;
         }
     }
 }

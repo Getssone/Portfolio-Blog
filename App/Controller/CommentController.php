@@ -205,8 +205,8 @@ class CommentController extends PostController
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
             // Redirection vers le post
-            var_dump('bloque dans Exception sur registerComment');
-            die;
+            // var_dump('bloque dans Exception sur registerComment');
+            // die;
             header("Location: ../posts");
         }
     }
@@ -226,8 +226,8 @@ class CommentController extends PostController
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
             // Redirection vers le post
-            var_dump('bloque Exception dans commentSaved');
-            die;
+            // var_dump('bloque Exception dans commentSaved');
+            // die;
             header("Location: postAccess?id=$postId");
         }
     }

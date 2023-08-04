@@ -4,8 +4,6 @@
   align-items: center;
   --line_color: #555555;
   --back_color: #ffecf6;
-  color: var(--line_color);
-  background-color: var(--back_color);
 }
 .container_Ecrire_Article .button {
   position: relative;
