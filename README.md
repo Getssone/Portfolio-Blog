@@ -99,6 +99,10 @@ You may need to change the default database name (blog_p5) in the SQL file to ma
 
 ```sql
 -- Base de données : `blog_p5`
+-- admin account : 'test5@test.fr'
+-- admin password : 'test5'
+-- user account : 'test4@test.fr'
+-- user password : 'test4'
 ```
 
 Then, go to the website, register yourself as a user.

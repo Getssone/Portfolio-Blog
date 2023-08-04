@@ -27,30 +27,28 @@
 
 					{% if user is defined %}
 						{% if user.role is same as 1 %}
-							<!-- Formulaire d'ajout de commentaire -->
-							<div class="add-comment">
-								<li class="list-inline-item">
-									<a href="admin">
-										<span class="fa-stack fa-lg center">
-											<i class="fas fa-circle fa-stack-2x"></i>
-											<i class="fa-solid fa-gear fa-stack-1x fa-inverse"></i>
-										</span>
-									</a>
-								</li>
-							{% endif %}
+							<li class="list-inline-item">
+								<a href="admin">
+									<span class="fa-stack fa-lg center">
+										<i class="fas fa-circle fa-stack-2x"></i>
+										<i class="fa-solid fa-gear fa-stack-1x fa-inverse"></i>
+									</span>
+								</a>
+							</li>
 						{% endif %}
-						<li class="list-inline-item">
-							<a href="CGU">
-								<span class="fa-stack fa-lg center">
-									<i class="fas fa-circle fa-stack-2x"></i>
-									<i class="fa-solid fa-circle-info fa-stack-1x fa-inverse"></i>
-								</span>
-							</a>
-						</li>
+					{% endif %}
+					<li class="list-inline-item">
+						<a href="CGU">
+							<span class="fa-stack fa-lg center">
+								<i class="fas fa-circle fa-stack-2x"></i>
+								<i class="fa-solid fa-circle-info fa-stack-1x fa-inverse"></i>
+							</span>
+						</a>
+					</li>
 
-					</ul>
-					<div class="small text-center text-muted fst-italic">Copyright &copy; Getssone Website 2023</div>
-				</div>
+				</ul>
+				<div class="small text-center text-muted fst-italic">Copyright &copy; Getssone Website 2023</div>
 			</div>
 		</div>
-	</footer>
+	</div>
+</footer>

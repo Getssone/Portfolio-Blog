@@ -87,8 +87,8 @@ class UserModel extends DatabaseConnection
             throw new Exception("Un utilisateur avec cette adresse e-mail existe déjà.");
         }
 
-        $querySQL = "INSERT INTO users(username, email, first_name, last_name, password, role) 
-                VALUES(:username, :email, :first_name, :last_name, :password, :role)";
+        $querySQL = "INSERT INTO users(username, email, first_name, last_name, password, role, picture) 
+                VALUES(:username, :email, :first_name, :last_name, :password, :role, :picture)";
         $requete = $this->database->prepare($querySQL);
         $requete->execute(
             array(
@@ -97,7 +97,9 @@ class UserModel extends DatabaseConnection
                 ':first_name' => $first_name,
                 ':last_name' => $last_name,
                 ':password' => password_hash($password, PASSWORD_BCRYPT),
-                ':role' => $role
+                ':role' => $role,
+                ':picture' => "https://picsum.photos/id/237/200/300"
+
             )
         );
         $newUserId = $this->database->lastInsertId();

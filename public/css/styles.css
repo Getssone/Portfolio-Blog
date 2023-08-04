@@ -341,6 +341,7 @@ figure {
 img,
 svg {
   vertical-align: middle;
+  object-fit: cover;
 }
 
 table {
@@ -3832,7 +3833,6 @@ fieldset:disabled .btn {
 .navbar > .container-xl,
 .navbar > .container-xxl {
   display: flex;
-  flex-wrap: inherit;
   align-items: center;
   justify-content: space-between;
 }
@@ -10921,7 +10921,7 @@ blockquote {
 }
 
 .btn {
-  width: 15rem;
+  width: 13rem;
   border-radius: 21em 21em 100em 100em;
   letter-spacing: 0.0625em;
 }
@@ -10966,6 +10966,9 @@ blockquote {
   font-weight: 800;
   letter-spacing: 0.0625em;
   text-transform: uppercase;
+}
+.nav-item {
+  margin-left: 1rem;
 }
 @media (min-width: 992px) {
   #mainNav {
@@ -11031,7 +11034,7 @@ footer {
 header.masthead {
   position: relative;
   margin-bottom: 3rem;
-  padding-top: calc(8rem + 57px);
+  padding-top: calc(10rem + 57px);
   padding-bottom: 8rem;
   background: no-repeat center center;
   background-color: #6c757d;

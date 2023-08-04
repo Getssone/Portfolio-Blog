@@ -194,12 +194,12 @@ class CommentController extends PostController
                     //TEST
                     // Redirection vers le post
                     // header("Refresh:0; url= ../postAccess?id= $postId"); Fonctionne idem que en dessous
-                    header("Location: ../postAccess?id=$postId");
+                    header("Location: ../postAccess?id=$postId&location=post");
                 } else {
                     $this->sessionModel->set('error_message', "Nous n'avons pas pu enregistrer votre message");
                     var_dump('bloque dans registerComment coter else');
                     // Redirection vers le post
-                    header("Location: ../postAccess?id=$postId");
+                    header("Location: ../postAccess?id=$postId&location=post");
                 }
             }
         } catch (Exception $e) {

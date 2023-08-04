@@ -144,15 +144,21 @@ class PostController
 
     public function createPost()
     {
-        if (!$this->authModel->isLoggedIn()) {
-            $this->sessionModel->set('message', "Authentification échouée");
-            header('Location: login');
-        } else if (!$this->authModel->isCurrentUserAdmin()) {
-            $this->sessionModel->set('message', "Demandée à un administrateur pour accéder à cette pages");
+        try {
+            if (!$this->authModel->isLoggedIn()) {
+                $this->sessionModel->set('message', "Authentification échouée");
+                header('Location: login');
+            } else if (!$this->authModel->isCurrentUserAdmin()) {
+                $this->sessionModel->set('message', "Demandée à un administrateur pour accéder à cette pages");
+                header('Location: posts');
+            } else {
+                $this->sessionModel->set('message', "Ô noble Administrateur, quelle histoire allez-vous donc nous conter ? ");
+                header('Location: admin_create_post');
+            }
+        } catch (\Exception $e) {
+            // Traiter l'exception
+            $this->sessionModel->set('message', "Une erreur s'est produite. Veuillez réessayer plus tard.");
             header('Location: posts');
-        } else {
-            $this->sessionModel->set('message', "Ô noble Administrateur, quelle histoire allez-vous donc nous conter ? ");
-            header('Location: admin_create_post');
         }
     }
 

@@ -1,7 +1,7 @@
 {% extends './Layout/base_unlogin.twig' %}
 
 {% block title %}
-	<title>login</title>
+	<title>Identification</title>
 {% endblock %}
 
 {% block styles %}
@@ -15,7 +15,7 @@
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<div class="site-heading">
 						<h1>Heureux de vous revoir</h1>
-						<span class="subheading">A blog to learn Full-Stack tricks</span>
+						<span class="subheading">Un blog pour apprendre les astuces Full-Stack</span>
 					</div>
 				</div>
 			</div>
@@ -25,7 +25,7 @@
 {% block content %}
 
 	{% if message is defined and message is not empty %}
-		<p class="text-light bg-danger d-flex justify-content-center py-3">{{ message }}</p>
+		<p class="text-light bg-info d-flex justify-content-center py-3">{{ message }}</p>
 	{% endif %}
 
 	<form action="logInAction" method="post">

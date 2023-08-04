@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : sam. 29 juil. 2023 à 22:57
+-- Généré le : ven. 04 août 2023 à 15:20
 -- Version du serveur : 5.7.24
 -- Version de PHP : 8.1.0
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `blog_p5`
 --
-CREATE DATABASE IF NOT EXISTS `blog_p5` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `blog_p5`;
 
 -- --------------------------------------------------------
 
@@ -48,7 +46,7 @@ INSERT INTO `comments` (`id`, `content`, `title`, `created_at`, `created_by`, `p
 (2, 'World', 'Hello', '2023-07-09 18:53:51', 6, 9, 'PENDING'),
 (3, 'This page ?', 'Refresh', '2023-07-09 19:00:04', 6, 9, 'APPROVED'),
 (4, 'It&#039;work ?', 'Try again', '2023-07-09 19:02:48', 6, 9, 'PENDING'),
-(5, 'Workkkk !!!', 'Now it&#039;s', '2023-07-09 19:09:00', 6, 9, 'PENDING'),
+(5, 'Workkkk !!!', 'Now it&#039;s', '2023-07-09 19:09:00', 6, 9, 'REJECTED'),
 (6, 'This id of commentaire ', 'You can see', '2023-07-09 19:11:28', 6, 9, 'PENDING'),
 (7, 'Again', 'Try again', '2023-07-09 19:11:56', 6, 9, 'APPROVED'),
 (8, 'Comme ici', 'J&#039;essaye ailleur ', '2023-07-09 19:15:33', 6, 8, 'PENDING'),
@@ -59,7 +57,7 @@ INSERT INTO `comments` (`id`, `content`, `title`, `created_at`, `created_by`, `p
 (13, 'just nothing', 'What is :', '2023-07-09 19:24:06', 6, 7, 'PENDING'),
 (14, 'we are close', 'What is :', '2023-07-09 19:24:54', 6, 7, 'REJECTED'),
 (15, 'What is the number of this post ?', 'Can you repeat ', '2023-07-09 19:26:26', 6, 6, 'PENDING'),
-(16, 'We can do it', 'I think ', '2023-07-09 19:29:19', 6, 6, 'PENDING'),
+(16, 'We can do it', 'I think ', '2023-07-09 19:29:19', 6, 6, 'APPROVED'),
 (17, 'We go see all posts', 'Try new test', '2023-07-09 19:43:48', 6, 5, 'APPROVED'),
 (18, 'Il suffit de mettre ../post', 'Je suis sur la bonne piste', '2023-07-09 19:59:04', 6, 6, 'APPROVED'),
 (19, 'World', 'Hello', '2023-07-14 15:05:57', 5, 2, 'APPROVED'),
@@ -123,15 +121,15 @@ INSERT INTO `users` (`id`, `username`, `email`, `first_name`, `last_name`, `pass
 (1, 'Getssone', 'getssone@mailo.com', 'Gaetan', 'Solis', '$2y$10$3zBfOudZrqhAYTuNuwfKheK9sApCPThkrw4iuxebv.xRlh3f1xLKi', 1, 0, 'https://images.pexels.com/photos/462162/pexels-photo-462162.jpeg'),
 (3, 'test2', 'test2@test.fr', 'test2', 'test2', '098f6bcd4621d373cade4e832627b4f6', 2, 0, 'https://picsum.photos/200/300'),
 (4, 'Emo', 'emo.ji@test.fr', 'Emo', 'Ji', '202cb962ac59075b964b07152d234b70', 0, 0, 'https://picsum.photos/200/300'),
-(5, 'test4', 'test4@test.fr', 'test4', 'test4', '$2y$10$ewS/3XgpZKGqGlwV/l77A.HNUuRr1pnotokA76ljG7hP3K4MmJs/G', 0, 0, 'https://picsum.photos/200/300'),
-(6, 'test5', 'test5@test.fr', 'test5', 'test5', '$2y$10$wS6ZzpwzbS2d/J8P1.mXdOQ3QUJ0BdzdIe9ey7.M4tQNu2n73wTkW', 0, 0, 'https://picsum.photos/200/300'),
+(5, 'test4', 'test4@test.fr', 'test4', 'test4', '$2y$10$ewS/3XgpZKGqGlwV/l77A.HNUuRr1pnotokA76ljG7hP3K4MmJs/G', 2, 0, 'https://picsum.photos/200/300'),
+(6, 'test5', 'test5@test.fr', 'test5', 'test5', '$2y$10$wS6ZzpwzbS2d/J8P1.mXdOQ3QUJ0BdzdIe9ey7.M4tQNu2n73wTkW', 1, 0, 'https://picsum.photos/200/300'),
 (7, 'test6', 'test6@test.fr', 'test6', 'test6', '$2y$10$aSy34p6kulEGCHEjHl7iQeZ1oV5xJ31.ZlNRvQVhfpGhuLegU2/HO', 0, 0, 'https://picsum.photos/200/300'),
 (8, 'test7', 'test7@test.fr', 'test7', 'test7', '$2y$10$aSy34p6kulEGCHEjHl7iQeZ1oV5xJ31.ZlNRvQVhfpGhuLegU2/HO', 0, 0, 'https://picsum.photos/200/300'),
 (9, 'test8', 'test8@test.fr', 'test8', 'test8', '$2y$10$aSy34p6kulEGCHEjHl7iQeZ1oV5xJ31.ZlNRvQVhfpGhuLegU2/HO', 0, 0, 'https://picsum.photos/200/300'),
 (10, 'test9', 'test9@test.fr', 'test9', 'test9', '$2y$10$aSy34p6kulEGCHEjHl7iQeZ1oV5xJ31.ZlNRvQVhfpGhuLegU2/HO', 0, 0, 'https://picsum.photos/200/300'),
 (11, 'test10', 'test10@test.fr', 'test10', 'test10', '$2y$10$aSy34p6kulEGCHEjHl7iQeZ1oV5xJ31.ZlNRvQVhfpGhuLegU2/HO', 0, 0, 'https://picsum.photos/200/300'),
 (12, 'test11', 'test11@test.fr', 'test11', 'test11', '$2y$10$JhN/8o/zrUY3aR1LzN/fy.y.iE7PefZ2mqZhfaSeRChTj4LhlxgNi', 0, 0, 'https://picsum.photos/200/300'),
-(13, 'hello', 'hello@hello.fr', 'hello', 'olleh', '$2y$10$HefJeCoRpK3OlRsQTUqnsOdzsZMRlk9mDwCIDttT8WX.F9QJLthWe', 0, 0, NULL),
+(13, 'hello', 'hello@hello.fr', 'hello', 'olleh', '$2y$10$HefJeCoRpK3OlRsQTUqnsOdzsZMRlk9mDwCIDttT8WX.F9QJLthWe', 3, 0, NULL),
 (14, 'Magie', 'magie@magie.fr', 'Magie', 'Eigam', '$2y$10$uyRrNngBCfTmAlm6gQNAa.6K67mOfehcV/4zirBeWQuETQ9doYlcq', 3, 0, 'https://picsum.photos/200/300');
 
 --
@@ -199,65 +197,6 @@ ALTER TABLE `comments`
 --
 ALTER TABLE `posts`
   ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`);
---
--- Base de données : `test_exo_partage_de_recette`
---
-CREATE DATABASE IF NOT EXISTS `test_exo_partage_de_recette` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `test_exo_partage_de_recette`;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `recipes`
---
-
-CREATE TABLE `recipes` (
-  `recipe_id` int(11) NOT NULL,
-  `title` varchar(128) NOT NULL,
-  `recipe` text NOT NULL,
-  `author` varchar(512) NOT NULL,
-  `is_enabled` tinyint(1) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Déchargement des données de la table `recipes`
---
-
-INSERT INTO `recipes` (`recipe_id`, `title`, `recipe`, `author`, `is_enabled`) VALUES
-(1, 'Cassoulet', 'Etape 1 : Des flageolets ! Etape 2 : Euh ...', 'contributeur@exemple.com', 1),
-(6, 'Pomme d\'amour', 'Pomme plus sucre ', 'contributeur@exemple.com', 1),
-(5, 'Poulet Curry', 'Suite dans le prochain épisode', 'contributeur@exemple.com', 1),
-(7, 'Salade Mexicaine', 'haricot rouge + sauce piquante', 'user@exemple.com', 1),
-(8, 'Rose des sables', 'Cornes Flakes avec chocolats', 'user@exemple.com', 1),
-(13, 'Mumuti Brochette', 'Prendre un mumuti.\nLe caresser dans le sens du poil.\nPuis faire Cochon Pendu.', 'Getssone@mailo.com', 1);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `users`
---
--- Erreur de lecture de structure pour la table test_exo_partage_de_recette.users : #1146 - La table &#039;test_exo_partage_de_recette.users&#039; n&#039;existe pas
--- Erreur de lecture des données pour la table test_exo_partage_de_recette.users : #1064 - Erreur de syntaxe près de &#039;FROM `test_exo_partage_de_recette`.`users`&#039; à la ligne 1
-
---
--- Index pour les tables déchargées
---
-
---
--- Index pour la table `recipes`
---
-ALTER TABLE `recipes`
-  ADD PRIMARY KEY (`recipe_id`);
-
---
--- AUTO_INCREMENT pour les tables déchargées
---
-
---
--- AUTO_INCREMENT pour la table `recipes`
---
-ALTER TABLE `recipes`
-  MODIFY `recipe_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

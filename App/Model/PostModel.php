@@ -56,6 +56,7 @@ class PostModel extends DatabaseConnection
         }
         return new Post($posts);
     }
+
     public function delPost(int $id)
     {
         $querySQL = "DELETE FROM posts WHERE id = :id";

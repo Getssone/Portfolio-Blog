@@ -15,7 +15,7 @@
 				<div class="col-md-10 col-lg-8 col-xl-7">
 					<div class="site-heading">
 						<h1>Articles</h1>
-						<span class="subheading">A blog to learn Full-Stack tricks</span>
+						<span class="subheading">Un blog pour apprendre les astuces Full-Stack</span>
 					</div>
 				</div>
 			</div>
@@ -49,7 +49,7 @@
 			</form>
 		{% endif %}
 	</div>
-	<div class="row mb-2">
+	<div class="row mb-2 d-flex justify-content-center">
 		{% for post in posts %}
 			<div class="card m-2" style="width: 18rem;">
 				<img src="{{post.image}}" class="card-img-top" alt="image de l'article">
@@ -82,6 +82,6 @@
 	{% endfor %}
 	<!-- Pager-->
 	{# <div class="d-flex justify-content-end m-4">
-			<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
-		</div> #}
+					<a class="btn btn-primary text-uppercase" href="#!">Ancien Posts →</a>
+				</div> #}
 </div>{% endblock %}
