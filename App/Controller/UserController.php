@@ -23,42 +23,39 @@ class UserController
 
     public function updateRole()
     {
-        try {
-            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET') {
-                $id = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : null;
-                $newStateRole = isset($_GET['newStateRole']) ? htmlspecialchars($_GET['newStateRole']) : null;
-                if ($id === null || $newStateRole === null) {
-                    throw new Exception('Les variables id et newStateRole doivent être définies');
-                }
+        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET') {
+            $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+            $newStateRole = filter_input(INPUT_GET, 'newStateRole', FILTER_SANITIZE_STRING);
 
-                // On récupère l'utilisateur
-                $user = $this->userModel->read($id);
-
-                // On met à jour le role de l'utilisateur
-                switch ($newStateRole) {
-                    case 'admin':
-                        $this->admin($user);
-                        break;
-                    case 'blocked':
-                        $this->blocked($user);
-                        break;
-                    case 'deleted':
-                        $this->deleted($user);
-                        break;
-
-                    default:
-                        $this->guest($user);
-                        break;
-                }
-
-                // On met à jour la base de données
-                $this->userModel->updateRole($id, $user->getRole());
-
-                // On met à jour la session
-                $this->sessionModel->set('message', "Le role de l'utilisateur a été mis à jour");
+            if ($id === null || $newStateRole === null) {
+                throw new Exception('Les variables id et newStateRole doivent être définies');
             }
-        } catch (Exception $e) {
-            throw new Exception("le role de l'utilisateur n'as pas pu être mis à jour", $e->getMessage());
+
+            // On récupère l'utilisateur
+            $user = $this->userModel->read($id);
+
+            // On met à jour le role de l'utilisateur
+            switch ($newStateRole) {
+                case 'admin':
+                    $this->admin($user);
+                    break;
+                case 'blocked':
+                    $this->blocked($user);
+                    break;
+                case 'deleted':
+                    $this->deleted($user);
+                    break;
+
+                default:
+                    $this->guest($user);
+                    break;
+            }
+
+            // On met à jour la base de données
+            $this->userModel->updateRole($id, $user->getRole());
+
+            // On met à jour la session
+            $this->sessionModel->set('message', "Le role de l'utilisateur a été mis à jour");
         }
     }
 
@@ -107,6 +104,8 @@ class UserController
                 // Authentification réussie
                 header('Location: postsAccess');
             } else {
+                throw new Exception("Authentification échouée");
+
                 $this->sessionModel->set('message', "Authentification échouée");
                 // Authentification échouée
                 header('Location: login');
