@@ -33,16 +33,17 @@ class CommentController extends PostController
 
     public function updateCommentStatus()
     {
-        if (isset($_GET['id'])) {
+        if (isset($_GET['id']) && !empty($_GET['id'])) {
             $id = $_GET['id'];
         } else {
-            throw new Exception("L'identifiant 'id' est manquant dans l'URL.");
+            throw new Exception("L'identifiant 'id' est manquant ou vide dans l'URL.");
             return;
         }
-        if (isset($_GET['newStateStatus'])) {
+
+        if (isset($_GET['newStateStatus']) && !empty($_GET['newStateStatus'])) {
             $newStateStatus = $_GET['newStateStatus'];
         } else {
-            throw new Exception("Le paramètre 'newStateStatus' est manquant dans l'URL.");
+            throw new Exception("Le paramètre 'newStateStatus' est manquant ou vide dans l'URL.");
             return;
         }
         // var_dump($id);
@@ -154,23 +155,25 @@ class CommentController extends PostController
     public function getCommentsWithAuthors()
     {
         try {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET') {
                 // Récupérer les paramètres GET
-                $idPost = $_GET['id'];
-                $allComments = $this->commentModel->getAllCommentsWith($idPost);
-                $allAuthors = [];
+                if (isset($_GET['id'])) {
+                    $idPost = $_GET['id'];
+                    $allComments = $this->commentModel->getAllCommentsWith($idPost);
+                    $allAuthors = [];
 
-                foreach ($allComments as $comment) {
-                    $authorID = $comment->getCreatedBy();
-                    $infosAuthor = $this->userModel->read($authorID);
-                    $comment->setCreated_by($infosAuthor->getUsername());
-                    $allAuthors[] = $infosAuthor;
+                    foreach ($allComments as $comment) {
+                        $authorID = $comment->getCreatedBy();
+                        $infosAuthor = $this->userModel->read($authorID);
+                        $comment->setCreated_by($infosAuthor->getUsername());
+                        $allAuthors[] = $infosAuthor;
+                    }
+
+                    return [
+                        'comments' => $allComments,
+                        'authors' => $allAuthors
+                    ];
                 }
-
-                return [
-                    'comments' => $allComments,
-                    'authors' => $allAuthors
-                ];
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
