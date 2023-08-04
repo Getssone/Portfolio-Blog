@@ -44,12 +44,10 @@ class SessionModel
     public function get(string $key, $default = null)
     {
         $this->ensureStarted();
-        if (isset($_SESSION)) {
-            if (array_key_exists($key, $_SESSION)) {
-                return $_SESSION[$key];
-            }
-            return $default;
+        if (array_key_exists($key, $_SESSION)) {
+            return $_SESSION[$key];
         }
+        return $default;
     }
 
     /**
