@@ -23,31 +23,42 @@ class UserController
 
     public function updateRole()
     {
-        if ($_SERVER["REQUEST_METHOD"] === "GET") {
-            $id = $_GET['id'];
-            $newStateRole = $_GET['newStateRole'];
-            // var_dump($id);
-            // var_dump($newStateRole);
-            // die;
+        try {
+            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET') {
+                $id = isset($_GET['id']) ? $_GET['id'] : null;
+                $newStateRole = isset($_GET['newStateRole']) ? $_GET['newStateRole'] : null;
+                if ($id === null || $newStateRole === null) {
+                    throw new Exception('Les variables id et newStateRole doivent être définies');
+                }
 
-            $user = $this->userModel->read($id);
-            switch ($newStateRole) {
-                case 'admin':
-                    $this->admin($user);
-                    break;
-                case 'blocked':
-                    $this->blocked($user);
-                    break;
-                case 'deleted':
-                    $this->deleted($user);
-                    break;
+                // On récupère l'utilisateur
+                $user = $this->userModel->read($id);
 
-                default:
-                    $this->guest($user);
-                    break;
+                // On met à jour le role de l'utilisateur
+                switch ($newStateRole) {
+                    case 'admin':
+                        $this->admin($user);
+                        break;
+                    case 'blocked':
+                        $this->blocked($user);
+                        break;
+                    case 'deleted':
+                        $this->deleted($user);
+                        break;
+
+                    default:
+                        $this->guest($user);
+                        break;
+                }
+
+                // On met à jour la base de données
+                $this->userModel->updateRole($id, $user->getRole());
+
+                // On met à jour la session
+                $this->sessionModel->set('message', "Le role de l'utilisateur a été mis à jour");
             }
-            $this->userModel->updateRole($id, $user->getRole());
-            $this->sessionModel->set('message', "le role de l'utilisateur à été mis à jour");
+        } catch (Exception $e) {
+            throw new Exception("le role de l'utilisateur n'as pas pu être mis à jour", $e->getMessage());
         }
     }
 

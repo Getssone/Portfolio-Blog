@@ -60,7 +60,7 @@ $databaseConnection = new DatabaseConnection($sessionModel);
 
 //Permet de vérifier l'url ex: http://localhost/P5/Code_p5/?p=home
 if (isset($_GET["page"])) {
-    $page = $_GET["page"];
+    $page = stripslashes($_GET["page"]);
 } else {
     $page = 'postsAccess';
 }
@@ -82,8 +82,12 @@ switch ($page) {
         break;
 
     case 'logInAction':
-        $userController = new UserController($sessionModel);
-        $userController->connect($_POST['email'], $_POST['password']);
+        if (isset($_POST['email'])) {
+            $userController = new UserController($sessionModel);
+            $userController->connect($_POST['email'], $_POST['password']);
+        } else {
+            header('Location: login');
+        }
         break;
 
     case 'logOut':
@@ -109,10 +113,16 @@ switch ($page) {
         // var_dump("postAccess");
         // var_dump($_GET['id']);
         // die;
-        $location = $_GET['location'];
-        $postController = new PostController($sessionModel);
-        $postController->seePostID();
-        header("Location: $location");
+        if (isset($_GET['location'])) {
+            $location = $_GET['location'];
+            $postController = new PostController($sessionModel);
+            $postController->seePostID();
+            header("Location: $location");
+        } else {
+            $postController = new PostController($sessionModel);
+            $postController->seePostID();
+            header("Location: posts");
+        }
         break;
 
     case 'post': // 1 Post
