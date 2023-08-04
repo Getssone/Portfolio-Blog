@@ -25,8 +25,8 @@ class UserController
     {
         try {
             if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET') {
-                $id = isset($_GET['id']) ? $_GET['id'] : null;
-                $newStateRole = isset($_GET['newStateRole']) ? $_GET['newStateRole'] : null;
+                $id = isset($_GET['id']) ? htmlspecialchars($_GET['id']) : null;
+                $newStateRole = isset($_GET['newStateRole']) ? htmlspecialchars($_GET['newStateRole']) : null;
                 if ($id === null || $newStateRole === null) {
                     throw new Exception('Les variables id et newStateRole doivent être définies');
                 }
@@ -127,9 +127,15 @@ class UserController
 
     public function seeUserID()
     {
-        $id = $_GET['id'];
-        $userToDeleted = $this->userModel->read($id);
-        $this->sessionModel->set('userToDeleted', $userToDeleted);
+        try {
+            if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === $_GET['id'])) {
+                $id = $_GET['id'];
+                $userToDeleted = $this->userModel->read($id);
+                $this->sessionModel->set('userToDeleted', $userToDeleted);
+            };
+        } catch (Exception $e) {
+            throw new Exception("La requête pour voir le user à échoué", $e->getMessage());
+        }
     }
     public function deletedUser()
     {

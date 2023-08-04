@@ -60,7 +60,7 @@ $databaseConnection = new DatabaseConnection($sessionModel);
 
 //Permet de vérifier l'url ex: http://localhost/P5/Code_p5/?p=home
 if (isset($_GET["page"])) {
-    $page = stripslashes($_GET["page"]);
+    $page = htmlspecialchars($_GET["page"]);
 } else {
     $page = 'postsAccess';
 }
@@ -82,7 +82,7 @@ switch ($page) {
         break;
 
     case 'logInAction':
-        if (isset($_POST['email'])) {
+        if (isset($_POST['email']) && isset($_POST['password'])) {
             $userController = new UserController($sessionModel);
             $userController->connect($_POST['email'], $_POST['password']);
         } else {
