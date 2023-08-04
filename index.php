@@ -3,7 +3,7 @@ require_once './vendor/autoload.php';
 
 
 
-session_start();
+// session_start();
 
 // use Twig\TwigFilter;
 // use PDO;
@@ -60,7 +60,7 @@ $databaseConnection = new DatabaseConnection($sessionModel);
 
 //Permet de vérifier l'url ex: http://localhost/P5/Code_p5/?p=home
 if (isset($_GET["page"])) {
-    $page = htmlspecialchars($_GET["page"]);
+    $page = htmlspecialchars(stripslashes($_GET["page"]));
 } else {
     $page = 'postsAccess';
 }

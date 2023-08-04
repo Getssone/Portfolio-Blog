@@ -32,7 +32,7 @@ class SessionModel
     public function destroy(): void
     {
         if (session_status() === PHP_SESSION_ACTIVE/*2*/) {
-            session_destroy();
+            session_unset();
         }
     }
 
