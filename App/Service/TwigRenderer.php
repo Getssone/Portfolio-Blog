@@ -34,10 +34,10 @@ class TwigRenderer
         $this->twigEnvironment = new Environment($this->loader, [
             'cache' => false, //__DIR__ .'./Tmp',
             'debug' => true,
+            'filters' => ['escape' => ['twig', 'escape']],
         ]);
 
         $this->twigEnvironment->addExtension(new DebugExtension()); // permet d'utiliser dump() = var_dump() qui lui n'est pas accessible dans twig
-
     }
     public function getTwig()
     {

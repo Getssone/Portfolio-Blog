@@ -170,50 +170,55 @@ class PostController
 
     public function addPost()
     {
-        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] ===  'POST') {
+        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérifier si un fichier image a été téléchargé avec succès
-            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                // Récupération du nom du fichier 
-                if (isset($_FILES['image']['name'])) {
-                    $fileName = filter_var($_FILES['image']['name'], FILTER_DEFAULT);
+            if (isset($_FILES['image']) && isset($_FILES['image']['error'])) {
+                if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                    // Récupération du nom du fichier 
+                    if (isset($_FILES['image']['name'])) {
+                        $fileName = $_FILES['image']['name'];
+                    } else {
+                        // Utiliser un nom de fichier par défaut
+                        $defaultFileName = 'default_image.jpg';
+                        $fileName = $defaultFileName;
+                    }
+
+                    // Accès au Chemin temporaire du fichier téléchargé
+                    $tmpFilePath = $_FILES['image']['tmp_name'];
+                    // Déplacer le fichier temporaire vers l'emplacement souhaité
+                    $destinationPath = 'public/assets/img/' . $fileName;
+                    // var_dump($destinationPath);
+                    // die;
+
+
+                    $save_File = move_uploaded_file($tmpFilePath, $destinationPath);
+                    if ($save_File == true) {
+                        // L'enregistrement du fichier a été réussi
+
+                        // On continuer avec le reste du traitement
+                        $title = ucfirst(strtolower(filter_var($_POST['title'], FILTER_DEFAULT)));
+                        $image = $destinationPath;
+                        $created_by = $this->sessionModel->get('userID');
+                        $lead_sentence = filter_var(htmlspecialchars($_POST['leadSentence']), FILTER_DEFAULT);
+                        $content = filter_var(htmlspecialchars($_POST['content']), FILTER_DEFAULT);
+
+                        $this->postModel->create($title, $image, $created_by, $lead_sentence, $content);
+
+                        $this->sessionModel->set('message', "Le post a été enregistré avec succès");
+                        header('Location: admin');
+                    } else {
+                        // Une erreur s'est produite lors de l'enregistrement du fichier
+                        $this->sessionModel->set('message', "Une erreur s'est produite lors de l'enregistrement de l'image");
+                        header('Location: admin');
+                    }
                 } else {
-                    // Utiliser un nom de fichier par défaut
-                    $defaultFileName = 'default_image.jpg';
-                    $fileName = $defaultFileName;
-                }
-
-                // Accès au Chemin temporaire du fichier téléchargé
-                $tmpFilePath = filter_var($_FILES['image']['tmp_name'], FILTER_DEFAULT);
-                // Déplacer le fichier temporaire vers l'emplacement souhaité
-                $destinationPath = 'public/assets/img/' . $fileName;
-                // var_dump($destinationPath);
-                // die;
-
-
-                $save_File = move_uploaded_file($tmpFilePath, $destinationPath);
-
-                if ($save_File == true) {
-                    // L'enregistrement du fichier a été réussi
-
-                    // On continuer avec le reste du traitement
-                    $title = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['title ']))), FILTER_DEFAULT);
-                    $image = filter_var($destinationPath, FILTER_DEFAULT);
-                    $created_by = $this->sessionModel->get('userID');
-                    $lead_sentence = filter_var(htmlspecialchars($_POST['leadSentence']), FILTER_DEFAULT);
-                    $content = filter_var(htmlspecialchars($_POST['content']), FILTER_DEFAULT);
-
-                    $this->postModel->create($title, $image, $created_by, $lead_sentence, $content);
-
-                    $this->sessionModel->set('message', "Le post a été enregistré avec succès");
-                    header('Location: admin');
-                } else {
-                    // Une erreur s'est produite lors de l'enregistrement du fichier
-                    $this->sessionModel->set('message', "Une erreur s'est produite lors de l'enregistrement de l'image");
+                    // Une erreur s'est produite lors du téléchargement du fichier image
+                    $this->sessionModel->set('message', "Une erreur s'est produite lors du téléchargement de l'image");
                     header('Location: admin');
                 }
             } else {
-                // Une erreur s'est produite lors du téléchargement du fichier image
-                $this->sessionModel->set('message', "Une erreur s'est produite lors du téléchargement de l'image");
+                // Le fichier n'a pas été téléchargé
+                $this->sessionModel->set('message', "Le fichier n'a pas été téléchargé");
                 header('Location: admin');
             }
         }
