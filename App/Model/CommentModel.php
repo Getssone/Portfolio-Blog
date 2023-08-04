@@ -179,8 +179,6 @@ class CommentModel extends DatabaseConnection
 
             return $newCommentId;
         } catch (Exception $e) {
-            var_dump($e->getMessage());
-            die;
             // Redirection vers le posts
             header('Location: posts');
             exit;

@@ -50,11 +50,11 @@ class EmailModel
             if ($this->mail->send()) {
                 return true;
             } else {
-                // Rediriger vers une page d'erreur ou afficher un message d'erreur
-                echo "Une erreur est survenue lors de l'envoi du message : " . $this->mail->ErrorInfo;
+                // Lever une exception en cas d'erreur
+                throw new Exception("Une erreur est survenue lors de l'envoi du message : " . $this->mail->ErrorInfo);
             }
         } catch (Exception $e) {
-            echo "Erreur lors de l'envoi du message : " . $e->getMessage();
+            throw new Exception("Une erreur est survenue noun'avons pas pue commencer à envoyé le mail : " . $e);
         }
     }
 }

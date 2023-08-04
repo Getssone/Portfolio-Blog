@@ -167,10 +167,14 @@ class PostController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérifier si un fichier image a été téléchargé avec succès
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-
-
                 // Récupération du nom du fichier 
-                $fileName = $_FILES['image']['name'];
+                if (isset($_FILES['image']['name'])) {
+                    $fileName = $_FILES['image']['name'];
+                } else {
+                    // Utiliser un nom de fichier par défaut
+                    $defaultFileName = 'default_image.jpg';
+                    $fileName = $defaultFileName;
+                }
 
                 // Accès au Chemin temporaire du fichier téléchargé
                 $tmpFilePath = $_FILES['image']['tmp_name'];
