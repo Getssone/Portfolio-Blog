@@ -69,7 +69,7 @@ if (isset($_GET["page"])) {
 /* Ne peut être déplacé si non bug */
 switch ($page) {
     case 'signIn':
-        echo $twig->render('sign_In.twig', ['message' => $message]);
+        echo $twig->display('sign_In.twig', ['message' => $message]);
         break;
 
     case 'signInAction':
@@ -78,7 +78,7 @@ switch ($page) {
         break;
 
     case 'login':
-        echo $twig->render('login.twig', ['message' => $message]);
+        echo $twig->display('login.twig', ['message' => $message]);
         break;
 
     case 'logInAction':
@@ -89,7 +89,7 @@ switch ($page) {
     case 'logOut':
         $userController = new UserController($sessionModel);
         $userController->logoutUser();
-        echo $twig->render('login.twig');
+        echo $twig->display('login.twig');
         break;
 
     case 'postsAccess':
@@ -102,7 +102,7 @@ switch ($page) {
     case 'posts': //Tout les posts
         $user = $sessionModel->get('user');
         $posts = $sessionModel->get('posts');
-        echo $twig->render('posts.twig', ["user" => $user, 'posts' => $posts]);
+        echo $twig->display('posts.twig', ["user" => $user, 'posts' => $posts]);
         break;
 
     case 'postAccess': // Vérification si le Post existe
@@ -125,7 +125,7 @@ switch ($page) {
         $sessionModel->deleteKey('messageComment');
         // Envoyé uniquement quand le page "post/add-comment" à validé l'enregistrement
 
-        echo $twig->render('post.twig', [
+        echo $twig->display('post.twig', [
             'user' => $user,
             'message' => $message, //Appeler tous en haut de l'index.php
             "post" => $post,
@@ -144,12 +144,12 @@ switch ($page) {
 
     case 'aboutme':
         $user = $sessionModel->get('user');
-        echo $twig->render('aboutme.twig', ["user" => $user]);
+        echo $twig->display('aboutme.twig', ["user" => $user]);
         break;
 
     case 'contact':
         $user = $sessionModel->get('user');
-        echo $twig->render('contact.twig', ["user" => $user, 'message' => $message]);
+        echo $twig->display('contact.twig', ["user" => $user, 'message' => $message]);
         break;
     case 'contactSendMail':
         $user = $sessionModel->get('user');
@@ -159,12 +159,12 @@ switch ($page) {
 
     case 'CGU':
         $user = $sessionModel->get('user');
-        echo $twig->render('CGU.twig', ["user" => $user]);
+        echo $twig->display('CGU.twig', ["user" => $user]);
         break;
 
     case 'profile':
         $user = $sessionModel->get('user');
-        echo $twig->render('profile.twig', ["user" => $user,]);
+        echo $twig->display('profile.twig', ["user" => $user,]);
         break;
 
     case 'admin_create_post_Action':
@@ -174,7 +174,7 @@ switch ($page) {
 
     case 'admin_create_post':
         $user = $sessionModel->get('user');
-        echo $twig->render('admin_create_post.twig', ["user" => $user, 'message' => $message]);
+        echo $twig->display('admin_create_post.twig', ["user" => $user, 'message' => $message]);
         break;
 
     case 'admin_add_post_Action':
@@ -185,7 +185,7 @@ switch ($page) {
         $user = $sessionModel->get('user');
         // var_dump($user);
         // die;
-        echo $twig->render('admin.twig', ["user" => $user, 'message' => $message]);
+        echo $twig->display('admin.twig', ["user" => $user, 'message' => $message]);
         break;
 
     case 'adminShowPostsAccess':
@@ -199,7 +199,7 @@ switch ($page) {
         $posts = $sessionModel->get('posts');
         // var_dump($user);
         // die;
-        echo $twig->render('admin_show_posts.twig', [
+        echo $twig->display('admin_show_posts.twig', [
             'user' => $user,
             'posts' => $posts,
             'message' => $message
@@ -221,7 +221,7 @@ switch ($page) {
         $authorPost = $sessionModel->get('authorPost');
         // Envoyé uniquement quand le page "post/add-comment" à validé l'enregistrement
 
-        echo $twig->render('admin_edit_post.twig', [
+        echo $twig->display('admin_edit_post.twig', [
             'user' => $user,
             'message' => $message, //Appeler tous en haut de l'index.php
             "post" => $post,
@@ -249,7 +249,7 @@ switch ($page) {
         $post = $sessionModel->get('post');
         $authorPost = $sessionModel->get('authorPost');
 
-        echo $twig->render('admin_delete_post.twig', [
+        echo $twig->display('admin_delete_post.twig', [
             'user' => $user,
             "post" => $post,
             "authorPost" => $authorPost
@@ -271,7 +271,7 @@ switch ($page) {
         $commentsPending = $sessionModel->get('commentsPending');
         $commentsApproved = $sessionModel->get('commentsApproved');
         $commentsRejected = $sessionModel->get('commentsRejected');
-        echo $twig->render('admin_pending_comments.twig', [
+        echo $twig->display('admin_pending_comments.twig', [
             'user' => $user,
             'commentsPending' => $commentsPending,
             'commentsApproved' => $commentsApproved,
@@ -297,7 +297,7 @@ switch ($page) {
     case 'admin_show_users':
         $user = $sessionModel->get('user');
         $users = $sessionModel->get('users');
-        echo $twig->render('admin_show_users.twig', [
+        echo $twig->display('admin_show_users.twig', [
             'user' => $user,
             "users" => $users
         ]);
@@ -312,7 +312,7 @@ switch ($page) {
     case 'admin_delete_user':
         $user = $sessionModel->get('user');
         $userToDeleted = $sessionModel->get('userToDeleted');
-        echo $twig->render('admin_delete_user.twig', [
+        echo $twig->display('admin_delete_user.twig', [
             'user' => $user,
             "userToDeleted" => $userToDeleted
         ]);
@@ -336,7 +336,7 @@ switch ($page) {
 
     case 'error_404':
         $user = $sessionModel->get('user');
-        echo $twig->render('404.twig', ['user' => $user]);
+        echo $twig->display('404.twig', ['user' => $user]);
         break;
 
     default:
