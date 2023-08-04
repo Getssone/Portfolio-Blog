@@ -33,8 +33,18 @@ class CommentController extends PostController
 
     public function updateCommentStatus()
     {
-        $id = $_GET['id'];
-        $newStateStatus = $_GET['newStateStatus'];
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+        } else {
+            throw new Exception("L'identifiant 'id' est manquant dans l'URL.");
+            return;
+        }
+        if (isset($_GET['newStateStatus'])) {
+            $newStateStatus = $_GET['newStateStatus'];
+        } else {
+            throw new Exception("Le paramètre 'newStateStatus' est manquant dans l'URL.");
+            return;
+        }
         // var_dump($id);
         // die;
         $comment = $this->commentModel->getCommentsWith($id);
