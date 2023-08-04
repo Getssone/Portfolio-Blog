@@ -27,7 +27,6 @@ use App\Model\SessionModel;
 // var_dump(basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))); 
 //die;
 
-$databaseConnection = new DatabaseConnection();
 // $posts = $databaseConnection->getAllPosts();
 
 /** //rendu template */
@@ -57,6 +56,7 @@ $sessionModel = new SessionModel();
 $message = $sessionModel->get('message');
 $sessionModel->deleteKey('message');
 
+$databaseConnection = new DatabaseConnection($sessionModel);
 
 //Permet de vérifier l'url ex: http://localhost/P5/Code_p5/?p=home
 if (isset($_GET["page"])) {
@@ -70,38 +70,32 @@ if (isset($_GET["page"])) {
 switch ($page) {
     case 'signIn':
         echo $twig->render('sign_In.twig', ['message' => $message]);
-        exit();
         break;
 
     case 'signInAction':
         $signInController = new SignInController($sessionModel);
         $signInController->signIn();
-        exit();
         break;
 
     case 'login':
         echo $twig->render('login.twig', ['message' => $message]);
-        exit();
         break;
 
     case 'logInAction':
         $userController = new UserController($sessionModel);
         $userController->connect($_POST['email'], $_POST['password']);
-        exit();
         break;
 
     case 'logOut':
         $userController = new UserController($sessionModel);
         $userController->logoutUser();
         echo $twig->render('login.twig');
-        exit();
         break;
 
     case 'postsAccess':
         $postController = new PostController($sessionModel);
         $postController->seeAllPosts();
         header("Location: posts");
-        exit();
         break;
 
 
@@ -109,7 +103,6 @@ switch ($page) {
         $user = $sessionModel->get('user');
         $posts = $sessionModel->get('posts');
         echo $twig->render('posts.twig', ["user" => $user, 'posts' => $posts]);
-        exit();
         break;
 
     case 'postAccess': // Vérification si le Post existe
@@ -120,7 +113,6 @@ switch ($page) {
         $postController = new PostController($sessionModel);
         $postController->seePostID();
         header("Location: $location");
-        exit();
         break;
 
     case 'post': // 1 Post
@@ -142,76 +134,64 @@ switch ($page) {
             "comments" => $comments,
             "messageComment" => $messageComment,
         ]);
-        exit();
         break;
 
     case 'post/add-comment':
 
         $commentController = new CommentController($sessionModel);
         $commentController->registerComment();
-        exit();
         break;
 
     case 'aboutme':
         $user = $sessionModel->get('user');
         echo $twig->render('aboutme.twig', ["user" => $user]);
-        exit();
         break;
 
     case 'contact':
         $user = $sessionModel->get('user');
         echo $twig->render('contact.twig', ["user" => $user, 'message' => $message]);
-        exit();
         break;
     case 'contactSendMail':
         $user = $sessionModel->get('user');
         $sendEmail = new EmailController($sessionModel);
         $sendEmail->sendMailViaContact();
-        exit();
         break;
 
     case 'CGU':
         $user = $sessionModel->get('user');
         echo $twig->render('CGU.twig', ["user" => $user]);
-        exit();
         break;
 
     case 'profile':
         $user = $sessionModel->get('user');
         echo $twig->render('profile.twig', ["user" => $user,]);
-        exit();
         break;
 
     case 'admin_create_post_Action':
         $postController = new PostController($sessionModel);
         $postController->createPost();
-        exit();
         break;
 
     case 'admin_create_post':
         $user = $sessionModel->get('user');
         echo $twig->render('admin_create_post.twig', ["user" => $user, 'message' => $message]);
-        exit();
         break;
 
     case 'admin_add_post_Action':
         $postController = new PostController($sessionModel);
         $postController->addPost();
-        exit();
         break;
     case 'admin':
         $user = $sessionModel->get('user');
         // var_dump($user);
         // die;
         echo $twig->render('admin.twig', ["user" => $user, 'message' => $message]);
-        exit();
         break;
 
     case 'adminShowPostsAccess':
         $postController = new PostController($sessionModel);
         $postController->seeAllPosts();
         header("Location: admin_show_posts");
-        exit();
         break;
 
     case 'admin_show_posts':
@@ -224,7 +204,6 @@ switch ($page) {
             'posts' => $posts,
             'message' => $message
         ]);
-        exit();
         break;
 
     case 'adminEditPostAccess':
@@ -234,7 +213,6 @@ switch ($page) {
         $postController = new PostController($sessionModel);
         $postController->seePostID();
         header("Location: admin_edit_post");
-        exit();
         break;
 
     case 'admin_edit_post':
@@ -249,7 +227,6 @@ switch ($page) {
             "post" => $post,
             "authorPost" => $authorPost,
         ]);
-        exit();
         break;
 
     case 'adminEditPostSuccess':
@@ -257,7 +234,6 @@ switch ($page) {
         $postController = new PostController($sessionModel);
         $postController->updatePostID();
         header("Location: admin");
-        exit();
         break;
 
 
@@ -266,7 +242,6 @@ switch ($page) {
         // die;
         $postController = new PostController($sessionModel);
         $postController->deletePostID();
-        exit();
         break;
 
     case 'admin_delete_post':
@@ -289,7 +264,6 @@ switch ($page) {
         $commentController->getAllPendingComments();
         $commentController->getAllRejectedComments();
         header('Location: admin_pending_comments');
-        exit();
         break;
 
     case 'admin_pending_comments':
@@ -310,7 +284,6 @@ switch ($page) {
         $commentController = new CommentController($sessionModel);
         $commentController->updateCommentStatus();
         header("Location: admin");
-        exit();
         break;
 
     case 'adminShowUsersAccess':
@@ -319,7 +292,6 @@ switch ($page) {
         $userController = new UserController($sessionModel);
         $userController->seeAllUsers();
         header("Location: admin_show_users");
-        exit();
         break;
 
     case 'admin_show_users':
@@ -335,7 +307,6 @@ switch ($page) {
         $userController = new UserController($sessionModel);
         $userController->seeUserID();
         header("Location: admin_delete_user");
-        exit();
         break;
 
     case 'admin_delete_user':
@@ -352,7 +323,6 @@ switch ($page) {
         $userController = new UserController($sessionModel);
         $userController->deletedUser();
         header("Location: admin");
-        exit();
         break;
 
     case 'adminUpdateRoleUser':
@@ -360,7 +330,6 @@ switch ($page) {
         $userController = new UserController($sessionModel);
         $userController->updateRole();
         header("Location: admin");
-        exit();
         break;
 
 
@@ -368,7 +337,6 @@ switch ($page) {
     case 'error_404':
         $user = $sessionModel->get('user');
         echo $twig->render('404.twig', ['user' => $user]);
-        exit();
         break;
 
     default:

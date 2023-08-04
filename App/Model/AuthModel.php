@@ -25,7 +25,7 @@ class AuthModel
     public function __construct()
     {
         $this->session = new SessionModel();
-        $this->userModel = new UserModel();
+        $this->userModel = new UserModel($this->session);
     }
 
     /**

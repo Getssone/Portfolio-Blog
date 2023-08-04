@@ -26,9 +26,9 @@ class CommentController extends PostController
         $this->sessionModel = $sessionModel; //récupéré via le rooter
         $this->authModel = new AuthModel();
         $this->user = $this->authModel->getCurrentUser();
-        $this->postModel = new PostModel();
-        $this->userModel = new UserModel();
-        $this->commentModel = new CommentModel();
+        $this->postModel = new PostModel($sessionModel);
+        $this->userModel = new UserModel($sessionModel);
+        $this->commentModel = new CommentModel($sessionModel);
     }
 
     public function updateCommentStatus()

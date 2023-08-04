@@ -46,7 +46,8 @@
 	<div id="content" class="container mb-5">
 		<main class="pb-5">
 			{% if message is defined and message is not empty %}
-				<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
+				<p class="text-light bg-success d-flex justify-content-center py-3">{{ message|raw }}
+				</p>
 			{% endif %}
 			<article class="my-5 text-center">
 				<div class="fw-bold display-6 mb-4">

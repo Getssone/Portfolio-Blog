@@ -120,7 +120,8 @@ reader.readAsDataURL(input.files[0]);
 		<main class="mb-5 pb-5">
 			<div class="mb-5">
 				{% if message is defined and message is not empty %}
-					<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
+					<p class="text-light bg-success d-flex justify-content-center py-3">{{ message|raw }}
+					</p>
 				{% endif %}
 				<h2 class="text-secondary">Ajouter un article</h2>
 				<p>Laissez-vous emporter par la magie des mots et créez votre propre chef-d'œuvre de l'écriture.</p>

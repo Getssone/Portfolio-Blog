@@ -180,6 +180,8 @@ class CommentModel extends DatabaseConnection
             return $newCommentId;
         } catch (Exception $e) {
             // Redirection vers le posts
+            throw new Exception("Une erreur est survenue lors de la creation du comment : " . $e->getMessage());
+
             header('Location: posts');
             exit;
         }

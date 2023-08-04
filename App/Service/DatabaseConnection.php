@@ -3,16 +3,21 @@
 namespace App\Service;
 
 use PDO;
+use Exception;
 use PDOException;
+use App\Model\SessionModel;
 
 class DatabaseConnection
 {
     protected ?PDO $database = null; //déclare une propriété $database de type variable peut contenir soit une instance de la classe PDO, soit la valeur null. 
     //Elle est accessible par les enfants
 
-    public function __construct()
+    private $sessionModel;
+
+    public function __construct($sessionModel)
     {
         $this->connect();
+        $this->sessionModel; //récupéré via le rooter
     }
 
     private function connect()
@@ -33,10 +38,8 @@ class DatabaseConnection
             $this->database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ); //les résultats sont renvoyés sous forme d'objets anonymes, où les noms des colonnes de la table deviennent des propriétés de l'objet. 
         } catch (PDOException $e) {
             // Gérer l'erreur de connexion à la base de données
-            echo 'Erreur de connexion à la base de données : ' . $e->getMessage();
-            exit();
-            // exit( $e); //fonctionne
-            // exit( $e->getMessage());//fonctionne
+            $this->sessionModel->set('message', "Une erreur est survenue lors de la connexion à la base de données. Veuillez réessayer ultérieurement.");
+            throw new Exception('Erreur de connexion à la base de données : ' . $e->getMessage());
         }
     }
 }

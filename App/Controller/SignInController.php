@@ -61,7 +61,7 @@ class SignInController
 
     protected function messageWelcome(string $username, string $email, string $first_name, string $last_name, string $password)
     {
-        $userModel = new UserModel();
+        $userModel = new UserModel($this->sessionModel);
         $userId = $userModel->create($username, $email, $first_name, $last_name, $password, 0);
         $username = $userModel->getUsernameById($userId);
 

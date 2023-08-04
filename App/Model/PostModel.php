@@ -155,9 +155,7 @@ class PostModel extends DatabaseConnection
             $request->bindValue(':id', $id, PDO::PARAM_INT);
             $request->execute();
         } catch (PDOException $e) {
-            // En cas d'erreur, vous pouvez gérer l'exception ici
-            // Par exemple, vous pouvez enregistrer l'erreur dans un fichier de journal, afficher un message d'erreur, etc.
-            echo "Une erreur est survenue lors de la mise à jour du post : " . $e->getMessage();
+            throw new Exception("Une erreur est survenue lors de la mise à jour du post : " . $e->getMessage());
         }
     }
 }

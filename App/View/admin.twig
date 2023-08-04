@@ -104,7 +104,8 @@
 			{% endblock %}
 			{% block admin_content %}
 				{% if message is defined and message is not empty %}
-					<p class="text-light bg-success d-flex justify-content-center py-3">{{ message }}</p>
+					<p class="text-light bg-success d-flex justify-content-center py-3">{{ message|raw }}
+					</p>
 				{% endif %}
 				<p class="d-flex justify-content-center py-3">
 					Bienvenu à Bord de votre Tableau de Bord 🚢

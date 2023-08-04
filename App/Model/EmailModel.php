@@ -54,7 +54,7 @@ class EmailModel
                 throw new Exception("Une erreur est survenue lors de l'envoi du message : " . $this->mail->ErrorInfo);
             }
         } catch (Exception $e) {
-            throw new Exception("Une erreur est survenue noun'avons pas pue commencer à envoyé le mail : " . $e);
+            throw new Exception("Une erreur est survenue noun'avons pas pue commencer à envoyé le mail : " . $e->getMessage());
         }
     }
 }

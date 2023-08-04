@@ -2,13 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* color type A */
   --line_color: #555555;
   --back_color: #ffecf6;
-
-  /* color type B */
-  /* --line_color : #1b1919 ;
-    --back_color : #E9ECFF  ; */
+  color: var(--line_color);
+  background-color: var(--back_color);
 
   .button {
     position: relative;

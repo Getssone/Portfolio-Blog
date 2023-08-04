@@ -25,7 +25,8 @@
 {% block content %}
 
 	{% if message is defined and message is not empty %}
-		<p class="text-light bg-info d-flex justify-content-center py-3">{{ message }}</p>
+		<p class="text-light bg-info d-flex justify-content-center py-3">{{ message|raw }}
+		</p>
 	{% endif %}
 
 	<form action="logInAction" method="post">

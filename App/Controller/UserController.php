@@ -17,7 +17,7 @@ class UserController
     public function __construct(SessionModel $sessionModel)
     {
         $this->sessionModel = $sessionModel; //récupéré via le rooter
-        $this->userModel = new UserModel();
+        $this->userModel = new UserModel($sessionModel);
         $this->userAuth = new AuthModel();
     }
 

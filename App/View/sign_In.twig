@@ -25,7 +25,8 @@
 {% block content %}
 
 	{% if message is defined and message is not empty %}
-		<p class="text-light bg-warning d-flex justify-content-center py-3">{{ message }}</p>
+		<p class="text-light bg-warning d-flex justify-content-center py-3">{{ message|raw }}
+		</p>
 	{% endif %}
 
 	<form action="signInAction" method="post">
@@ -73,17 +74,4 @@
 
 
 			</form>
-
-
-			{# <!-- Afficher le message si un mail a été envoyé -->
-																																																																														{% if app.request.method == 'POST' %}
-																																																																															{% if app.session.get('message') is defined %}
-																																																																																<p>{{ app.session.get('message') }}</p>
-																																																																																{% set _ = app.session.remove('message') %}
-																																																																																{% set emailSent = true %}
-																																																																															{% else %}
-																																																																																{% set emailSent = false %}
-																																																																																<p>Mail ou mot de passe non valide</p>
-																																																																															{% endif %}
-																																																																														{% endif %} #}
 		{% endblock %}
