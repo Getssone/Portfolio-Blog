@@ -111,7 +111,6 @@ class PostModel extends DatabaseConnection
             throw new Exception("Un post avec ceux titre existe déjà.");
         }
         $now = new DateTime();
-        $postArray = [];
         $querySQL = "INSERT INTO posts (title, image, created_at, updated_at,created_by,lead_sentence,content) VALUES (:title, :image, :created_at, :updated_at,:created_by,:lead_sentence,:content)";
         $request = $this->database->prepare($querySQL);
         $request->execute(

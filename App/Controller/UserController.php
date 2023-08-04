@@ -91,8 +91,10 @@ class UserController
                 // var_dump($user);
                 // die;
 
-                $setSessionId = $this->sessionModel->set('userID', $user->getId());
-                $getSessionId = $this->sessionModel->get('userID');
+                $this->sessionModel->set('userID', $user->getId());
+                $this->sessionModel->get('userID');
+                // $setSessionId = $this->sessionModel->set('userID', $user->getId());
+                // $getSessionId = $this->sessionModel->get('userID');
                 // print('$getSessionId' . "<br>");
                 // var_dump($getSessionId);
                 // die;

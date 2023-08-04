@@ -17,7 +17,7 @@ class DatabaseConnection
     public function __construct($sessionModel)
     {
         $this->connect();
-        $this->sessionModel; //récupéré via le rooter
+        $this->sessionModel = $sessionModel; //récupéré via le rooter
     }
 
     private function connect()
