@@ -94,6 +94,7 @@ Before running the project, you need to run the following commands in order to i
 ### Import database files
 
 Once the mamp is launched, go to <http://localhost/phpMyAdmin/index.php/> on your browser. You need to import my BDD :"localhost.sql" file into your BDD.
+
 You may need to change the default database name (blog_p5) in the SQL file to match the allocated database name provided by your host.
 
 ```sql
