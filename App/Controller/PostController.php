@@ -175,7 +175,7 @@ class PostController
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 // Récupération du nom du fichier 
                 if (isset($_FILES['image']['name'])) {
-                    $fileName = $_FILES['image']['name'];
+                    $fileName = filter_var($_FILES['image']['name'], FILTER_DEFAULT);
                 } else {
                     // Utiliser un nom de fichier par défaut
                     $defaultFileName = 'default_image.jpg';
@@ -183,7 +183,7 @@ class PostController
                 }
 
                 // Accès au Chemin temporaire du fichier téléchargé
-                $tmpFilePath = $_FILES['image']['tmp_name'];
+                $tmpFilePath = filter_var($_FILES['image']['tmp_name'], FILTER_DEFAULT);
                 // Déplacer le fichier temporaire vers l'emplacement souhaité
                 $destinationPath = 'public/assets/img/' . $fileName;
                 // var_dump($destinationPath);
@@ -196,11 +196,11 @@ class PostController
                     // L'enregistrement du fichier a été réussi
 
                     // On continuer avec le reste du traitement
-                    $title =  ucfirst(strtolower(htmlspecialchars($_POST['title'])));
-                    $image =  $destinationPath; // Utiliser le chemin du fichier enregistré
+                    $title = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['title ']))), FILTER_DEFAULT);
+                    $image = filter_var($destinationPath, FILTER_DEFAULT);
                     $created_by = $this->sessionModel->get('userID');
-                    $lead_sentence = htmlspecialchars($_POST['leadSentence']);
-                    $content = htmlspecialchars($_POST['content']);
+                    $lead_sentence = filter_var(htmlspecialchars($_POST['leadSentence']), FILTER_DEFAULT);
+                    $content = filter_var(htmlspecialchars($_POST['content']), FILTER_DEFAULT);
 
                     $this->postModel->create($title, $image, $created_by, $lead_sentence, $content);
 

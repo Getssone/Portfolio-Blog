@@ -26,10 +26,10 @@ class EmailController
         try {
             if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['object']) && isset($_POST['message'])) {
-                    $name = $_POST['name'];
-                    $email = $_POST['email'];
-                    $object = $_POST['object'];
-                    $message = $_POST['message'];
+                    $name = filter_var($_POST['name'], FILTER_DEFAULT);
+                    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+                    $object = filter_var($_POST['object'], FILTER_DEFAULT);
+                    $message = filter_var($_POST['message'], FILTER_DEFAULT);
 
                     // Appel au modèle pour envoyer l'e-mail
                     $this->emailModel->sendMe($name, $email, $object, $message);
@@ -42,53 +42,4 @@ class EmailController
             //throw $th;
         }
     }
-
-    // public function envoieMail()
-    // {
-
-    //     // Code pour traiter le formulaire
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         // Récupérer les données du formulaire
-    //         $email = $_POST['email'];
-    //         $password = $_POST['password'];
-    //         $confirmPassword = $_POST['confirm_password'];
-
-    //         // Vérifier les données et effectuer d'autres validations si nécessaire
-    //         if (!$this->password_verify($password, $confirmPassword)) {
-    //             $_SESSION['message'] = 'Les mots de passe ne correspondent pas.';
-    //             header('Location: ' . $_SERVER['REQUEST_URI']);
-    //         
-    //         }
-
-    //         // Instancier la classe Email
-    //         $emailForUser = new EmailModel();
-
-    //         // Envoyer l'email
-    //         $emailSent = $emailForUser->sendEmail($email, $password, 'John Doe'); // Remplacez 'John Doe' par le nom approprié
-
-    //         if ($emailSent) {
-    //             // Email envoyé avec succès
-    //             // $_SESSION['message'] = $emailForUser->message_Success();
-    //             $_SESSION['message'] = 'Un mail vous a été envoyé.';
-    //         } else {
-    //             // Erreur lors de l'envoi de l'email
-    //             $_SESSION['message'] = 'Une erreur s\'est produite lors de l\'envoi de l\'email.';
-    //         }
-
-    //         // Rediriger vers la même page pour afficher le message
-    //         header('Location: ' . $_SERVER['REQUEST_URI']);
-    //
-    //     }
-
-    //     // Afficher la vue
-    //     echo $twig->render('login.twig', ['emailSent' => isset($emailSent) ? $emailSent : false]);
-
-    //     // Arrêtez l'exécution du script
-
-    // }
-
-    // public function password_verify($password, $confirmPassword)
-    // {
-    //     return $password === $confirmPassword;
-    // }
 }

@@ -24,12 +24,29 @@ class SignInController
         try {
             if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Récupérer les données du formulaire
-                $userName = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['username']))), FILTER_DEFAULT);
-                $email = filter_var(strtolower(htmlspecialchars($_POST['email'])), FILTER_VALIDATE_EMAIL);
-                $firstName = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['first_name']))), FILTER_DEFAULT);
-                $lastName = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['last_name']))), FILTER_DEFAULT);
-                $password = filter_var(htmlspecialchars($_POST['password']), FILTER_DEFAULT);
-                $passwordConfirmed = filter_var(htmlspecialchars($_POST['password_Confirmed']), FILTER_DEFAULT);
+                if (isset($_POST['username'])) {
+                    // La variable est définie, on peut l'utiliser
+                    $userName = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['username']))), FILTER_DEFAULT);
+                }
+                if (isset($_POST['email'])) {
+                    $email = filter_var(strtolower(htmlspecialchars($_POST['email'])), FILTER_VALIDATE_EMAIL);
+                }
+
+                if (isset($_POST['first_name'])) {
+                    $firstName = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['first_name']))), FILTER_DEFAULT);
+                }
+                if (isset($_POST['last_name'])) {
+
+                    $lastName = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['last_name']))), FILTER_DEFAULT);
+                }
+                if (isset($_POST['password'])) {
+
+                    $password = filter_var(htmlspecialchars($_POST['password']), FILTER_DEFAULT);
+                }
+                if (isset($_POST['password_Confirmed'])) {
+                    $passwordConfirmed = filter_var(htmlspecialchars($_POST['password_Confirmed']), FILTER_DEFAULT);
+                }
+
                 // Vérifier si les champs requis sont présents
                 if (!isset($userName) || !isset($email) || !isset($firstName) || !isset($lastName) || !isset($password) || !isset($passwordConfirmed)) {
                     throw new Exception('Tous les champs requis ne sont pas présents.');
@@ -45,9 +62,6 @@ class SignInController
 
                 // Rediriger vers la page de connexion
                 header('Location: login');
-
-                // Terminer l'exécution du script pour éviter tout affichage supplémentaire
-                exit;
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
