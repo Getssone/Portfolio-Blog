@@ -36,7 +36,7 @@ class EmailController
                 header('Location: contact');
             }
         } catch (Exception $e) {
-            echo ("Il y a une erreur dans le sendMailViaContact:" . $e);
+            $this->sessionModel->set('message', "Il y a une erreur dans le sendMailViaContact:" . $e);
             //throw $th;
         }
     }
