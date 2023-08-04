@@ -170,7 +170,7 @@ class PostController
 
     public function addPost()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] ===  'POST') {
             // Vérifier si un fichier image a été téléchargé avec succès
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 // Récupération du nom du fichier 

@@ -22,30 +22,32 @@ class SignInController
     public function signIn()
     {
         try {
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Récupérer les données du formulaire
-                $userName = ucfirst(strtolower(htmlspecialchars($_POST['username'])));
-                $email = strtolower(htmlspecialchars($_POST['email']));
-                $firstName = ucfirst(strtolower(htmlspecialchars($_POST['first_name'])));
-                $lastName = ucfirst(strtolower(htmlspecialchars($_POST['last_name'])));
-                $password = htmlspecialchars($_POST['password']);
-                $passwordConfirmed = htmlspecialchars($_POST['password_Confirmed']);
+                $userName = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['username']))), FILTER_DEFAULT);
+                $email = filter_var(strtolower(htmlspecialchars($_POST['email'])), FILTER_VALIDATE_EMAIL);
+                $firstName = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['first_name']))), FILTER_DEFAULT);
+                $lastName = filter_var(ucfirst(strtolower(htmlspecialchars($_POST['last_name']))), FILTER_DEFAULT);
+                $password = filter_var(htmlspecialchars($_POST['password']), FILTER_DEFAULT);
+                $passwordConfirmed = filter_var(htmlspecialchars($_POST['password_Confirmed']), FILTER_DEFAULT);
+                // Vérifier si les champs requis sont présents
+                if (!isset($userName) || !isset($email) || !isset($firstName) || !isset($lastName) || !isset($password) || !isset($passwordConfirmed)) {
+                    throw new Exception('Tous les champs requis ne sont pas présents.');
+                }
 
                 // Effectuer les vérifications de sécurité ici
-                if ($password === $passwordConfirmed) {
-                    // Appeler la méthode messageWelcome
-                    $this->messageWelcome($userName, $email, $firstName, $lastName, $password);
-
-                    // Rediriger vers la page de connexion
-                    header('Location: login');
-
-                    // Terminer l'exécution du script pour éviter tout affichage supplémentaire
-
-                } else {
-                    // Les mots de passe ne correspondent pas, afficher un message d'erreur
-                    $this->sessionModel->set('error_message', 'Les mots de passe ne correspondent pas.');
-                    header('Location: signIn');
+                if ($password !== $passwordConfirmed) {
+                    throw new Exception('Les mots de passe ne correspondent pas.');
                 }
+
+                // Appeler la méthode messageWelcome
+                $this->messageWelcome($userName, $email, $firstName, $lastName, $password);
+
+                // Rediriger vers la page de connexion
+                header('Location: login');
+
+                // Terminer l'exécution du script pour éviter tout affichage supplémentaire
+                exit;
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
