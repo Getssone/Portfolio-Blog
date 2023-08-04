@@ -35,9 +35,6 @@ class EmailController
                     $this->emailModel->sendMe($name, $email, $object, $message);
                     $this->sessionModel->set('message', 'Votre message a été envoyé avec succès.');
                     header('Location: contact');
-                } else {
-                    $this->sessionModel->set('message', "Tous les champs du formulaire doivent être remplis:");
-                    return;
                 }
             }
         } catch (Exception $e) {
