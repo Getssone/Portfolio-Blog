@@ -24,16 +24,21 @@ class EmailController
     public function sendMailViaContact()
     {
         try {
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $name = $_POST['name'];
-                $email = $_POST['email'];
-                $object = $_POST['object'];
-                $message = $_POST['message'];
+            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+                if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['object']) && isset($_POST['message'])) {
+                    $name = $_POST['name'];
+                    $email = $_POST['email'];
+                    $object = $_POST['object'];
+                    $message = $_POST['message'];
 
-                // Appel au modèle pour envoyer l'e-mail
-                $this->emailModel->sendMe($name, $email, $object, $message);
-                $this->sessionModel->set('message', 'Votre message a été envoyé avec succès.');
-                header('Location: contact');
+                    // Appel au modèle pour envoyer l'e-mail
+                    $this->emailModel->sendMe($name, $email, $object, $message);
+                    $this->sessionModel->set('message', 'Votre message a été envoyé avec succès.');
+                    header('Location: contact');
+                } else {
+                    $this->sessionModel->set('message', "Tous les champs du formulaire doivent être remplis:");
+                    return;
+                }
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', "Il y a une erreur dans le sendMailViaContact:" . $e->getMessage());
