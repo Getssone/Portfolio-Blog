@@ -16,7 +16,7 @@ class UserController
 
     public function __construct(SessionModel $sessionModel)
     {
-        $this->sessionModel = $sessionModel; //récupéré via le rooter
+        $this->sessionModel = $sessionModel; //récupéré via le rooter.
         $this->userModel = new UserModel($sessionModel);
         $this->userAuth = new AuthModel();
     }
@@ -31,10 +31,10 @@ class UserController
                 throw new Exception('Les variables id et newStateRole doivent être définies');
             }
 
-            // On récupère l'utilisateur
+            // On récupère l'utilisateur.
             $user = $this->userModel->read($id);
 
-            // On met à jour le role de l'utilisateur
+            // On met à jour le role de l'utilisateur.
             switch ($newStateRole) {
                 case 'admin':
                     $this->admin($user);
@@ -51,10 +51,10 @@ class UserController
                     break;
             }
 
-            // On met à jour la base de données
+            // On met à jour la base de données.
             $this->userModel->updateRole($id, $user->getRole());
 
-            // On met à jour la session
+            // On met à jour la session.
             $this->sessionModel->set('message', "Le role de l'utilisateur a été mis à jour");
         }
     }
@@ -101,13 +101,13 @@ class UserController
                 // var_dump($userCurrent);
                 // die;
                 $this->sessionModel->set('user', $userCurrent);
-                // Authentification réussie
+                // Authentification réussie.
                 header('Location: postsAccess');
             } else {
                 throw new Exception("Authentification échouée");
 
                 $this->sessionModel->set('message', "Authentification échouée");
-                // Authentification échouée
+                // Authentification échouée.
                 header('Location: login');
             }
         }
@@ -143,7 +143,7 @@ class UserController
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-                // Récupérer les paramètres GET
+                // Récupérer les paramètres GET.
                 $userId = $_GET['id'];
 
                 if (isset($userId) && !empty($userId)) {
@@ -159,7 +159,7 @@ class UserController
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
-            // Redirection vers le post
+            // Redirection vers le post.
             header('Location: error_404');
         }
     }

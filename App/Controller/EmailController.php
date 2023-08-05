@@ -27,9 +27,9 @@ class EmailController
             if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['object']) && isset($_POST['message'])) {
                     $name = filter_var($_POST['name'], FILTER_DEFAULT);
-                    $email = filter_var(stripslashes($_POST['email']), FILTER_SANITIZE_EMAIL);
-                    $object = filter_var(stripslashes($_POST['object']), FILTER_DEFAULT);
-                    $message = filter_var(stripslashes($_POST['message']), FILTER_DEFAULT);
+                    $email = filter_var(htmlspecialchars($_POST['email']), FILTER_SANITIZE_EMAIL);
+                    $object = filter_var(htmlspecialchars($_POST['object']), FILTER_DEFAULT);
+                    $message = filter_var(htmlspecialchars($_POST['message']), FILTER_DEFAULT);
 
                     // Appel au modèle pour envoyer l'e-mail
                     $this->emailModel->sendMe($name, $email, $object, $message);

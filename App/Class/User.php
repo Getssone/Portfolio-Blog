@@ -40,8 +40,8 @@ class User
 
     public function setId(int $id)
     {
-        if (is_string($id) && intval($id) > 0) {
-            $this->id = intval($id);
+        if (is_string($id) && (int)$id > 0) {
+            $this->id = (int)$id;
         }
         if (is_int($id) && $id > 0) {
             $this->id = $id;
