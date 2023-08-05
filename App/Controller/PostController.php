@@ -36,7 +36,7 @@ class PostController
         try {
             if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET') {
                 if (isset($_GET['id'])) {
-                    $postId = $_GET['id'];
+                    $postId = filter_input(INPUT_GET, 'id', FILTER_DEFAULT);
                     if (isset($postId) && !empty($postId)) {
                         $thisPostDeleted = $this->postModel->delPost($postId);
                         if ($thisPostDeleted === true) {
@@ -102,7 +102,7 @@ class PostController
                 if (isset($_GET['id'])) {
 
                     // Récupérer les paramètres GET
-                    $postId = $_GET['id'];
+                    $postId = filter_input(INPUT_GET, 'id', FILTER_DEFAULT);
                     // $location = $_GET['location'];
 
                     if (isset($postId) && !empty($postId)) {

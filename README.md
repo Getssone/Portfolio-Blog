@@ -4,7 +4,7 @@ Création d'un Portfolio-Blog
 
 > Openclassrooms PHP/Symfony developer course project 5 : develop your own blog using PHP.
 
-[![Codacy Badge]()]()
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/16c567b246e54c2badd2806a2f69af2d)](https://app.codacy.com/gh/Getssone/Portfolio-Blog/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ## Features
 
