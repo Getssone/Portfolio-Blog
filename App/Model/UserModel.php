@@ -70,21 +70,27 @@ class UserModel extends DatabaseConnection
     {
         $querySQL = "SELECT * FROM users WHERE username = :username";
         $reponse = $this->database->prepare($querySQL);
-        $reponse->bindValue(1, $username, PDO::PARAM_STR);
+        $reponse->bindValue(":username", $username, PDO::PARAM_STR);
         $reponse->execute();
         $result = $reponse->fetch();
         if (!$result) {
             return null;
         }
-        return new User($result);
+        $userData = (array) $result;
+        //$userData = get_object_vars($result);
+        return new User($userData);
     }
 
     public function create(string $username, string $email, string $first_name, string $last_name, string $password, $role)
     {
 
-        $existingUser = $this->findByEmail($email);
-        if ($existingUser) {
+        $existingUserEmail = $this->findByEmail($email);
+        if ($existingUserEmail) {
             throw new Exception("Un utilisateur avec cette adresse e-mail existe déjà.");
+        }
+        $existingUsername = $this->findByUsername($username);
+        if ($existingUsername) {
+            throw new Exception("Un utilisateur avec cette Alias existe déjà.");
         }
 
         $querySQL = "INSERT INTO users(username, email, first_name, last_name, password, role, picture) 

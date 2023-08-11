@@ -63,6 +63,8 @@ class SignInController
         $userModel = new UserModel($this->sessionModel);
         $userId = $userModel->create($username, $email, $first_name, $last_name, $password, 0);
         $username = $userModel->getUsernameById($userId);
+        var_dump('ok1');
+        die;
 
 
         // Afficher un message de remerciement avec le nom d'utilisateur récupéré

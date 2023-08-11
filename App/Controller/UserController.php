@@ -141,7 +141,7 @@ class UserController
     public function deletedUser()
     {
         try {
-            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'GET')) {
 
                 // Récupérer les paramètres GET.
                 $userId = $_GET['id'];
