@@ -59,12 +59,18 @@ class PostModel extends DatabaseConnection
 
     public function delPost(int $id)
     {
-        $querySQL = "DELETE FROM posts WHERE id = :id";
-        $requete = $this->database->prepare($querySQL);
-        $requete->bindValue(":id", $id, PDO::PARAM_INT);
-        $success = $requete->execute();
+        try {
+            // var_dump($id);
+            // die;
+            $querySQL = "DELETE FROM posts WHERE id = :id";
+            $requete = $this->database->prepare($querySQL);
+            $requete->bindValue(":id", $id, PDO::PARAM_INT);
+            $success = $requete->execute();
 
-        return $success;
+            return $success;
+        } catch (Exception $e) {
+            throw new Exception("Une erreur s'est produite" . $e->getMessage());
+        }
     }
 
     public function findByTitle(string $title)

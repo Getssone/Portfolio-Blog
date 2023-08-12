@@ -248,8 +248,6 @@ switch ($page) {
 
 
     case 'admin_delete_post_access': // Vérification si le Post existe
-        // var_dump($_GET['id']);
-        // die;
         $postController = new PostController($sessionModel);
         $postController->deletePostID();
         break;

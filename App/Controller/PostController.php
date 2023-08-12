@@ -46,6 +46,9 @@ class PostController
 
                             header('Location: admin');
                         }
+                        var_dump('Erreur');
+                        var_dump($postId);
+                        die;
                     } else {
                         $this->sessionModel->set('error_message', "Nous n'avons pas pu bannir ce récits il doit être ensorceler");
                         header('Location: admin');
@@ -57,7 +60,7 @@ class PostController
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
             // Redirection vers le post
-            header('Location: error_404');
+            header('Location: admin');
         }
     }
     public function updatePostID()
