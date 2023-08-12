@@ -43,19 +43,13 @@ class PostController
                             $this->sessionModel->deleteKey('posts');
                             $this->seeAllPosts();
                             $this->sessionModel->set('message', "le récit à été banni de nos terres   ");
-
                             header('Location: admin');
                         }
-                        var_dump('Erreur');
-                        var_dump($postId);
-                        die;
                     } else {
                         $this->sessionModel->set('error_message', "Nous n'avons pas pu bannir ce récits il doit être ensorceler");
                         header('Location: admin');
                     }
                 }
-                // Récupérer les paramètres GET
-
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
