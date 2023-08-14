@@ -132,15 +132,10 @@ class User
 
     private function hydrate($data)
     {
-        // Boucle sur tous les champs et valeurs
         foreach ($data as $key => $value) {
-            // Construit le nom de la méthode grâce
-            // au nom des champs de la DB
             $methodName = 'set' . ucfirst($key);
 
-            // Si la méthode existe
             if (method_exists($this, $methodName)) {
-                // Appel de la méthode
                 $this->$methodName($value);
             }
         }

@@ -21,20 +21,12 @@ class PostModel extends DatabaseConnection
         $posts = [];
         $requeteSQL = "SELECT * FROM posts ORDER BY  updated_at DESC";
 
-        // TODO: jointure sur le User pour éviter d'avoir à appeler un READ supplémentaire pour chaque userID
         $requete = $this->database->query($requeteSQL);
         while ($post = $requete->fetch(PDO::FETCH_ASSOC)) {
             $posts[] = new Post($post);
         }
-        // var_dump("--posts--");
-        // var_dump($posts);
-        // die;
-        return $posts;
 
-        // $requeteSQL = "SELECT * FROM posts";
-        // $reponse = $this->database->query($requeteSQL); //query() est une fonction de l'object PDO et return un object PDOStatement
-        // $posts = $reponse->fetch(); //fetchAll() est une fonction de l'object PDOStatement
-        // return $posts;
+        return $posts;
     }
 
     /**
@@ -72,8 +64,6 @@ class PostModel extends DatabaseConnection
 
     public function findByTitle(string $title)
     {
-        // var_dump($title);
-        // die;
         $querySQL = ("SELECT * FROM posts WHERE title = :title");
         $reponse = $this->database->prepare($querySQL);
         $reponse->bindValue(":title", $title, PDO::PARAM_STR);
@@ -82,16 +72,12 @@ class PostModel extends DatabaseConnection
         if (!$result) {
             return null;
         }
-        // $postData = (array) $result;
-        //$postData = get_object_vars($result);
-        // return new Post($postData);
         return new Post($result);
     }
 
     public function findTitleById(string $id)
     {
-        // var_dump($title);
-        // die;
+
         $querySQL = ("SELECT * FROM posts WHERE id = :id");
         $reponse = $this->database->prepare($querySQL);
         $reponse->bindValue(":id", $id, PDO::PARAM_STR);
@@ -100,9 +86,7 @@ class PostModel extends DatabaseConnection
         if (!$result) {
             return null;
         }
-        // $postData = (array) $result;
-        //$postData = get_object_vars($result);
-        // return new Post($postData);
+
         return new Post($result);
     }
 
@@ -144,8 +128,7 @@ class PostModel extends DatabaseConnection
      */
     public function update(int $id, string $title, string $content, string $leadSentence)
     {
-        // var_dump($id);
-        // die;
+
         try {
             $querySQL = "UPDATE posts SET title = :title, content = :content, lead_sentence = :lead_sentence, updated_at = :updated_at WHERE id = :id";
             $request = $this->database->prepare($querySQL);

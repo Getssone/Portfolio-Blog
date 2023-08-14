@@ -100,7 +100,6 @@ class Post
     public function setCreated_At($createdAt)
     {
         $format = 'Y-m-d H:i:s';
-        // Teste la validité de la date
         $d = DateTime::createFromFormat($format, $createdAt);
         if ($createdAt == $d->format($format)) {
             $this->createdAt = $d->format($format);
@@ -120,7 +119,6 @@ class Post
     {
         if (!empty($updatedAt)) {
             $format = 'Y-m-d H:i:s';
-            // Teste la validité de la date
             $d = DateTime::createFromFormat($format, $updatedAt);
 
             if ($updatedAt == $d->format($format)) {
@@ -155,15 +153,10 @@ class Post
 
     private function hydrate($data)
     {
-        // Boucle sur tous les champs et valeurs
         foreach ($data as $key => $value) {
-            // Construit le nom de la méthode grâce
-            // au nom des champs de la DB
             $methodName = 'set' . ucfirst($key);
 
-            // Si la méthode existe
             if (method_exists($this, $methodName)) {
-                // Appel de la méthode
                 $this->$methodName($value);
             }
         }

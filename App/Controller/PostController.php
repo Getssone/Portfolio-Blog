@@ -22,7 +22,7 @@ class PostController
 
     public function __construct(SessionModel $sessionModel)
     {
-        $this->sessionModel = $sessionModel; //récupéré via le rooter
+        $this->sessionModel = $sessionModel;
         $this->authModel = new AuthModel();
         $this->user = $this->authModel->getCurrentUser();
         $this->postModel = new PostModel($sessionModel);
@@ -53,7 +53,6 @@ class PostController
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
-            // Redirection vers le post
             header('Location: admin');
         }
     }
@@ -73,13 +72,11 @@ class PostController
                         $leadSentence = htmlspecialchars($_POST['lead_sentence']);
 
                         $content = htmlspecialchars($_POST['content']);
-                        // var_dump($_POST);
-                        // die;
                         $this->postModel->update($id, $title, $content, $leadSentence);
 
                         $this->sessionModel->set('message', "Le post a été enregistré avec succès");
                     } else {
-                        // Une erreur s'est produite lors de l'enregistrement du fichier
+
                         $this->sessionModel->set('message', "Une erreur s'est produite lors de l'enregistrement");
                         header('Location: admin');
                     }
@@ -87,7 +84,7 @@ class PostController
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
-            // Redirection vers le post
+
             header('Location: error_404');
         }
     }
@@ -98,22 +95,13 @@ class PostController
             if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] ===  'GET') {
                 if (isset($_GET['id'])) {
 
-                    // Récupérer les paramètres GET
                     $postId = filter_input(INPUT_GET, 'id', FILTER_DEFAULT);
-                    // $location = $_GET['location'];
 
                     if (isset($postId) && !empty($postId)) {
                         $thisPost = $this->postModel->getPost($postId);
                         $idAuthorPost = $thisPost->getCreated_By();
                         $infosAuthorPost = $this->userModel->read($idAuthorPost);
                         $comments = $this->commentController->getCommentsWithAuthors();
-                        // $authorComments = $this->commentController->getAuthorComment();
-                        // foreach ($comments as $comment) {
-                        //     $idAuthorComments = $comment->getCreated_By();
-                        //     $infosAuthorComments = $this->userModel->read($idAuthorComments);
-                        //     $authorName = $infosAuthorComments->getUsername();
-                        //     $comment->setCreated_By($authorName);
-                        // }
                         $this->sessionModel->set('post', $thisPost);
                         $this->sessionModel->set('authorPost', $infosAuthorPost->getUsername());
                         $this->sessionModel->set('comments', $comments["comments"]);
@@ -127,7 +115,6 @@ class PostController
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', $e->getMessage());
-            // Redirection vers le post
             header('Location: error_404');
         }
     }
@@ -142,7 +129,6 @@ class PostController
         }
         $this->sessionModel->set('message', "Cher visiteur, quel récit souhaitez-vous découvrir parmi nos derniers chroniques publiés ? ");
         $this->sessionModel->set('posts', $allPosts);
-        // header('Location: posts');
     }
 
     public function createPost()
@@ -159,7 +145,6 @@ class PostController
                 header('Location: admin_create_post');
             }
         } catch (\Exception $e) {
-            // Traiter l'exception
             $this->sessionModel->set('message', "Une erreur s'est produite. Veuillez réessayer plus tard.");
             header('Location: posts');
         }
@@ -168,31 +153,22 @@ class PostController
     public function addPost()
     {
         if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Vérifier si un fichier image a été téléchargé avec succès
             if (isset($_FILES['image']) && isset($_FILES['image']['error'])) {
                 if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                    // Récupération du nom du fichier 
                     if (isset($_FILES['image']['name'])) {
                         $fileName = $_FILES['image']['name'];
                     } else {
-                        // Utiliser un nom de fichier par défaut
                         $defaultFileName = 'default_image.jpg';
                         $fileName = $defaultFileName;
                     }
 
-                    // Accès au Chemin temporaire du fichier téléchargé
                     $tmpFilePath = $_FILES['image']['tmp_name'];
-                    // Déplacer le fichier temporaire vers l'emplacement souhaité
                     $destinationPath = 'public/assets/img/' . $fileName;
-                    // var_dump($destinationPath);
-                    // die;
 
 
                     $save_File = move_uploaded_file($tmpFilePath, $destinationPath);
                     if ($save_File == true) {
-                        // L'enregistrement du fichier a été réussi
 
-                        // On continuer avec le reste du traitement
                         $title = ucfirst(strtolower(filter_var($_POST['title'], FILTER_DEFAULT)));
                         $image = $destinationPath;
                         $created_by = $this->sessionModel->get('userID');
@@ -204,17 +180,14 @@ class PostController
                         $this->sessionModel->set('message', "Le post a été enregistré avec succès");
                         header('Location: admin');
                     } else {
-                        // Une erreur s'est produite lors de l'enregistrement du fichier
                         $this->sessionModel->set('message', "Une erreur s'est produite lors de l'enregistrement de l'image");
                         header('Location: admin');
                     }
                 } else {
-                    // Une erreur s'est produite lors du téléchargement du fichier image
                     $this->sessionModel->set('message', "Une erreur s'est produite lors du téléchargement de l'image");
                     header('Location: admin');
                 }
             } else {
-                // Le fichier n'a pas été téléchargé
                 $this->sessionModel->set('message', "Le fichier n'a pas été téléchargé");
                 header('Location: admin');
             }

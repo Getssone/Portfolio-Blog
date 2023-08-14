@@ -35,7 +35,6 @@ class AuthModel
      */
     public function isLoggedIn(): bool
     {
-        // Les informations ID de l'utilisateur sont stockées dans la session .
         if (empty($this->session->get('userID')) && empty($this->session->get('username'))) {
             return false;
         }

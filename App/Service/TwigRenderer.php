@@ -24,20 +24,17 @@ class TwigRenderer
 
     public function __construct()
     {
-        //* rendu template */
-
-        $this->loader = new FilesystemLoader("App/View"); // identique au code ci dessous, il spécifiez le répertoire contenant les templates
 
 
-        // $this->loader = new FilesystemLoader(dirname(__DIR__) . "/View");// identique au code ci dessus
+        $this->loader = new FilesystemLoader("App/View");
 
         $this->twigEnvironment = new Environment($this->loader, [
-            'cache' => false, //__DIR__ .'./Tmp',
+            'cache' => false,
             'debug' => true,
             'filters' => ['escape' => ['twig', 'escape']],
         ]);
 
-        $this->twigEnvironment->addExtension(new DebugExtension()); // permet d'utiliser dump() = var_dump() qui lui n'est pas accessible dans twig
+        $this->twigEnvironment->addExtension(new DebugExtension());
     }
     public function getTwig()
     {

@@ -104,7 +104,7 @@ let reader = new FileReader();
 reader.onload = function () {
 let imgElement = document.getElementById('image-preview');
 imgElement.src = reader.result;
-// Ajoutez la condition ici pour afficher l'image si la source est valide
+
 if (input.files.length === 0) {
 imgElement.style.display = 'none';
 } else {

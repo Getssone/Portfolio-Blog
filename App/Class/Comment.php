@@ -13,7 +13,6 @@ class Comment
     private $createdAt;
     private $createdBy;
     private $postId;
-    // TODO: if possible when a PHP 8.1 fpm alpine image is released on Docker hub, replace this with an Enum class
     const PENDING = 'PENDING';
     const REJECTED = 'REJECTED';
     const APPROVED = 'APPROVED';
@@ -73,7 +72,6 @@ class Comment
     public function setCreated_at($createdAt)
     {
         $format = 'Y-m-d H:i:s';
-        // Teste la validité de la date
         $d = DateTime::createFromFormat($format, $createdAt);
         if ($createdAt == $d->format($format)) {
             $this->createdAt = $d->format($format);
@@ -119,15 +117,14 @@ class Comment
 
     private function hydrate($data)
     {
-        // Boucle sur tous les champs et valeurs
+
         foreach ($data as $key => $value) {
-            // Construit le nom de la méthode grâce
-            // au nom des champs de la DB
+
+
             $methodName = 'set' . ucfirst($key);
 
-            // Si la méthode existe
+
             if (method_exists($this, $methodName)) {
-                // Appel de la méthode
                 $this->$methodName($value);
             }
         }

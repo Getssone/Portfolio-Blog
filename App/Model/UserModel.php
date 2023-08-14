@@ -13,9 +13,6 @@ class UserModel extends DatabaseConnection
     public function updateRole(int $id, $role)
     {
         $querySQL = "UPDATE users SET role = :role WHERE id = :id";
-        // var_dump($querySQL);
-        // die;
-
         $request = $this->database->prepare($querySQL);
         $request->execute(
             array(
@@ -42,28 +39,28 @@ class UserModel extends DatabaseConnection
         $reponse = $this->database->prepare($querySQL);
         $reponse->bindValue(":id", $id, PDO::PARAM_INT);
         $reponse->execute();
+
         $result = $reponse->fetch(PDO::FETCH_ASSOC);
 
         if (!$result) {
-            return null; // Aucun utilisateur trouvé, retourne null
+            return null;
         }
         return new User($result);
     }
 
     public function findByEmail(string $email)
     {
-        // var_dump($email);
-        // die;
+
         $querySQL = ("SELECT * FROM users WHERE email = :email");
         $reponse = $this->database->prepare($querySQL);
         $reponse->bindValue(":email", $email, PDO::PARAM_STR);
         $reponse->execute();
+
         $result = $reponse->fetch();
         if (!$result) {
             return null;
         }
         $userData = (array) $result;
-        //$userData = get_object_vars($result);
         return new User($userData);
     }
     public function findByUsername(string $username)
@@ -72,12 +69,12 @@ class UserModel extends DatabaseConnection
         $reponse = $this->database->prepare($querySQL);
         $reponse->bindValue(":username", $username, PDO::PARAM_STR);
         $reponse->execute();
+
         $result = $reponse->fetch();
         if (!$result) {
             return null;
         }
         $userData = (array) $result;
-        //$userData = get_object_vars($result);
         return new User($userData);
     }
 
@@ -118,10 +115,8 @@ class UserModel extends DatabaseConnection
         $request = $this->database->prepare($querySQL);
         $request->bindValue(":userId", $userId, PDO::PARAM_INT);
         $request->execute();
-        // $reponse = $this->database->prepare($querySQL);
-        // $reponse->execute(array(':userId' => $userId));
 
-        $user = $request->fetch(PDO::FETCH_ASSOC); //les résultats seront sous forme de tableau associatif
+        $user = $request->fetch(PDO::FETCH_ASSOC);
 
         return $user['username'];
     }

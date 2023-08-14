@@ -2,13 +2,6 @@
 require_once './vendor/autoload.php';
 
 
-
-// session_start();
-
-// use Twig\TwigFilter;
-// use PDO;
-// use Twig\TwigFunction;
-
 use App\Service\DatabaseConnection;
 use App\Service\TwigRenderer;
 
@@ -21,15 +14,8 @@ use App\Model\EmailModel;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use App\Model\SessionModel;
-// use App\Controller\EmailController;
 
-
-// var_dump(basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))); 
-//die;
-
-// $posts = $databaseConnection->getAllPosts();
-
-/** //rendu template */
+/** rendu template */
 
 $twigRenderer = new TwigRenderer();
 $twig = $twigRenderer->getTwig();
@@ -38,15 +24,9 @@ $twig = $twigRenderer->getTwig();
 
 
 /** Extension de TWIG via une function */
-// $twig->addFunction(new TwigFunction('soustraction', function ($value1, $value2) {
-//     return "salut je suis une fonction qui soustrait : $value1 - $value2 = " . $value1 - $value2;
-// }));
 
 
 /** Extension de TWIG via un Filtre */
-// $twig->addFilter(new TwigFilter('textadd', function ($value1) {
-//     return "salut je suis un filtre " . $value1;
-// }, ["is_safe" => ["html"]]));
 
 
 
@@ -58,15 +38,11 @@ $sessionModel->deleteKey('message');
 
 $databaseConnection = new DatabaseConnection($sessionModel);
 
-//Permet de vérifier l'url ex: http://localhost/P5/Code_p5/?p=home
 if (isset($_GET["page"])) {
     $page = htmlspecialchars(($_GET["page"]));
 } else {
     $page = 'postsAccess';
 }
-
-
-/* Ne peut être déplacé si non bug */
 switch ($page) {
     case 'signIn':
         $twig->display('sign_In.twig', ['message' => $message]);
@@ -103,16 +79,13 @@ switch ($page) {
         break;
 
 
-    case 'posts': //Tout les posts
+    case 'posts':
         $user = $sessionModel->get('user');
         $posts = $sessionModel->get('posts');
         $twig->display('posts.twig', ["user" => $user, 'posts' => $posts]);
         break;
 
-    case 'postAccess': // Vérification si le Post existe
-        // var_dump("postAccess");
-        // var_dump($_GET['id']);
-        // die;
+    case 'postAccess':
         if (isset($_GET['location'])) {
             $location = $_GET['location'];
             $postController = new PostController($sessionModel);
@@ -125,7 +98,7 @@ switch ($page) {
         }
         break;
 
-    case 'post': // 1 Post
+    case 'post':
         $user = $sessionModel->get('user');
         $post = $sessionModel->get('post');
         $authorPost = $sessionModel->get('authorPost');
@@ -133,11 +106,10 @@ switch ($page) {
         $comments = $sessionModel->get('comments');
         $messageComment = $sessionModel->get('messageComment');
         $sessionModel->deleteKey('messageComment');
-        // Envoyé uniquement quand le page "post/add-comment" à validé l'enregistrement
 
         $twig->display('post.twig', [
             'user' => $user,
-            'message' => $message, //Appeler tous en haut de l'index.php
+            'message' => $message,
             "post" => $post,
             "authorPost" => $authorPost,
             "authorComments" => $authorComments,
@@ -193,8 +165,6 @@ switch ($page) {
         break;
     case 'admin':
         $user = $sessionModel->get('user');
-        // var_dump($user);
-        // die;
         $twig->display('admin.twig', ["user" => $user, 'message' => $message]);
         break;
 
@@ -207,8 +177,6 @@ switch ($page) {
     case 'admin_show_posts':
         $user = $sessionModel->get('user');
         $posts = $sessionModel->get('posts');
-        // var_dump($user);
-        // die;
         $twig->display('admin_show_posts.twig', [
             'user' => $user,
             'posts' => $posts,
@@ -217,9 +185,6 @@ switch ($page) {
         break;
 
     case 'adminEditPostAccess':
-        // var_dump("adminEditPostAccess");
-        // var_dump($_GET['id']);
-        // die;
         $postController = new PostController($sessionModel);
         $postController->seePostID();
         header("Location: admin_edit_post");
@@ -229,25 +194,23 @@ switch ($page) {
         $user = $sessionModel->get('user');
         $post = $sessionModel->get('post');
         $authorPost = $sessionModel->get('authorPost');
-        // Envoyé uniquement quand le page "post/add-comment" à validé l'enregistrement
 
         $twig->display('admin_edit_post.twig', [
             'user' => $user,
-            'message' => $message, //Appeler tous en haut de l'index.php
+            'message' => $message,
             "post" => $post,
             "authorPost" => $authorPost,
         ]);
         break;
 
     case 'adminEditPostSuccess':
-        // var_dump("adminEditPostSuccess");
         $postController = new PostController($sessionModel);
         $postController->updatePostID();
         header("Location: admin");
         break;
 
 
-    case 'admin_delete_post_access': // Vérification si le Post existe
+    case 'admin_delete_post_access':
         $postController = new PostController($sessionModel);
         $postController->deletePostID();
         break;
@@ -288,15 +251,12 @@ switch ($page) {
         break;
 
     case 'adminUpdateStatusComment':
-        // var_dump("adminUpdateStatusComment");
         $commentController = new CommentController($sessionModel);
         $commentController->updateCommentStatus();
         header("Location: admin");
         break;
 
     case 'adminShowUsersAccess':
-        // var_dump("adminShowUsersAccess");
-        // die;
         $userController = new UserController($sessionModel);
         $userController->seeAllUsers();
         header("Location: admin_show_users");
@@ -327,7 +287,6 @@ switch ($page) {
         break;
 
     case 'adminDeletedUserSuccess':
-        // var_dump("adminEditPostSuccess");
         $userController = new UserController($sessionModel);
         $userController->deletedUser();
         header("Location: admin");

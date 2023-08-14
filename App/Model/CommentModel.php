@@ -41,14 +41,13 @@ class CommentModel extends DatabaseConnection
         $requete = $this->database->prepare($requeteSQL);
         $requete->execute();
         $comments = $requete->fetchAll(PDO::FETCH_ASSOC);
-        $commentRejected = []; //on crée un tableau avant afin d'évité d'écraser la valeur du $commentRejected dans la condition foreach à chaque itération
+        $commentRejected = [];
         if ($comments) {
             foreach ($comments as $comment) {
                 $commentRejected[] = new Comment($comment);
             }
         }
-        // var_dump($commentApproved);
-        // die;
+
         return $commentRejected;
     }
 
@@ -70,8 +69,7 @@ class CommentModel extends DatabaseConnection
                 $commentApproved[] = new Comment($comment);
             }
         }
-        // var_dump($commentApproved);
-        // die;
+
         return $commentApproved;
     }
 
@@ -87,16 +85,13 @@ class CommentModel extends DatabaseConnection
         $requete->execute();
         $comments = $requete->fetchAll(PDO::FETCH_ASSOC);
         $commentPending = [];
-        // print_r($comments);
-        // print_r($comments);
-        // die;
+
         if ($comments) {
             foreach ($comments as $comment) {
                 $commentPending[] = new Comment($comment);
             }
         }
-        // print_r($commentPending);
-        // die;
+
         return $commentPending;
     }
 
@@ -123,8 +118,7 @@ class CommentModel extends DatabaseConnection
         $requete->execute();
         $comments = $requete->fetchAll(PDO::FETCH_ASSOC);
         $commentObjects = [];
-        // var_dump($comments);
-        // die;
+
         foreach ($comments as $comment) {
             $commentObjects[] = new Comment($comment);
         }
@@ -159,7 +153,7 @@ class CommentModel extends DatabaseConnection
     public function create(int $postId, int $userId, string $commentTitle, string $commentContent)
     {
         try {
-            //code...
+
             $now = new DateTime();
             $querySQL = "INSERT INTO comments ( post_id,created_by, title, content, created_at,  status) 
                     VALUES(:post_id,:created_by,:title, :content, :created_at, :status)";
@@ -179,7 +173,7 @@ class CommentModel extends DatabaseConnection
 
             return $newCommentId;
         } catch (Exception $e) {
-            // Redirection vers le posts
+
             throw new Exception("Une erreur est survenue lors de la creation du comment : " . $e->getMessage());
 
             header('Location: posts');

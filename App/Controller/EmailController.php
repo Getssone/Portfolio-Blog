@@ -17,7 +17,7 @@ class EmailController
     public function __construct(SessionModel $sessionModel)
     {
 
-        $this->sessionModel = $sessionModel; //récupéré via le rooter
+        $this->sessionModel = $sessionModel;
         $this->emailModel = new EmailModel($sessionModel);
     }
 
@@ -31,7 +31,6 @@ class EmailController
                     $object = filter_var(htmlspecialchars($_POST['object']), FILTER_DEFAULT);
                     $message = filter_var(htmlspecialchars($_POST['message']), FILTER_DEFAULT);
 
-                    // Appel au modèle pour envoyer l'e-mail
                     $this->emailModel->sendMe($name, $email, $object, $message);
                     $this->sessionModel->set('message', 'Votre message a été envoyé avec succès.');
                     header('Location: contact');
@@ -39,7 +38,6 @@ class EmailController
             }
         } catch (Exception $e) {
             $this->sessionModel->set('message', "Il y a une erreur dans le sendMailViaContact:" . $e->getMessage());
-            //throw $th;
         }
     }
 }

@@ -16,9 +16,7 @@ class EmailModel
     public function __construct(SessionModel $sessionModel)
     {
         $this->mail = new PHPMailer(true);
-        $this->sessionModel = $sessionModel; //récupéré via le rooter
-
-        // Paramètres SMTP
+        $this->sessionModel = $sessionModel;
         $this->mail->isSMTP();
         $this->mail->Host = 'smtp.gmail.com';
         $this->mail->SMTPAuth = true;
@@ -26,31 +24,23 @@ class EmailModel
         $this->mail->Password = 'offilbhwedgclgcs';
         $this->mail->SMTPSecure = 'tls';
         $this->mail->Port = 587;
-        // Paramètres de débogage (facultatif)
-        $this->mail->SMTPDebug = 0; // 0 pour désactiver les messages de débogage
-        // Paramètres généraux du message
-        $this->mail->isHTML(true); // Le message est au format HTML par défaut
-
-
+        $this->mail->SMTPDebug = 0;
+        $this->mail->isHTML(true);
     }
 
     public function sendMe($name, $email, $object, $message)
     {
         try {
-            // Destinataire du message
             $destinataire = "gaetan.solis@gmail.com";
 
-            // Configuration de l'e-mail avec PHPMailer
             $this->mail->setFrom($email, $name);
             $this->mail->addAddress($destinataire);
             $this->mail->Subject = $object;
             $this->mail->Body = "Nom : $name\nEmail : $email\nMessage :\n$message";
 
-            // Envoi de l'e-mail
             if ($this->mail->send()) {
                 return true;
             } else {
-                // Lever une exception en cas d'erreur
                 throw new Exception("Une erreur est survenue lors de l'envoi du message : " . $this->mail->ErrorInfo);
             }
         } catch (Exception $e) {
