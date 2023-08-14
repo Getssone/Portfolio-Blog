@@ -15,7 +15,7 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 use App\Model\SessionModel;
 
-/** rendu template */
+/* rendu template */
 
 $twigRenderer = new TwigRenderer();
 $twig = $twigRenderer->getTwig();
@@ -23,14 +23,14 @@ $twig = $twigRenderer->getTwig();
 
 
 
-/** Extension de TWIG via une function */
+/* Extension de TWIG via une function */
 
 
-/** Extension de TWIG via un Filtre */
+/* Extension de TWIG via un Filtre */
 
 
 
-/** Routing */
+/* Routing */
 
 $sessionModel = new SessionModel();
 $message = $sessionModel->get('message');

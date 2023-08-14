@@ -43,7 +43,6 @@ class Comment
         return $this->title;
     }
 
-
     public function setTitle($title)
     {
         if (mb_strlen($title) <= 255) {
@@ -117,13 +116,8 @@ class Comment
 
     private function hydrate($data)
     {
-
         foreach ($data as $key => $value) {
-
-
             $methodName = 'set' . ucfirst($key);
-
-
             if (method_exists($this, $methodName)) {
                 $this->$methodName($value);
             }

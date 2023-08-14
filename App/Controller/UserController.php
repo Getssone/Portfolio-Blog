@@ -82,7 +82,6 @@ class UserController
                 $this->sessionModel->set('userID', $user->getId());
                 $this->sessionModel->get('userID');
 
-
                 $userCurrent = $this->userAuth->getCurrentUser();
 
                 $this->sessionModel->set('user', $userCurrent);
