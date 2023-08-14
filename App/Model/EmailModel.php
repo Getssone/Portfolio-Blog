@@ -20,8 +20,8 @@ class EmailModel
         $this->mail->isSMTP();
         $this->mail->Host = 'smtp.gmail.com';
         $this->mail->SMTPAuth = true;
-        $this->mail->Username = 'gaetan.solis@gmail.com';
-        $this->mail->Password = 'offilbhwedgclgcs';
+        $this->mail->Username = 'yourEmail@mail.com';
+        $this->mail->Password = 'yourPW';
         $this->mail->SMTPSecure = 'tls';
         $this->mail->Port = 587;
         $this->mail->SMTPDebug = 0;
