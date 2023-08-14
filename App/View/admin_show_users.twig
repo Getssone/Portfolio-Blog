@@ -31,7 +31,7 @@
 	<div id="admin-nav" class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark left-0">
 		<div class="dropdown d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
 			<a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-				{% if user is defined and user.role == 1 %}
+				{% if user is defined and user.role in [1, "1"]  %}
 					<span class="fs-4">
 						<img src="{{user.picture}}" alt="img" width="32" height="32" class="rounded-circle me-2">
 						{{user.username}}
@@ -42,7 +42,7 @@
 					</span>
 				{% endif %}
 			</a>
-			{% if user is defined and user.role == 1 %}
+			{% if user is defined and user.role in [1, "1"]  %}
 				<ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
 					<li>
 						<a class="dropdown-item" href="#">Paramètres</a>
@@ -63,7 +63,7 @@
 			{% endif %}
 		</div>
 		<hr>
-		{% if user is defined and user.role == 1 %}
+		{% if user is defined and user.role in [1, "1"]  %}
 			<ul class="nav nav-pills flex-column mb-auto">
 				<li class="nav-item">
 					<a href="admin" class="nav-link text-white">
@@ -99,7 +99,7 @@
 {% endblock %}
 {% block admin_content %}
 	{% block admin_title %}{% endblock %}
-	{% if user is defined and user.role == 1 %}
+	{% if user is defined and user.role in [1, "1"]  %}
 		<main class="mb-5 pb-5">
 			<h2 class="text-secondary">Liste des utilisateurs</h2>
 			<p class="lead">Gérez ici les utilisateurs et définissez leurs rôles.</p>

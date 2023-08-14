@@ -59,11 +59,15 @@ class PostModel extends DatabaseConnection
 
     public function delPost(int $id)
     {
-        $querySQL = "DELETE FROM posts WHERE id = :id";
-        $requete = $this->database->prepare($querySQL);
-        $requete->bindValue(":id", $id, PDO::PARAM_INT);
-        $success = $requete->execute();
-        return $success;
+        try {
+            $querySQL = "DELETE FROM posts WHERE id = :id";
+            $requete = $this->database->prepare($querySQL);
+            $requete->bindValue(":id", $id, PDO::PARAM_INT);
+            $success = $requete->execute();
+            return $success;
+        } catch (Exception $e) {
+            throw new Exception("On ne peut supprimer ou mettre à jour un article qui possède des commentaires");
+        }
     }
 
     public function findByTitle(string $title)

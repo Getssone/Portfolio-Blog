@@ -104,8 +104,6 @@ class UserController
                 // Authentification réussie.
                 header('Location: postsAccess');
             } else {
-                throw new Exception("Authentification échouée");
-
                 $this->sessionModel->set('message', "Authentification échouée");
                 // Authentification échouée.
                 header('Location: login');
